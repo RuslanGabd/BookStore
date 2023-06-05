@@ -1,3 +1,2 @@
-# Senla_hw_1
-
-## This repository was created as the first homework of the Java course
+TASK 3.2
+A hierarchy of the firm's employees. Staff a software firm and calculate the total monthly salary of the employees.
