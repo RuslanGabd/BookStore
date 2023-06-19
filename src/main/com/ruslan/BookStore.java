@@ -13,37 +13,11 @@ import java.util.Map;
 
 public class BookStore {
 
-    public BookStore() {
-    }
 
-    ArrayList<Book> stock = new ArrayList<>();
-    ArrayList<Order> orders = new ArrayList<>();
+    private ArrayList<Book> stock = new ArrayList<>();
+    private ArrayList<Order> orders = new ArrayList<>();
+    private Map<Request, Book> requests = new HashMap<>();
 
-    Map<Request, Book> requests = new HashMap<>();
-
-    public Book createBook(String title, String author, int price) {
-        Book bk = new Book(title, author, price);
-        stock.add(bk);
-        System.out.println("Created book: " + bk.toString());
-        return bk;
-    }
-
-    public void changeStatusBook(Book book, BookStatus status) {
-        for (Book bk : stock) {
-            if (bk.equals(book)) {
-                bk.setStatus(status);
-                System.out.println("Book id=" + book.getId() + " changed status " + status);
-            }
-        }
-    }
-
-    public ArrayList<Book> getStock() {
-        return stock;
-    }
-
-    public void setStock(ArrayList<Book> stock) {
-        this.stock = stock;
-    }
 
     public ArrayList<Order> getOrders() {
         return orders;
@@ -61,7 +35,26 @@ public class BookStore {
         this.requests = requests;
     }
 
-    public void addBookToStock(Book book) {
+    public BookStore() {
+    }
+
+    public Book createBook(String title, String author, int price) {
+        Book bk = new Book(title, author, price);
+        stock.add(bk);
+        System.out.println("Created book: " + bk.toString());
+        return bk;
+    }
+
+    public void changeStatusBook(Book book, BookStatus status) {
+        for (Book bk : stock) {
+            if (bk.equals(book)) {
+                bk.setStatus(status);
+                System.out.println("Book id=" + book.getId() + " changed status " + status);
+            }
+        }
+    }
+
+    public void addBookToStockAndCancelRequests(Book book) {
         for (Book bk : stock) {
             if (book.equals(bk)) {
                 bk.setStatus(BookStatus.IN_STOCK);

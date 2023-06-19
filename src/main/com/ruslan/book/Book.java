@@ -4,7 +4,11 @@ import java.util.Objects;
 
 public class Book {
 
-    int id;
+    private int id;
+    private BookStatus status;
+    private String title;
+    private String author;
+    private int price;
 
     public int getId() {
         return id;
@@ -14,19 +18,6 @@ public class Book {
         this.id = id;
     }
 
-    BookStatus status;
-    String title;
-    String author;
-    int price;
-
-
-    public Book(String title, String author, int price) {
-        this.id = new BookCounted().getId();
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.status = BookStatus.IN_STOCK;
-    }
 
     public String getTitle() {
         return title;
@@ -61,6 +52,15 @@ public class Book {
     public void setStatus(BookStatus status) {
         this.status = status;
     }
+
+    public Book(String title, String author, int price) {
+        this.id = new BookCounted().getId();
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.status = BookStatus.IN_STOCK;
+    }
+
 
     @Override
     public boolean equals(Object o) {

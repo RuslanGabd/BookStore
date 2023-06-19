@@ -26,7 +26,7 @@ public class TestBookStore {
         //-Cancel an order;
         bookStore.cancelOrder(1);
         //-Add a book to stock (closes all book requests and changes its status into "in stock");
-        bookStore.addBookToStock(book2);
+        bookStore.addBookToStockAndCancelRequests(book2);
 
         //-Leave a request for a book.
         bookStore.createRequest(book3);

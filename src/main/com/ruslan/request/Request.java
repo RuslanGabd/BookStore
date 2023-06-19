@@ -5,15 +5,9 @@ import com.ruslan.book.Book;
 import java.util.Date;
 
 public class Request {
-    Book book;
-    int id;
-    Date date;
-
-    public Request(Book book) {
-        this.book = book;
-        this.id = new RequestCounted().getId();
-        this.date = new Date();
-    }
+    private Book book;
+    private int id;
+    private Date date;
 
     public Book getBook() {
         return book;
@@ -38,4 +32,11 @@ public class Request {
     public void setDate(Date date) {
         this.date = date;
     }
+
+    public Request(Book book) {
+        this.book = book;
+        this.id = new RequestCounted().getId();
+        this.date = new Date();
+    }
+
 }

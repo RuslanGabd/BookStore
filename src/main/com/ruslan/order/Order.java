@@ -4,30 +4,17 @@ import com.ruslan.book.Book;
 import com.ruslan.book.BookStatus;
 import com.ruslan.request.Request;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
 public class Order {
-    Integer id;
-    Book book;
-    Date dateOrder;
-    String buyer;
-    String address;
+    private Integer id;
+    private Book book;
+    private Date dateOrder;
+    private String buyer;
+    private String address;
 
-    OrderStatus status;
-
-    ArrayList<Order> orders = new ArrayList<>();
-    ArrayList<Request> request = new ArrayList<>();
-
-    public Order(Book book) {
-        this.id = new OrderCounted().getId();
-        this.book = book;
-        this.status = OrderStatus.NEW;
-        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
-            new Request(book);
-        }
-    }
+    private OrderStatus status;
 
 
     public Integer getId() {
@@ -77,6 +64,15 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Order(Book book) {
+        this.id = new OrderCounted().getId();
+        this.book = book;
+        this.status = OrderStatus.NEW;
+        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
+            new Request(book);
+        }
     }
 
     @Override
