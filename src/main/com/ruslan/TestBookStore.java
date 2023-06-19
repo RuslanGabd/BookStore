@@ -10,7 +10,7 @@ public class TestBookStore {
 
         BookStore bookStore = new BookStore();
         Book book1 = bookStore.createBook("Finalist", "Teodor D", 100);
-        Book book2 = bookStore.createBook("Silver", "Djack London", 50);
+        Book book2 = bookStore.createBook("Silver", "Jack London", 50);
         Book book3 = bookStore.createBook("Chemistry", "Mohjan P.", 80);
         Book book4 = bookStore.createBook("King", "Sven Richi", 90);
         Book book5 = bookStore.createBook("Wolf", "Tramp K.", 10);
