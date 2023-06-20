@@ -13,9 +13,28 @@ public class Order {
     private Date dateOrder;
     private String buyer;
     private String address;
-
     private OrderStatus status;
 
+    public Order(Book book) {
+        this.id = new OrderCounted().getId();
+        this.book = book;
+        this.status = OrderStatus.NEW;
+        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
+            new Request(book);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order order)) return false;
+        return getId().equals(order.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 
     public Integer getId() {
         return id;
@@ -64,27 +83,6 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
-    }
-
-    public Order(Book book) {
-        this.id = new OrderCounted().getId();
-        this.book = book;
-        this.status = OrderStatus.NEW;
-        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
-            new Request(book);
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Order order)) return false;
-        return getId().equals(order.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
     }
 }
 

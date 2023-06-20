@@ -13,27 +13,9 @@ import java.util.Map;
 
 public class BookStore {
 
-
     private ArrayList<Book> stock = new ArrayList<>();
     private ArrayList<Order> orders = new ArrayList<>();
     private Map<Request, Book> requests = new HashMap<>();
-
-
-    public ArrayList<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(ArrayList<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Map<Request, Book> getRequests() {
-        return requests;
-    }
-
-    public void setRequests(Map<Request, Book> requests) {
-        this.requests = requests;
-    }
 
     public BookStore() {
     }
@@ -115,11 +97,27 @@ public class BookStore {
         }
     }
 
-
     public void createRequest(Book book) {
         Request request = new Request(book);
         requests.put(request, book);
         System.out.print("New request created with id=" + request.getId());
         System.out.println(" Total requests: " + requests.size());
     }
+
+    public ArrayList<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(ArrayList<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Map<Request, Book> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Map<Request, Book> requests) {
+        this.requests = requests;
+    }
+
 }

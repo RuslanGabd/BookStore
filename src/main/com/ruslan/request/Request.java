@@ -9,6 +9,12 @@ public class Request {
     private int id;
     private Date date;
 
+    public Request(Book book) {
+        this.book = book;
+        this.id = new RequestCounted().getId();
+        this.date = new Date();
+    }
+
     public Book getBook() {
         return book;
     }
@@ -31,12 +37,6 @@ public class Request {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public Request(Book book) {
-        this.book = book;
-        this.id = new RequestCounted().getId();
-        this.date = new Date();
     }
 
 }
