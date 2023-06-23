@@ -13,7 +13,7 @@ public class Book {
 
 
     public Book(String title, String author, int price) {
-        this.id = new BookCounted().getId();
+        this.id = BookCounted.generateNewId();
         this.title = title;
         this.author = author;
         this.price = price;

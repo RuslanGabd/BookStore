@@ -16,7 +16,7 @@ public class Order {
     private OrderStatus status;
 
     public Order(Book book) {
-        this.id = new OrderCounted().getId();
+        this.id = OrderCounted.generateNewId();
         this.book = book;
         this.status = OrderStatus.NEW;
         if (book.getStatus() == BookStatus.NOT_AVAILABLE) {

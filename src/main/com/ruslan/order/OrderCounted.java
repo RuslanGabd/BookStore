@@ -5,13 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OrderCounted {
     private static final AtomicInteger COUNTER = new AtomicInteger(1);
 
-    private final int id;
-
-    public OrderCounted() {
-        id = COUNTER.getAndIncrement();
+    public static int generateNewId() {
+        return COUNTER.getAndIncrement();
     }
 
-    public int getId() {
-        return id;
-    }
 }
