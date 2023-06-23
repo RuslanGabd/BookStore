@@ -1,5 +1,6 @@
 package com.ruslan.book;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -12,12 +13,16 @@ public class Book {
     private int price;
 
 
+    private LocalDate datePublication;
+
+
     public Book(String title, String author, int price) {
-        this.id = new BookCounted().getId();
+        this.id = BookCounted.generateNewId();
         this.title = title;
         this.author = author;
         this.price = price;
         this.status = BookStatus.IN_STOCK;
+        this.datePublication = LocalDate.now();
     }
 
 
@@ -35,10 +40,13 @@ public class Book {
 
     @Override
     public String toString() {
-        return ", title='" + title + '\'' +
+
+        return "id=" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", price=" + price + '\'' +
-                "id=" + id +
+                ", date=" + datePublication + '\'' +
+                ", status=" + status + '\'' +
                 '}';
     }
 
@@ -84,6 +92,15 @@ public class Book {
 
     public void setStatus(BookStatus status) {
         this.status = status;
+    }
+
+
+    public LocalDate getDatePublication() {
+        return datePublication;
+    }
+
+    public void setDatePublication(LocalDate datePublication) {
+        this.datePublication = datePublication;
     }
 }
 

@@ -4,6 +4,7 @@ import com.ruslan.book.Book;
 import com.ruslan.book.BookStatus;
 import com.ruslan.request.Request;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -15,8 +16,11 @@ public class Order {
     private String address;
     private OrderStatus status;
 
+    private LocalDate dateExecution;
+
+
     public Order(Book book) {
-        this.id = new OrderCounted().getId();
+        this.id = OrderCounted.generateNewId();
         this.book = book;
         this.status = OrderStatus.NEW;
         if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
@@ -34,6 +38,19 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", titleBook=" + book.getTitle() +
+                ", dateOrder=" + dateOrder +
+                ", buyer='" + buyer + '\'' +
+                ", address='" + address + '\'' +
+                ", status=" + status +
+                ", dateExecution=" + dateExecution +
+                '}';
     }
 
     public Integer getId() {
@@ -77,12 +94,19 @@ public class Order {
     }
 
     public OrderStatus getStatus() {
-
         return status;
     }
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public LocalDate getDateExecution() {
+        return dateExecution;
+    }
+
+    public void setDateExecution(LocalDate dateExecution) {
+        this.dateExecution = dateExecution;
     }
 }
 

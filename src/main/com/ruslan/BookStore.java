@@ -5,17 +5,21 @@ import com.ruslan.book.BookStatus;
 import com.ruslan.order.Order;
 import com.ruslan.order.OrderStatus;
 import com.ruslan.request.Request;
+import com.sun.source.tree.Tree;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BookStore {
 
-    private ArrayList<Book> stock = new ArrayList<>();
-    private ArrayList<Order> orders = new ArrayList<>();
-    private Map<Request, Book> requests = new HashMap<>();
+    protected ArrayList<Book> stock = new ArrayList<>();
+    protected ArrayList<Order> orders = new ArrayList<>();
+    protected Map<Request, Book> requests = new HashMap<>();
+
+
+
+
 
     public BookStore() {
     }
@@ -56,14 +60,15 @@ public class BookStore {
         }
     }
 
-    public Order createOrder(Book book) {
+    public void createOrder(Book book) {
         Order ord = new Order(book);
         orders.add(ord);
+        //System.out.println(orders.size());
         System.out.println("Order created with id=" + ord.getId());
         if (book.getStatus() == BookStatus.OUT_OF_STOCK) {
             createRequest(ord.getBook());
         }
-        return ord;
+
 
     }
 
@@ -73,8 +78,10 @@ public class BookStore {
                 if (status == OrderStatus.FULFILLED && requests.containsValue(ord.getBook())) {
                     System.out.println("Request for book id=" + ord.getBook().getId() +
                             " is not finished. Please close request");
-                } else
-                    ord.setStatus(status);
+                } else if (status == OrderStatus.FULFILLED) {
+                    ord.setDateExecution(LocalDate.now());
+                }
+                 ord.setStatus(status);
             }
         }
     }
@@ -119,5 +126,6 @@ public class BookStore {
     public void setRequests(Map<Request, Book> requests) {
         this.requests = requests;
     }
+
 
 }
