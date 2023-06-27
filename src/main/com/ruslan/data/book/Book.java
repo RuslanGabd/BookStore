@@ -1,7 +1,6 @@
-package com.ruslan.book;
+package com.ruslan.data.book;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 
 public class Book {
@@ -10,9 +9,7 @@ public class Book {
     private BookStatus status;
     private String title;
     private String author;
-    private int price;
-
-
+    private  int price;
     private LocalDate datePublication;
 
 

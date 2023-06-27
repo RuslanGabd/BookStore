@@ -1,4 +1,4 @@
-package com.ruslan.book;
+package com.ruslan.data.book;
 
 public enum BookStatus {
     IN_STOCK,

@@ -1,32 +1,45 @@
-package com.ruslan.order;
+package com.ruslan.data.order;
 
-import com.ruslan.book.Book;
-import com.ruslan.book.BookStatus;
-import com.ruslan.request.Request;
+import com.ruslan.data.book.Book;
+import com.ruslan.data.book.BookStatus;
+import com.ruslan.data.request.Request;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Order {
     private Integer id;
-    private Book book;
+    private List<Book> listBook;
     private Date dateOrder;
     private String buyer;
     private String address;
     private OrderStatus status;
 
+
+    private Integer totalPrice;
     private LocalDate dateExecution;
 
 
-    public Order(Book book) {
+    public Order(List<Book> listBook) {
+        int commonPrice = 0;
         this.id = OrderCounted.generateNewId();
-        this.book = book;
+        this.listBook = listBook;
         this.status = OrderStatus.NEW;
-        if (book.getStatus() == BookStatus.NOT_AVAILABLE) {
-            new Request(book);
+        for (Book bk : listBook) {
+            if (bk.getStatus() == BookStatus.NOT_AVAILABLE) {
+                new Request(bk);
+            }
+            commonPrice = commonPrice + bk.getPrice();
         }
+        this.totalPrice = commonPrice;
+        for (Book bk : listBook)
+            if (bk.getStatus() == BookStatus.NOT_AVAILABLE) {
+                new Request(bk);
+            }
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -44,14 +57,28 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", titleBook=" + book.getTitle() +
+                //", listBook=" + listBook +
                 ", dateOrder=" + dateOrder +
                 ", buyer='" + buyer + '\'' +
                 ", address='" + address + '\'' +
                 ", status=" + status +
+                ", totalPrice=" + totalPrice +
                 ", dateExecution=" + dateExecution +
                 '}';
     }
+
+    //    @Override
+//    public String toString() {
+//        return "Order{" +
+//                "id=" + id +
+//                ", titleBook=" + book.getTitle() +
+//                ", dateOrder=" + dateOrder +
+//                ", buyer='" + buyer + '\'' +
+//                ", address='" + address + '\'' +
+//                ", status=" + status +
+//                ", dateExecution=" + dateExecution +
+//                '}';
+//    }
 
     public Integer getId() {
         return id;
@@ -61,12 +88,12 @@ public class Order {
         this.id = id;
     }
 
-    public Book getBook() {
-        return book;
+    public List<Book> getListBook() {
+        return listBook;
     }
 
-    public void setBook(Book book) {
-        this.book = book;
+    public void setListBook(List<Book> listBook) {
+        this.listBook = listBook;
     }
 
     public Date getDateOrder() {
@@ -107,6 +134,14 @@ public class Order {
 
     public void setDateExecution(LocalDate dateExecution) {
         this.dateExecution = dateExecution;
+    }
+
+    public Integer getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
     }
 }
 

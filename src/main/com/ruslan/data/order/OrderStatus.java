@@ -1,4 +1,4 @@
-package com.ruslan.order;
+package com.ruslan.data.order;
 
 public enum OrderStatus {
     NEW,

@@ -1,4 +1,4 @@
-package com.ruslan.request;
+package com.ruslan.data.request;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
