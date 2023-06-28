@@ -19,10 +19,11 @@ public class TestBookService {
 
         Book book1 = bookService.createBook("Finalist", "Teodor D", 100, randomDate.generateDateForTest());
         Book book2 = bookService.createBook("Silver", "Jack London", 50, randomDate.generateDateForTest());
-        Book book3 = bookService.createBook("Chemistry", "Mohjan P.", 80, randomDate.generateDateForTest());
+        Book book3 = bookService.createBook("Chemistry", "Mohjan P.", 180, randomDate.generateDateForTest());
         Book book4 = bookService.createBook("King", "Sven Richi", 90, randomDate.generateDateForTest());
         Book book5 = bookService.createBook("Wolf", "Tramp K.", 10, randomDate.generateDateForTest());
         Book book6 = bookService.createBook("Fox", "Brus Li", 146, randomDate.generateDateForTest());
+        Book book7 = bookService.createBook("Cat", "Uma Turman", 123, randomDate.generateDateForTest());
 
         bookService.createOrder(Arrays.asList(book1, book2));
         bookService.createOrder(Arrays.asList(book3, book4));
@@ -36,18 +37,15 @@ public class TestBookService {
         bookService.changeOrderStatus(4, OrderStatus.FULFILLED);
         bookService.changeOrderStatus(5, OrderStatus.FULFILLED);
         bookService.changeOrderStatus(2, OrderStatus.CANCELLED);
-        System.out.println(repository.findOrderUseId(1).getDateOrder());
-        System.out.println(repository.findOrderUseId(2).getDateOrder());
-        System.out.println(repository.findOrderUseId(3).getDateOrder());
 
         bookService.createRequest(book1);
         bookService.createRequest(book5);
         bookService.printAllOrdersSortedByPrice();
         bookService.printAllOrdersSortedByStatus();
-      bookService.printAllOrdersSortedByDateExecution();
+        bookService.printAllOrdersSortedByDateExecution();
         bookService.printAllRequestSortedByNumber();
         bookService.printAllOrdersSortedByStatus();
-       bookService.printAllRequestSortedByAlphabetically();
-       bookService.printStaleBooks();
+        bookService.printAllRequestSortedByAlphabetically();
+        bookService.printStaleBooksSortedByPrice();
     }
 }

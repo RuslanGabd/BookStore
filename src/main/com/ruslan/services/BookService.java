@@ -263,7 +263,7 @@ public class BookService {
 
     public void printOrdersSortedByDateForPeriod(LocalDate date1, LocalDate date2) {
         List<Order> orderListForSort = orderListForPeriod(repository.getOrders(), date1, date2);
-        Collections.sort(orderListForSort, Comparator.comparing(Order::getDateOrder));
+        Collections.sort(orderListForSort, Comparator.comparing(Order::getDateExecution));
         System.out.println("Order sorted by Date for period " + date1 + "-" + date2 + ":" + orderListForSort);
     }
 
@@ -295,7 +295,7 @@ public class BookService {
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
-    public void printStaleBooks() {
+    public List<Book> staleBooks() {
         List<Book> staleBookList = repository.getStock();
         List<Order> fulfilledListOrders = createListOrdersFulfilled(repository.getOrders());
 
@@ -311,8 +311,20 @@ public class BookService {
                     staleBookList.remove(book);
             }
         }
-        System.out.println("Books which were not sold for more than 6 months: ");
-        System.out.println(staleBookList);
+        return staleBookList;
+
+    }
+
+    public void printStaleBooksSortedByDate() {
+        Collections.sort(staleBooks(), Comparator.comparing(Book::getDatePublication));
+        System.out.println("Books which were not sold for more than 6 months, sorted by date publication: ");
+        System.out.println(staleBooks());
+    }
+
+    public void printStaleBooksSortedByPrice() {
+        Collections.sort(staleBooks(), Comparator.comparing(Book::getPrice));
+        System.out.println("Books which were not sold for more than 6 months, sorted by price: ");
+        System.out.println(staleBooks());
     }
 
     public List<Order> createListOrdersFulfilled(List<Order> list) {

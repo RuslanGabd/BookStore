@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Order {
     private Integer id;
     private List<Book> listBook;
-    private LocalDate dateOrder;
+
     private String buyer;
     private String address;
     private OrderStatus status;
@@ -56,8 +56,6 @@ public class Order {
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                //", listBook=" + listBook +
-                ", dateOrder=" + dateOrder +
                 ", buyer='" + buyer + '\'' +
                 ", address='" + address + '\'' +
                 ", status=" + status +
@@ -83,13 +81,7 @@ public class Order {
         this.listBook = listBook;
     }
 
-    public LocalDate getDateOrder() {
-        return dateOrder;
-    }
 
-    public void setDateOrder(LocalDate dateOrder) {
-        this.dateOrder = dateOrder;
-    }
 
     public String getBuyer() {
         return buyer;

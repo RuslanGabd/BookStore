@@ -54,7 +54,6 @@ public class Repository {
 
     public void changeStatusOrder(int id, OrderStatus status) {
         findOrderUseId(id).setStatus(status);
-        System.out.println(findOrderUseId(id).getDateExecution());
     }
 
 
