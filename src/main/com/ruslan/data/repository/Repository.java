@@ -53,21 +53,13 @@ public class Repository {
     }
 
     public void changeStatusOrder(int id, OrderStatus status) {
-        int i = 0;
-        for (Order ord : orders) {
-            if (ord.getId() == id)
-                orders.get(i).setStatus(status);
-            i++;
-        }
+        findOrderUseId(id).setStatus(status);
+        System.out.println(findOrderUseId(id).getDateExecution());
     }
 
+
     public void addDateExecutionToOrder(int id, LocalDate date) {
-        int i = 0;
-        for (Order ord : orders) {
-            if (ord.getId() == id)
-                orders.get(i).setDateExecution(date);
-            i++;
-        }
+        findOrderUseId(id).setDateExecution(date);
     }
 
     public void removeRequest(int id) {
@@ -77,5 +69,12 @@ public class Repository {
                 requests.remove(i);
             i++;
         }
+    }
+
+    public Order findOrderUseId(int id) {
+        for (Order ord : orders)
+            if (ord.getId() == id)
+                return ord;
+        return null;
     }
 }

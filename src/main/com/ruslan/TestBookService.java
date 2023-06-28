@@ -9,65 +9,45 @@ import com.ruslan.services.BookService;
 import java.util.Arrays;
 
 public class TestBookService {
+
     public static void main(String[] args) {
+
 
         final Repository repository = new Repository();
         BookService bookService = new BookService(repository);
+        RandomDate randomDate = new RandomDate();
 
-        Book book1 = bookService.createBook("Finalist", "Teodor D", 100);
-        Book book2 = bookService.createBook("Silver", "Jack London", 50);
-        Book book3 = bookService.createBook("Chemistry", "Mohjan P.", 80);
-        Book book4 = bookService.createBook("King", "Sven Richi", 90);
-        Book book5 = bookService.createBook("Wolf", "Tramp K.", 10);
-        Book book6 = bookService.createBook("Fox", "Brus Li", 146);
+        Book book1 = bookService.createBook("Finalist", "Teodor D", 100, randomDate.generateDateForTest());
+        Book book2 = bookService.createBook("Silver", "Jack London", 50, randomDate.generateDateForTest());
+        Book book3 = bookService.createBook("Chemistry", "Mohjan P.", 80, randomDate.generateDateForTest());
+        Book book4 = bookService.createBook("King", "Sven Richi", 90, randomDate.generateDateForTest());
+        Book book5 = bookService.createBook("Wolf", "Tramp K.", 10, randomDate.generateDateForTest());
+        Book book6 = bookService.createBook("Fox", "Brus Li", 146, randomDate.generateDateForTest());
 
-//        // -Write off the book from stock (set to "out of stock" status);
-//        bookService.changeStatusBook(book1, BookStatus.OUT_OF_STOCK);
-//        bookService.changeStatusBook(book2, BookStatus.NOT_AVAILABLE);
-//        bookService.changeStatusBook(book3, BookStatus.OUT_OF_STOCK);
-//        bookService.changeStatusBook(book4, BookStatus.OUT_OF_STOCK);
-//        bookService.changeStatusBook(book5, BookStatus.NOT_AVAILABLE);
-//        bookService.changeStatusBook(book6, BookStatus.NOT_AVAILABLE);
-//
-
-//        // -Create an order;
         bookService.createOrder(Arrays.asList(book1, book2));
         bookService.createOrder(Arrays.asList(book3, book4));
         bookService.createOrder(Arrays.asList(book4, book5, book6));
         bookService.createOrder(Arrays.asList(book4, book5, book6));
-//        //-Change order status (new, fulfilled, cancelled);
-        //    bookService.printAllOrdersSortedByPrice();
+        bookService.createOrder(Arrays.asList(book1, book5, book6));
+        bookService.createOrder(Arrays.asList(book3, book5, book6));
+
         bookService.changeOrderStatus(1, OrderStatus.FULFILLED);
-
         bookService.changeOrderStatus(3, OrderStatus.FULFILLED);
+        bookService.changeOrderStatus(4, OrderStatus.FULFILLED);
+        bookService.changeOrderStatus(5, OrderStatus.FULFILLED);
         bookService.changeOrderStatus(2, OrderStatus.CANCELLED);
-
-//        bookService.changeOrderStatus(2, OrderStatus.FULFILLED);
-//        //-Cancel an order;
-//        bookService.cancelOrder(1);
-//        //-Add a book to stock (closes all book requests and changes its status into "in stock");
-//        bookService.addBookToStockAndCancelRequests(book2);
-//        bookService.createMapAllBookSortedTitle();
-//        System.out.println(bookService.getBookSortedTitle().tailMap(bookService.getBookSortedTitle().firstKey()));
-//        System.out.println(bookService.getBookSortedTitle().firstKey());
-//        bookService.printAllBookSortedTitle();
+        System.out.println(repository.findOrderUseId(1).getDateOrder());
+        System.out.println(repository.findOrderUseId(2).getDateOrder());
+        System.out.println(repository.findOrderUseId(3).getDateOrder());
 
         bookService.createRequest(book1);
         bookService.createRequest(book5);
+        bookService.printAllOrdersSortedByPrice();
         bookService.printAllOrdersSortedByStatus();
-        bookService.printAllOrdersSortedByDateExecution();
-        //   bookServiceSorted.printAllBooksSortedByStatus();
+      bookService.printAllOrdersSortedByDateExecution();
         bookService.printAllRequestSortedByNumber();
         bookService.printAllOrdersSortedByStatus();
-        // bookService.createTreeMapOrders();
-        //  bookService.printAllOrdersSortedByExecution();
-        //-Leave a request for a book.
-//        bookService.createRequest(book3);
-//        bookService.cancelRequestsOfBook(book3);
-//        //The order cannot be completed until the book request is fulfilled.
-//        bookService.changeStatusBook(book2, BookStatus.OUT_OF_STOCK);
-//        bookService.createOrder(book2);
-//        bookService.changeOrderStatus(3, OrderStatus.FULFILLED);
-        bookService.printAllRequestSortedByAlphabetically();
+       bookService.printAllRequestSortedByAlphabetically();
+       bookService.printStaleBooks();
     }
 }

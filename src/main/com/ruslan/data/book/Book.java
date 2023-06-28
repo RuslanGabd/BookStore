@@ -12,14 +12,19 @@ public class Book {
     private  int price;
     private LocalDate datePublication;
 
+    private LocalDate dataOfReceipt;
 
-    public Book(String title, String author, int price) {
+    private String description;
+
+
+    public Book(String title, String author, int price, LocalDate datePublication ) {
         this.id = BookCounted.generateNewId();
         this.title = title;
         this.author = author;
         this.price = price;
         this.status = BookStatus.IN_STOCK;
         this.datePublication = LocalDate.now();
+
     }
 
 
@@ -98,6 +103,14 @@ public class Book {
 
     public void setDatePublication(LocalDate datePublication) {
         this.datePublication = datePublication;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
 

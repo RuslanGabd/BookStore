@@ -1,5 +1,6 @@
 package com.ruslan.services;
 
+import com.ruslan.RandomDate;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
@@ -7,21 +8,21 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.Repository;
 import com.ruslan.data.request.Request;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class BookService {
     private final Repository repository;
 
+    private static final LocalDate MIN_DATE = LocalDate.of(1970, 1, 1);
+    private static final LocalDate MAX_DATE = LocalDate.of(2023, 06, 30);
 
     public BookService(final Repository repository) {
         this.repository = repository;
     }
 
-    public Book createBook(String title, String author, int price) {
-        Book bk = new Book(title, author, price);
+    public Book createBook(String title, String author, int price, LocalDate datePublication) {
+        Book bk = new Book(title, author, price, datePublication);
 
         repository.getStock().add(bk);
         System.out.println("Created book: " + bk.toString());
@@ -47,7 +48,6 @@ public class BookService {
         }
     }
 
-
     public void removeBookFromStock(Book book) {
         for (Book bk : repository.getStock()) {
             if (book.equals(bk)) {
@@ -68,31 +68,41 @@ public class BookService {
         }
     }
 
-    public LocalDate randomDateForTest() {
-        long minDay = LocalDate.of(1970, 1, 1).toEpochDay();
-        long maxDay = LocalDate.of(2023, 06, 30).toEpochDay();
-        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-        return randomDate;
-    }
+//    public LocalDate randomDateForTest() {
+//        long minDay = MIN_DATE.toEpochDay();
+//        long maxDay = MAX_DATE.toEpochDay();
+//        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
+//        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
+//        return randomDate;
+//    }
 
     public void changeOrderStatus(int id, OrderStatus status) {
         for (Order ord : repository.getOrders()) {
-            if (ord.getId() == id) {
-                if (status == OrderStatus.FULFILLED) {
-                    for (Book book : ord.getListBook())
-                        for (Request rq : repository.getRequests())
-                            if (rq.getBook().equals(book))
-                                System.out.println("Request for book id= " + book.getId() +
-                                        " is not finished. Please close request");
-                            else {
-                                repository.addDateExecutionToOrder(id, randomDateForTest());
-                                repository.changeStatusOrder(id, status);
-                            }
+            if (ord.getId() != id) {
+                continue;
+            }
+            if (status == OrderStatus.FULFILLED) {
+                if (repository.getRequests().size() != 0) { //search request for book
+                    for (Request rq : repository.getRequests()) {
+                        if (ord.getListBook().contains(rq.getBook())) {
+                            System.out.println("Request for book id= " + rq.getBook().getId() +
+                                    " is not finished. Please close request");
+                        }
+                    }
                 } else
+
+
                     repository.changeStatusOrder(id, status);
+                repository.addDateExecutionToOrder(id, new RandomDate().generateDateForTest());
+                // repository.addDateExecutionToOrder(id, LocalDate.now());
+                System.out.println("Status for Order with id=" + id + " changed: " + status);
+
+            } else {
+                repository.changeStatusOrder(id, status);
+                System.out.println("Status for Order with id=" + id + " changed: " + status);
             }
         }
+
     }
 
 
@@ -123,7 +133,8 @@ public class BookService {
         System.out.print("New request created with id=" + request.getId());
         System.out.println(" Total requests: " + repository.getRequests().size());
     }
-    //   List of books (sort alphabetically, by date of publication, by price, by stock availability);
+
+//   List of books (sort alphabetically, by date of publication, by price, by stock availability);
 
     public void printAllBooksSortedByTitleAlphabetically() {
         Collections.sort(repository.getStock(), (o1, o2) -> CharSequence.compare(o2.getTitle(), o1.getTitle()));
@@ -135,15 +146,12 @@ public class BookService {
         System.out.println("Books sorted by DatePublication:" + Arrays.toString(repository.getStock().toArray()));
     }
 
-
     public void printAllBooksSortedByPrice() {
         Collections.sort(repository.getStock(), Comparator.comparingInt(Book::getPrice));
         System.out.println(Arrays.toString(repository.getStock().toArray()));
-
     }
 
     public void printAllBooksSortedByStatus() {
-
         List<Book> sortedBooks = repository.getStock();
         Book temp;
         for (Book bk : repository.getStock()) {
@@ -240,13 +248,13 @@ public class BookService {
     }
 
 
-    // List of completed orders for a period of time (sort by date, by price);
+// List of completed orders for a period of time (sort by date, by price);
 
     public List<Order> orderListForPeriod(List<Order> orderList, LocalDate date1, LocalDate date2) {
         int i = 0;
         for (Order ord : orderList) {
-            if (ord.getDateOrder().toInstant().isBefore(Instant.from(date1))
-                    && ord.getDateOrder().toInstant().isAfter(Instant.from(date2)))
+            if (ord.getDateExecution().isBefore(date1)
+                    && ord.getDateExecution().isAfter(date2))
                 orderList.remove(i);
             i++;
         }
@@ -264,9 +272,6 @@ public class BookService {
         Collections.sort(orderListForSort, Comparator.comparing(Order::getTotalPrice));
         System.out.println("Order sorted by Price for period " + date1 + "-" + date2 + ":" + orderListForSort);
     }
-
-
-
 
 
     // The amount of money earned over a period of time;
@@ -289,5 +294,51 @@ public class BookService {
         System.out.println("Count fulfilled orders for period " + date1 + "-" + date2 + ":" + countOrders++);
     }
 
+    //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
+    public void printStaleBooks() {
+        List<Book> staleBookList = repository.getStock();
+        List<Order> fulfilledListOrders = createListOrdersFulfilled(repository.getOrders());
+
+        Collections.sort(fulfilledListOrders, Comparator.comparing(Order::getDateExecution));
+        List<Order> orderList = orderListForPeriod(fulfilledListOrders, LocalDate.now(),
+                LocalDate.now().minusMonths(6));
+
+        List<Book> tempList;
+        for (Order ord : orderList) {
+            if (ord.getStatus() == OrderStatus.FULFILLED) {
+                tempList = ord.getListBook();
+                for (Book book : tempList)
+                    staleBookList.remove(book);
+            }
+        }
+        System.out.println("Books which were not sold for more than 6 months: ");
+        System.out.println(staleBookList);
+    }
+
+    public List<Order> createListOrdersFulfilled(List<Order> list) {
+        List<Order> listFulfilledOrders = new ArrayList<>();
+        for (Order ord : list) {
+            if (ord.getStatus() == OrderStatus.FULFILLED) {
+                listFulfilledOrders.add(ord);
+            }
+        }
+        return listFulfilledOrders;
+    }
+
+
+    //Order details (any customer data + books);
+    public void printOrderDetails(int id) {
+        for (Order ord : repository.getOrders())
+            if (ord.getId() == id) {
+                System.out.println("Customer:" + ord.getBuyer());
+                System.out.println("Book:" + ord.getListBook());
+            }
+    }
+
+    //Description of the book.
+    public void printDescriptionOfBook(Book book) {
+        System.out.println("Description for book with id=" + book.getId() + ":");
+        System.out.println(book.getDescription());
+    }
 
 }

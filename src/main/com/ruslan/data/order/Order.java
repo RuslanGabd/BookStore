@@ -5,14 +5,13 @@ import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.request.Request;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class Order {
     private Integer id;
     private List<Book> listBook;
-    private Date dateOrder;
+    private LocalDate dateOrder;
     private String buyer;
     private String address;
     private OrderStatus status;
@@ -67,18 +66,6 @@ public class Order {
                 '}';
     }
 
-    //    @Override
-//    public String toString() {
-//        return "Order{" +
-//                "id=" + id +
-//                ", titleBook=" + book.getTitle() +
-//                ", dateOrder=" + dateOrder +
-//                ", buyer='" + buyer + '\'' +
-//                ", address='" + address + '\'' +
-//                ", status=" + status +
-//                ", dateExecution=" + dateExecution +
-//                '}';
-//    }
 
     public Integer getId() {
         return id;
@@ -96,11 +83,11 @@ public class Order {
         this.listBook = listBook;
     }
 
-    public Date getDateOrder() {
+    public LocalDate getDateOrder() {
         return dateOrder;
     }
 
-    public void setDateOrder(Date dateOrder) {
+    public void setDateOrder(LocalDate dateOrder) {
         this.dateOrder = dateOrder;
     }
 
