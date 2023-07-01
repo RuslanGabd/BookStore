@@ -6,6 +6,7 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.Repository;
 import com.ruslan.services.BookService;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 public class TestBookService {
@@ -40,11 +41,28 @@ public class TestBookService {
 
         bookService.createRequest(book1);
         bookService.createRequest(book5);
+
+        //List of books (sort alphabetically, by date of publication, by price, by stock availability);
+        bookService.printAllBooksSortedByTitleAlphabetically();
+        bookService.printAllBooksSortedByPrice();
+        bookService.printAllBooksSortedByDatePublication();
+        bookService.printAllBooksSortedByStatus();
+
+        //List of orders (sort by date of execution, by price, by status);
         bookService.printAllOrdersSortedByPrice();
         bookService.printAllOrdersSortedByStatus();
         bookService.printAllOrdersSortedByDateExecution();
+
+        //List of book requests (sort by number of requests, alphabetically);
         bookService.printAllRequestSortedByNumber();
-        bookService.printAllOrdersSortedByStatus();
+        bookService.printAllRequestSortedByAlphabetically();
+
+        //List of completed orders for a period of time (sort by date, by price);
+        bookService.printOrdersSortedByDateForPeriod(LocalDate.of(1970, 1, 1),
+                LocalDate.of(2023, 06, 30));
+        bookService.printOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
+                LocalDate.of(2023, 06, 30));
+
         bookService.printAllRequestSortedByAlphabetically();
         bookService.printStaleBooksSortedByPrice();
     }

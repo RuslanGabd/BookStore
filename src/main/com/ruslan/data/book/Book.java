@@ -9,7 +9,7 @@ public class Book {
     private BookStatus status;
     private String title;
     private String author;
-    private  int price;
+    private int price;
     private LocalDate datePublication;
 
     private LocalDate dataOfReceipt;
@@ -17,7 +17,7 @@ public class Book {
     private String description;
 
 
-    public Book(String title, String author, int price, LocalDate datePublication ) {
+    public Book(String title, String author, int price, LocalDate datePublication) {
         this.id = BookCounted.generateNewId();
         this.title = title;
         this.author = author;
@@ -42,14 +42,13 @@ public class Book {
 
     @Override
     public String toString() {
-
-        return "id=" + id + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", price=" + price + '\'' +
-                ", date=" + datePublication + '\'' +
-                ", status=" + status + '\'' +
-                '}';
+        return "Book:" +
+                " id=" + id +
+                ", title=" + title +
+                ", author=" + author +
+                ", price=" + price +
+                ", date=" + datePublication +
+                ", status=" + status;
     }
 
 

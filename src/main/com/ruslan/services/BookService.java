@@ -134,21 +134,28 @@ public class BookService {
         System.out.println(" Total requests: " + repository.getRequests().size());
     }
 
-//   List of books (sort alphabetically, by date of publication, by price, by stock availability);
+    //   List of books (sort alphabetically, by date of publication, by price, by stock availability);
+    public void printListBooks(String header, List<Book> list) {
+        System.out.println(header);
+        for (Book bk : list) {
+            System.out.println(bk.toString() + "; ");
+        }
+        System.out.println();
+    }
 
     public void printAllBooksSortedByTitleAlphabetically() {
         Collections.sort(repository.getStock(), (o1, o2) -> CharSequence.compare(o2.getTitle(), o1.getTitle()));
-        System.out.println(Arrays.toString(repository.getStock().toArray()));
+        printListBooks("Books sorted by Title Alphabetically:", repository.getStock());
     }
 
     public void printAllBooksSortedByDatePublication() {
         Collections.sort(repository.getStock(), Comparator.comparing(Book::getDatePublication));
-        System.out.println("Books sorted by DatePublication:" + Arrays.toString(repository.getStock().toArray()));
+        printListBooks("Books sorted by Date Publication:", repository.getStock());
     }
 
     public void printAllBooksSortedByPrice() {
         Collections.sort(repository.getStock(), Comparator.comparingInt(Book::getPrice));
-        System.out.println(Arrays.toString(repository.getStock().toArray()));
+        printListBooks("Books sorted by Price:", repository.getStock());
     }
 
     public void printAllBooksSortedByStatus() {
@@ -176,25 +183,34 @@ public class BookService {
                 }
             }
         }
-        System.out.println("Books sorted by Status:" + Arrays.toString(sortedBooks.toArray()));
+        printListBooks("Books sorted by Status:", repository.getStock());
     }
 
     public void printAllBooksSortedByAuthor() {
         Collections.sort(repository.getStock(), (o1, o2) -> CharSequence.compare(o2.getAuthor(), o1.getAuthor()));
-        System.out.println(Arrays.toString(repository.getStock().toArray()));
+        printListBooks("Books sorted by Author:", repository.getStock());
     }
 
 
     //List of orders (sort by date of execution, by price, by status);
+
+    public void printListOrders(String header, List<Order> orders) {
+        System.out.println(header);
+        for (Order ord : orders) {
+            System.out.println(ord.toString() + "; ");
+        }
+        System.out.println();
+    }
+
     public void printAllOrdersSortedByDateExecution() {
         Collections.sort(repository.getOrders(), Comparator.comparing(Order::getDateExecution,
                 Comparator.nullsLast(Comparator.naturalOrder())));
-        System.out.println("Orders sorted by DateExecution:" + Arrays.toString(repository.getOrders().toArray()));
+        printListOrders("Orders sorted by DateExecution:", repository.getOrders());
     }
 
     public void printAllOrdersSortedByPrice() {
         Collections.sort(repository.getOrders(), Comparator.comparing(Order::getTotalPrice));
-        System.out.println("Order sorted by Price:" + repository.getOrders());
+        printListOrders("Orders sorted by Price:", repository.getOrders());
     }
 
     public void printAllOrdersSortedByStatus() {
@@ -222,14 +238,23 @@ public class BookService {
                 }
             }
         }
-        System.out.println("Orders sorted by Status:" + sortedOrders.toString());
+        printListOrders("Orders sorted by Status:", sortedOrders);
     }
 
     //List of book requests (sort by number of requests, alphabetically);
+
+    public void printListRequests(String header, List<Request> list) {
+        System.out.println(header);
+        for (Request req : list) {
+            System.out.println(req.toString() + "; ");
+        }
+        System.out.println();
+    }
+
     public void printAllRequestSortedByNumber() {
         List<Request> listReq = repository.getRequests();
         Collections.sort(listReq, Comparator.comparing(Request::getId));
-        System.out.println("Requests sorted by number (id):" + listReq.toString());
+        printListRequests("Requests sorted by Number:", listReq);
     }
 
     public void printAllRequestSortedByAlphabetically() {
@@ -244,7 +269,7 @@ public class BookService {
         for (Map.Entry<String, Request> entry : requestTreeMap.entrySet()) {
             System.out.println("Title book: " + entry.getKey() + "Request: " + entry.getValue());
         }
-
+        System.out.println();
     }
 
 
@@ -291,7 +316,7 @@ public class BookService {
         for (Order ord : orderListEarnedMoney)
             if (ord.getStatus() == OrderStatus.FULFILLED)
                 countOrders++;
-        System.out.println("Count fulfilled orders for period " + date1 + "-" + date2 + ":" + countOrders++);
+        System.out.println("Count fulfilled orders for period " + date1 + "-" + date2 + ":" + countOrders);
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
@@ -312,7 +337,6 @@ public class BookService {
             }
         }
         return staleBookList;
-
     }
 
     public void printStaleBooksSortedByDate() {
@@ -323,8 +347,8 @@ public class BookService {
 
     public void printStaleBooksSortedByPrice() {
         Collections.sort(staleBooks(), Comparator.comparing(Book::getPrice));
-        System.out.println("Books which were not sold for more than 6 months, sorted by price: ");
-        System.out.println(staleBooks());
+        printListBooks("Books which were not sold for more than 6 months, sorted by price:", staleBooks());
+
     }
 
     public List<Order> createListOrdersFulfilled(List<Order> list) {

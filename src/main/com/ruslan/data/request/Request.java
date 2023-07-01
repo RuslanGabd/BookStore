@@ -19,11 +19,10 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
-                "id=" + id +
+        return "Request:" +
+                " id=" + id +
                 ", bookId=" + book.getId() +
-                ", date=" + date +
-                '}';
+                ", date=" + date;
     }
 
     public Book getBook() {

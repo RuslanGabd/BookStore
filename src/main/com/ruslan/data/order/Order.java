@@ -54,14 +54,13 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", buyer='" + buyer + '\'' +
-                ", address='" + address + '\'' +
+        return "Order:" +
+                " id=" + id +
+                ", buyer=" + buyer +
+                ", address=" + address +
                 ", status=" + status +
                 ", totalPrice=" + totalPrice +
-                ", dateExecution=" + dateExecution +
-                '}';
+                ", dateExecution=" + dateExecution ;
     }
 
 
