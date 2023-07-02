@@ -16,6 +16,46 @@ public class Repository {
     private List<Request> requests = new ArrayList<>();
 
     // private Map<Request, Book> requests = new HashMap<>();
+
+    public void addToStock(Book book) {
+        stock.add(book);
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
+    public void addRequest(Request request) {
+        requests.add(request);
+    }
+
+    public void changeStatusOrder(int id, OrderStatus status) {
+        findOrderUseId(id).setStatus(status);
+    }
+
+
+
+    public void addDateExecutionToOrder(int id, LocalDate date) {
+        findOrderUseId(id).setDateExecution(date);
+    }
+
+    public void removeRequest(int id) {
+        int i = 0;
+        for (Request req : requests) {
+            if (req.getId() == id)
+                requests.remove(i);
+            i++;
+        }
+    }
+
+    public Order findOrderUseId(int id) {
+        for (Order ord : orders)
+            if (ord.getId() == id)
+                return ord;
+        return null;
+    }
+
+
     public List<Book> getStock() {
         return stock;
     }
@@ -40,40 +80,4 @@ public class Repository {
         this.requests = requests;
     }
 
-    public void addToStock(Book book) {
-        stock.add(book);
-    }
-
-    public void addOrder(Order order) {
-        orders.add(order);
-    }
-
-    public void addRequest(Request request) {
-        requests.add(request);
-    }
-
-    public void changeStatusOrder(int id, OrderStatus status) {
-        findOrderUseId(id).setStatus(status);
-    }
-
-
-    public void addDateExecutionToOrder(int id, LocalDate date) {
-        findOrderUseId(id).setDateExecution(date);
-    }
-
-    public void removeRequest(int id) {
-        int i = 0;
-        for (Request req : requests) {
-            if (req.getId() == id)
-                requests.remove(i);
-            i++;
-        }
-    }
-
-    public Order findOrderUseId(int id) {
-        for (Order ord : orders)
-            if (ord.getId() == id)
-                return ord;
-        return null;
-    }
 }

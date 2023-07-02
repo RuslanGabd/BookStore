@@ -1,6 +1,5 @@
 package com.ruslan.services;
 
-import com.ruslan.RandomDate;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
@@ -10,6 +9,7 @@ import com.ruslan.data.request.Request;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class BookService {
     private final Repository repository;
@@ -68,13 +68,6 @@ public class BookService {
         }
     }
 
-//    public LocalDate randomDateForTest() {
-//        long minDay = MIN_DATE.toEpochDay();
-//        long maxDay = MAX_DATE.toEpochDay();
-//        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
-//        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
-//        return randomDate;
-//    }
 
     public void changeOrderStatus(int id, OrderStatus status) {
         for (Order ord : repository.getOrders()) {
@@ -89,14 +82,11 @@ public class BookService {
                                     " is not finished. Please close request");
                         }
                     }
-                } else
-
-
+                } else {
                     repository.changeStatusOrder(id, status);
-                repository.addDateExecutionToOrder(id, new RandomDate().generateDateForTest());
-                // repository.addDateExecutionToOrder(id, LocalDate.now());
-                System.out.println("Status for Order with id=" + id + " changed: " + status);
-
+                    repository.addDateExecutionToOrder(id, LocalDate.now());
+                    System.out.println("Status for Order with id=" + id + " changed: " + status);
+                }
             } else {
                 repository.changeStatusOrder(id, status);
                 System.out.println("Status for Order with id=" + id + " changed: " + status);
@@ -133,6 +123,7 @@ public class BookService {
         System.out.print("New request created with id=" + request.getId());
         System.out.println(" Total requests: " + repository.getRequests().size());
     }
+
 
     //   List of books (sort alphabetically, by date of publication, by price, by stock availability);
     public void printListBooks(String header, List<Book> list) {
@@ -193,6 +184,14 @@ public class BookService {
 
 
     //List of orders (sort by date of execution, by price, by status);
+
+    public void changeOrderDateCreated(int id, LocalDate date) {
+        repository.findOrderUseId(id).setDateCreated(date);
+    }
+
+    public void changeOrderDateExecution(int id, LocalDate date) {
+        repository.findOrderUseId(id).setDateExecution(date);
+    }
 
     public void printListOrders(String header, List<Order> orders) {
         System.out.println(header);
@@ -275,44 +274,45 @@ public class BookService {
 
 // List of completed orders for a period of time (sort by date, by price);
 
-    public List<Order> orderListForPeriod(List<Order> orderList, LocalDate date1, LocalDate date2) {
-        int i = 0;
-        for (Order ord : orderList) {
-            if (ord.getDateExecution().isBefore(date1)
-                    && ord.getDateExecution().isAfter(date2))
-                orderList.remove(i);
-            i++;
-        }
-        return orderList;
+    public List<Order> orderListForPeriodByExecutionDate(List<Order> orderList, LocalDate date1, LocalDate date2) {
+        return orderList.stream().filter(order -> order.getDateExecution().isAfter(date1)
+                && order.getDateExecution().isBefore(date2)).collect(Collectors.toList());
+    }
+
+    public List<Order> orderListForPeriodByDateCreated(List<Order> orderList, LocalDate date1, LocalDate date2) {
+        return orderList.stream().filter(order -> (order.getDateCreated().isAfter(date1) || order.getDateCreated().isEqual(date1))
+                && (order.getDateCreated().isBefore(date2)) || order.getDateCreated().isEqual(date2)).collect(Collectors.toList());
     }
 
     public void printOrdersSortedByDateForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderListForSort = orderListForPeriod(repository.getOrders(), date1, date2);
-        Collections.sort(orderListForSort, Comparator.comparing(Order::getDateExecution));
-        System.out.println("Order sorted by Date for period " + date1 + "-" + date2 + ":" + orderListForSort);
+        List<Order> orderListForSort = orderListForPeriodByDateCreated(repository.getOrders(), date1, date2);
+        Collections.sort(repository.getOrders(), Comparator.comparing(Order::getDateCreated));
+
+        printListOrders("Order sorted by Date for period " + date1 + "   " + date2 + ":", orderListForSort);
     }
 
     public void printOrdersSortedByPriceForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderListForSort = orderListForPeriod(repository.getOrders(), date1, date2);
+        List<Order> orderListForSort = orderListForPeriodByDateCreated(repository.getOrders(), date1, date2);
         Collections.sort(orderListForSort, Comparator.comparing(Order::getTotalPrice));
-        System.out.println("Order sorted by Price for period " + date1 + "-" + date2 + ":" + orderListForSort);
+        printListOrders("Order sorted by Price for period " + date1 + "-" + date2 + ":", orderListForSort);
     }
 
 
     // The amount of money earned over a period of time;
     public void printEarnedMoneyForPeriod(LocalDate date1, LocalDate date2) {
-        int earnedMoney = 0;
-        List<Order> orderListEarnedMoney = orderListForPeriod(repository.getOrders(), date1, date2);
-        for (Order ord : orderListEarnedMoney)
-            if (ord.getStatus() == OrderStatus.FULFILLED)
-                earnedMoney += ord.getTotalPrice();
-        System.out.println("Earned money for period " + date1 + "-" + date2 + ":" + earnedMoney);
+
+        List<Order> fulfilledOrders = repository.getOrders().stream().filter(order -> order.getStatus() == OrderStatus.FULFILLED).toList();
+        List<Order> orderListEarnedMoney = orderListForPeriodByExecutionDate(fulfilledOrders, date1, date2);
+        orderListEarnedMoney.forEach(order -> order.getTotalPrice());
+        Integer earnedMoney = orderListEarnedMoney.stream().map(Order::getTotalPrice).reduce(0, Integer::sum);
+        System.out.println("Earned money for period " + date1 + "-" + date2 + ": " + earnedMoney);
+        System.out.println();
     }
 
     // The number of completed orders over a period of time;
-    public void printCountFulfilledOrdersForPeriod(LocalDate date1, LocalDate date2) {
+    public void printNumberFulfilledOrdersForPeriod(LocalDate date1, LocalDate date2) {
         int countOrders = 0;
-        List<Order> orderListEarnedMoney = orderListForPeriod(repository.getOrders(), date1, date2);
+        List<Order> orderListEarnedMoney = orderListForPeriodByDateCreated(repository.getOrders(), date1, date2);
         for (Order ord : orderListEarnedMoney)
             if (ord.getStatus() == OrderStatus.FULFILLED)
                 countOrders++;
@@ -323,31 +323,20 @@ public class BookService {
     public List<Book> staleBooks() {
         List<Book> staleBookList = repository.getStock();
         List<Order> fulfilledListOrders = createListOrdersFulfilled(repository.getOrders());
-
-        Collections.sort(fulfilledListOrders, Comparator.comparing(Order::getDateExecution));
-        List<Order> orderList = orderListForPeriod(fulfilledListOrders, LocalDate.now(),
-                LocalDate.now().minusMonths(6));
-
-        List<Book> tempList;
-        for (Order ord : orderList) {
-            if (ord.getStatus() == OrderStatus.FULFILLED) {
-                tempList = ord.getListBook();
-                for (Book book : tempList)
-                    staleBookList.remove(book);
-            }
-        }
+        List<Order> orderList = orderListForPeriodByExecutionDate(fulfilledListOrders, LocalDate.now().minusMonths(6),
+                LocalDate.now());
+        orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
     }
 
     public void printStaleBooksSortedByDate() {
         Collections.sort(staleBooks(), Comparator.comparing(Book::getDatePublication));
-        System.out.println("Books which were not sold for more than 6 months, sorted by date publication: ");
-        System.out.println(staleBooks());
+        printListBooks("Books which were not sold for more than 6 months, sorted by Date", staleBooks());
     }
 
     public void printStaleBooksSortedByPrice() {
         Collections.sort(staleBooks(), Comparator.comparing(Book::getPrice));
-        printListBooks("Books which were not sold for more than 6 months, sorted by price:", staleBooks());
+        printListBooks("Books which were not sold for more than 6 months, sorted by Price:", staleBooks());
 
     }
 
@@ -361,13 +350,12 @@ public class BookService {
         return listFulfilledOrders;
     }
 
-
     //Order details (any customer data + books);
     public void printOrderDetails(int id) {
         for (Order ord : repository.getOrders())
             if (ord.getId() == id) {
                 System.out.println("Customer:" + ord.getBuyer());
-                System.out.println("Book:" + ord.getListBook());
+                printListBooks("Books: ", ord.getListBook());
             }
     }
 

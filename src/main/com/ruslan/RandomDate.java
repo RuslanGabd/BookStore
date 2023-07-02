@@ -15,4 +15,13 @@ public class RandomDate {
         LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
         return randomDate;
     }
+    public LocalDate generateDateExecutionForOrder() {
+        long minDay = LocalDate.of(2023, 01, 01).toEpochDay();
+        long maxDay = LocalDate.of(2023, 04, 01).toEpochDay();
+        long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
+        LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
+        return randomDate;
+    }
+
+
 }

@@ -24,8 +24,7 @@ public class Book {
         this.price = price;
         this.status = BookStatus.IN_STOCK;
         this.datePublication = LocalDate.now();
-
-    }
+   }
 
 
     @Override

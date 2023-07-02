@@ -2,6 +2,7 @@ package com.ruslan;
 
 
 import com.ruslan.data.book.Book;
+import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.Repository;
 import com.ruslan.services.BookService;
@@ -39,6 +40,17 @@ public class TestBookService {
         bookService.changeOrderStatus(5, OrderStatus.FULFILLED);
         bookService.changeOrderStatus(2, OrderStatus.CANCELLED);
 
+        bookService.changeOrderDateCreated(1, randomDate.generateDateForTest());
+        bookService.changeOrderDateCreated(2, randomDate.generateDateForTest());
+        bookService.changeOrderDateCreated(3, randomDate.generateDateForTest());
+        bookService.changeOrderDateCreated(5, randomDate.generateDateForTest());
+        bookService.changeOrderDateCreated(2, randomDate.generateDateForTest());
+
+        bookService.changeOrderDateExecution(1, randomDate.generateDateExecutionForOrder());
+        bookService.changeOrderDateExecution(3, randomDate.generateDateExecutionForOrder());
+        bookService.changeOrderDateExecution(4, randomDate.generateDateExecutionForOrder());
+        bookService.changeOrderDateExecution(5, randomDate.generateDateExecutionForOrder());
+
         bookService.createRequest(book1);
         bookService.createRequest(book5);
 
@@ -63,7 +75,21 @@ public class TestBookService {
         bookService.printOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
                 LocalDate.of(2023, 06, 30));
 
-        bookService.printAllRequestSortedByAlphabetically();
+        // The amount of money earned over a period of time;
+       bookService.printEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
+               LocalDate.of(2023, 06, 30));
+
+        //The number of completed orders over a period of time;
+        bookService.printNumberFulfilledOrdersForPeriod(LocalDate.of(1970, 1, 1),
+                LocalDate.of(2023, 06, 30));
+
+        //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
         bookService.printStaleBooksSortedByPrice();
+        bookService.printStaleBooksSortedByDate();
+
+        //Order details (any customer data + books);
+        bookService.printOrderDetails(5);
+        //Description of the book.
+        bookService.printDescriptionOfBook(book7);
     }
 }
