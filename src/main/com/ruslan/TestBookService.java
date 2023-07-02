@@ -2,7 +2,6 @@ package com.ruslan;
 
 
 import com.ruslan.data.book.Book;
-import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.Repository;
 import com.ruslan.services.BookService;
@@ -76,8 +75,8 @@ public class TestBookService {
                 LocalDate.of(2023, 06, 30));
 
         // The amount of money earned over a period of time;
-       bookService.printEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
-               LocalDate.of(2023, 06, 30));
+        bookService.printEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
+                LocalDate.of(2023, 06, 30));
 
         //The number of completed orders over a period of time;
         bookService.printNumberFulfilledOrdersForPeriod(LocalDate.of(1970, 1, 1),
