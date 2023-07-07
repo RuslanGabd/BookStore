@@ -90,7 +90,8 @@ public class TestBookService {
 
 
         //The number of completed orders over a period of time;
-        System.out.println("The number of completed orders over a period of time: " + orderService.getCountFulfilledOrdersForPeriod(LocalDate.of(1970, 1, 1),
+        System.out.println("The number of completed orders over a period of time: "
+                + orderService.getNumberFulfilledOrdersForPeriod(LocalDate.of(1970, 1, 1),
                 LocalDate.of(2023, 06, 30)));
 
         //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);

@@ -31,6 +31,7 @@ public class OrderService implements IOrderService {
     public void changeOrderDateCreated(int id, LocalDate date) {
         orderRepository.getById(id).setDateCreated(date);
     }
+
     public void changeOrderDateExecution(int id, LocalDate date) {
         orderRepository.getById(id).setDateExecution(date);
     }
@@ -114,13 +115,15 @@ public class OrderService implements IOrderService {
     }
 
     // The number of completed orders over a period of time;
-    public Integer getCountFulfilledOrdersForPeriod(LocalDate date1, LocalDate date2) {
-        int countOrders = 0;
-        List<Order> orderListEarnedMoney = getOrderListForPeriodByDate(orderRepository.getOrdersList(), date1, date2);
-        for (Order ord : orderListEarnedMoney)
-            if (ord.getStatus() == OrderStatus.FULFILLED)
-                countOrders++;
-        return countOrders;
+    public List<Integer> getNumberFulfilledOrdersForPeriod(LocalDate date1, LocalDate date2) {
+        return orderRepository.getOrdersList()
+                .stream()
+                .filter(order ->
+                        order.getStatus() == OrderStatus.FULFILLED
+                                && order.getDateExecution().isAfter(date1)
+                                && order.getDateExecution().isBefore(date2))
+                .map(Order::getId)
+                .collect(Collectors.toList());
     }
 
     // The amount of money earned over a period of time;
