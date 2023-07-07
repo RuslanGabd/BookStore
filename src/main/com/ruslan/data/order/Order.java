@@ -23,7 +23,6 @@ public class Order {
 
     public Order(List<Book> listBook) {
         int commonPrice = 0;
-        this.id = OrderCounted.generateNewId();
         this.listBook = listBook;
         this.status = OrderStatus.NEW;
         for (Book bk : listBook) {

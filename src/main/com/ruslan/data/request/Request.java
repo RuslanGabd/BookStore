@@ -11,9 +11,7 @@ public class Request {
     private LocalDate date;
 
     public Request(Book book) {
-
         this.book = book;
-        this.id = new RequestCounted().getId();
         this.date = LocalDate.now();
     }
 
