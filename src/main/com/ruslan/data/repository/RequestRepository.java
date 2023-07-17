@@ -11,7 +11,13 @@ import java.util.List;
 import java.util.Map;
 
 public class RequestRepository implements IRequestRepostitory {
+    public static final RequestRepository INSTANCE = new RequestRepository();
+    private RequestRepository() {
+    }
 
+    public static RequestRepository getInstance() {
+        return INSTANCE;
+    }
     private Map<Integer, Request> requestMap = new HashMap<>();
 
     public void removeRequest(int id) {

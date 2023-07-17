@@ -12,6 +12,13 @@ import java.util.Map;
 
 public class BookRepository implements IBookRepository {
 
+        public static final BookRepository INSTANCE = new BookRepository();
+    private BookRepository() {
+    }
+
+    public static BookRepository getInstance() {
+        return INSTANCE;
+    }
     private Map<Integer, Book> booksMap = new HashMap<>();
 
 

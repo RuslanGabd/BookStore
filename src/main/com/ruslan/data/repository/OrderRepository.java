@@ -13,6 +13,14 @@ import java.util.Map;
 
 public class OrderRepository implements IOrderRepository {
 
+    public static final OrderRepository INSTANCE = new OrderRepository();
+    private OrderRepository() {
+    }
+
+    public static OrderRepository getInstance() {
+        return INSTANCE;
+    }
+
     private final Map<Integer, Order> ordersMap = new HashMap<>();
 
 

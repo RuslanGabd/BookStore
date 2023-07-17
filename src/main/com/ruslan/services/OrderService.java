@@ -150,8 +150,8 @@ public class OrderService implements IOrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<Order> getOrderListForPeriodByDate(List<Order> orderList, LocalDate date1, LocalDate date2) {
-        return orderList
+    public List<Order> getOrderListForPeriodByDate( LocalDate date1, LocalDate date2) {
+        return orderRepository.getOrdersList()
                 .stream()
                 .filter(order ->
                         (order.getDateCreated().isAfter(date1)
@@ -162,13 +162,13 @@ public class OrderService implements IOrderService {
     }
 
     public List<Order> getOrdersSortedByDateForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderList = getOrderListForPeriodByDate(orderRepository.getOrdersList(), date1, date2);
+        List<Order> orderList = getOrderListForPeriodByDate(date1, date2);
         orderList.sort(Comparator.comparing(Order::getDateCreated));
         return orderList;
     }
 
     public List<Order> getOrdersSortedByPriceForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderList = getOrderListForPeriodByDate(orderRepository.getOrdersList(), date1, date2);
+        List<Order> orderList = getOrderListForPeriodByDate(date1, date2);
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
     }
