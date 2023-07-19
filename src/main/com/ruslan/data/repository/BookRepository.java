@@ -41,11 +41,7 @@ public class BookRepository implements IBookRepository {
         return new ArrayList<>(booksMap.values());
     }
 
-    public Map<Integer, Book> getStock() {
-        return booksMap;
-    }
-
-    public void setStock(Map<Integer, Book> stock) {
-        this.booksMap = stock;
+     public void saveAll(List<Book> bookList) {
+       bookList.forEach(this::saveBook);
     }
 }

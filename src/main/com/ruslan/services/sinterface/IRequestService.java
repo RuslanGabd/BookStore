@@ -10,7 +10,7 @@ public interface IRequestService {
 
     void printList(String header, List<Request> list);
 
-    void createRequest(Book book);
+    void createRequest(int id);
 
 
 }

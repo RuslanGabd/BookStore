@@ -44,12 +44,4 @@ public class RequestRepository implements IRequestRepostitory {
 
     public void createRequest(Book book) {
     }
-
-    public Map<Integer, Request> getRequestMap() {
-        return requestMap;
-    }
-
-    public void setRequestMap(Map<Integer, Request> requestMap) {
-        this.requestMap = requestMap;
-    }
 }

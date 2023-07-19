@@ -73,12 +73,12 @@ public class OrderService implements IOrderService {
         return listFulfilledOrders;
     }
 
-    public void changeOrderStatus(int id, OrderStatus status) {
+    public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
         for (Order ord : orderRepository.getOrdersList()) {
-            if (ord.getId() != id) {
+            if (ord.getId() != orderId) {
                 continue;
             }
-            if (status == OrderStatus.FULFILLED) {
+            if (newOrderStatus == OrderStatus.FULFILLED) {
                 if (requestRepository.getRequestList().size() != 0) { //search request for book
                     for (Request rq : requestRepository.getRequestList()) {
                         if (ord.getListBook().contains(rq.getBook())) {
@@ -87,27 +87,27 @@ public class OrderService implements IOrderService {
                         }
                     }
                 } else {
-                    orderRepository.updateStatus(id, status);
-                    orderRepository.setDateExecution(id, LocalDate.now());
-                    System.out.println("Status for Order with id=" + id + " changed: " + status);
+                    orderRepository.updateStatus(orderId, newOrderStatus);
+                    orderRepository.setDateExecution(orderId, LocalDate.now());
+                    System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
                 }
             } else {
-                orderRepository.updateStatus(id, status);
-                System.out.println("Status for Order with id=" + id + " changed: " + status);
+                orderRepository.updateStatus(orderId, newOrderStatus);
+                System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
             }
         }
     }
 
     @Override
-    public void removeOrder(int id) {
-        orderRepository.removeById(id);
-        System.out.println("Order with id=" + id + " was canceled");
+    public void removeOrder(int orderId) {
+        orderRepository.removeById(orderId);
+        System.out.println("Order with id=" + orderId + " was canceled");
     }
 
     //Order details (any customer data + books);
-    public void printOrderDetails(int id) {
+    public void printOrderDetails(int orderId) {
         for (Order ord : orderRepository.getOrdersList())
-            if (ord.getId() == id) {
+            if (ord.getId() == orderId) {
                 System.out.println("Customer: " + ord.getBuyer());
                 System.out.println("Books: ");
                 ord.getListBook().forEach(book -> System.out.println(book.toString()));

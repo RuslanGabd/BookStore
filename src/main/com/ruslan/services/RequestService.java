@@ -1,8 +1,5 @@
 package com.ruslan.services;
 
-import com.ruslan.data.book.Book;
-import com.ruslan.data.order.Order;
-import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.data.request.Request;
@@ -28,33 +25,25 @@ public class RequestService implements IRequestService {
         }
         System.out.println();
     }
+
     @Override
-    public void createRequest(Book book) {
-        requestRepository.saveRequest(new Request(book));
+    public void createRequest(int bookId) {
+        requestRepository.saveRequest(new Request(bookRepository.getById(bookId)));
     }
 
-    public void cancelRequestsUseId(int id) {
-        requestRepository.removeRequest(id);
-        System.out.println("Request id=" + id + " canceled");
+    public void cancelRequestsById(int requestId) {
+        requestRepository.removeRequest(requestId);
+        System.out.println("Request id=" + requestId + " canceled");
     }
 
-    public void cancelRequestsForBook(Book book) {
+    public void cancelRequestsByBookId(int bookId) {
         for (Request req : requestRepository.getRequestList())
-            if (req.getBook().equals(book)) {
+            if (req.getBook().getId() == bookId) {
                 requestRepository.removeRequest(req.getId());
                 System.out.println("Request id=" + req.getId() + " canceled");
             }
     }
 
-    public List<Order> createListOrdersFulfilled(List<Order> list) {
-        List<Order> listFulfilledOrders = new ArrayList<>();
-        for (Order ord : list) {
-            if (ord.getStatus() == OrderStatus.FULFILLED) {
-                listFulfilledOrders.add(ord);
-            }
-        }
-        return listFulfilledOrders;
-    }
 
     //List of book requests (sort by number of requests, alphabetically);
     public List<Request> getRequestSortedByNumber() {
@@ -63,16 +52,9 @@ public class RequestService implements IRequestService {
         return listReq;
     }
 
-    public Map<String, Request> getRequestSortedByAlphabetically() {
+    public List<Request> getRequestSortedByAlphabetically() {
         Map<String, Request> requestTreeMap = new TreeMap<>();
         requestRepository.getRequestList().forEach(request -> requestTreeMap.put(request.getBook().getTitle(), request));
-        return requestTreeMap;
-    }
-
-    public void printMap(String header, Map<String, Request> requestMap) {
-        System.out.println(header);
-        for (Map.Entry<String, Request> entry : requestMap.entrySet()) {
-            System.out.println("Title book: "+entry.getKey() + " : " + entry.getValue().toString());
-        }
+        return new ArrayList<Request>(requestTreeMap.values());
     }
 }

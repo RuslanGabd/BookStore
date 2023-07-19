@@ -58,8 +58,8 @@ public class TestBookService {
         orderService.changeOrderDateExecution(4, randomDate.generateDateExecutionForOrder());
         orderService.changeOrderDateExecution(5, randomDate.generateDateExecutionForOrder());
 
-        requestService.createRequest(book1);
-        requestService.createRequest(book5);
+        requestService.createRequest(1);
+        requestService.createRequest(5) ;
 
         //List of books (sort alphabetically, by date of publication, by price, by stock availability);
         bookService.printList("Books sorted by Title Alphabetically:", bookService.getBooksSortedByTitleAlphabetically());
@@ -74,7 +74,7 @@ public class TestBookService {
 
         //List of book requests (sort by number of requests, alphabetically);
         requestService.printList("Requests sorted by Number:", requestService.getRequestSortedByNumber());
-        requestService.printMap("Requests sorted by Alphabetically", requestService.getRequestSortedByAlphabetically());
+        requestService.printList("Requests sorted by Alphabetically", requestService.getRequestSortedByAlphabetically());
 
 
         //List of completed orders for a period of time (sort by date, by price);
@@ -101,6 +101,6 @@ public class TestBookService {
         //Order details (any customer data + books);
         orderService.printOrderDetails(5);
         //Description of the book.
-        bookService.printDescriptionOfBook(book7);
+        bookService.printDescriptionOfBook(6);
     }
 }

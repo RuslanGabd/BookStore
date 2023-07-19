@@ -39,26 +39,26 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void changeStatusBook(int idBook, BookStatus status) {
-        bookRepository.updateStatus(idBook, status);
-        System.out.println("Book id=" + idBook + " changed status " + status);
+    public void changeStatusBook(int bookId, BookStatus status) {
+        bookRepository.updateStatus(bookId, status);
+        System.out.println("Book id=" + bookId + " changed status " + status);
     }
 
     @Override
-    public void removeBookFromStock(int idBook) {
-        bookRepository.updateStatus(idBook, BookStatus.OUT_OF_STOCK);
-        System.out.println("Book id=" + idBook + " status changed OUT_OF_STOCK");
+    public void removeBookFromStock(int bookId) {
+        bookRepository.updateStatus(bookId, BookStatus.OUT_OF_STOCK);
+        System.out.println("Book id=" + bookId + " status changed OUT_OF_STOCK");
     }
 
-    public void addBookToStockAndCancelRequests(int idBook) {
-        bookRepository.updateStatus(idBook, BookStatus.IN_STOCK);
-        cancelRequestsByIdBook(idBook);
-        System.out.println("Book " + idBook + " add to stock");
+    public void addBookToStockAndCancelRequests(int bookId) {
+        bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
+        cancelRequestsByIdBook(bookId);
+        System.out.println("Book " + bookId + " add to stock");
     }
 
-    public void cancelRequestsByIdBook(int idBook) {
+    public void cancelRequestsByIdBook(int bookId) {
         for (Request req : requestRepository.getRequestList())
-            if (req.getBook().equals(bookRepository.getById(idBook))) {
+            if (req.getBook().equals(bookRepository.getById(bookId))) {
                 requestRepository.removeRequest(req.getId());
                 System.out.println("Request id=" + req.getId() + " canceled");
             }
@@ -67,9 +67,9 @@ public class BookService implements IBookService {
 
 
     //Description of the book.
-    public void printDescriptionOfBook(Book book) {
-        System.out.println("Description for book with id=" + book.getId() + ":");
-        System.out.println(book.getDescription());
+    public void printDescriptionOfBook(int bookId) {
+        System.out.println("Description for book with id=" + bookId + ":");
+        System.out.println(bookRepository.getById(bookId).getDescription());
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
