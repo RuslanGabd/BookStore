@@ -137,7 +137,6 @@ public class OrderService implements IOrderService {
                                 && order.getDateExecution().isBefore(date2))
                 .map(Order::getTotalPrice)
                 .reduce(0, Integer::sum);
-
     }
 
     // List of completed orders for a period of time (sort by date, by price);
@@ -150,7 +149,7 @@ public class OrderService implements IOrderService {
                 .collect(Collectors.toList());
     }
 
-    public List<Order> getOrderListForPeriodByDate( LocalDate date1, LocalDate date2) {
+    public List<Order> getOrderListForPeriodByDate(LocalDate date1, LocalDate date2) {
         return orderRepository.getOrdersList()
                 .stream()
                 .filter(order ->

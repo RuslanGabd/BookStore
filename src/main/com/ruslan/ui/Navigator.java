@@ -23,6 +23,6 @@ public class Navigator {
         if (currentMenu.getMenuItems().get(index).getAction() != null) {
             currentMenu.getMenuItems().get(index).getAction().execute();
         }
-        currentMenu = currentMenu.getMenuItems().get(index).getNextMenu();
+         currentMenu = currentMenu.getMenuItems().get(index).getNextMenu();
     }
 }

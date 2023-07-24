@@ -6,6 +6,7 @@ public class OrderListByPrice implements IAction {
 
     @Override
     public void execute() {
-        orderService.printList("Orders sorted by Price", orderService.getOrdersSortedByPrice());
+        orderService.printList("Orders sorted by Price",
+                orderService.getOrdersSortedByPrice());
     }
 }

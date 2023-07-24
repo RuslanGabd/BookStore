@@ -67,9 +67,9 @@ public class BookService implements IBookService {
 
 
     //Description of the book.
-    public void printDescriptionOfBook(Book book) {
-        System.out.println("Description for book with id=" + book.getId() + ":");
-        System.out.println(book.getDescription());
+    public void printDescriptionOfBook(int id) {
+        System.out.println("Description for book with id=" + id + ":");
+        System.out.println(bookRepository.getById(id).getDescription());
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);

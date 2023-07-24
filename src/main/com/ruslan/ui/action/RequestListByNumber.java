@@ -8,6 +8,4 @@ public class RequestListByNumber implements IAction {
         requestService.printList("Requests sorted by Number",
                 requestService.getRequestSortedByNumber());
     }
-
-
 }

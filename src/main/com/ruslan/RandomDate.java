@@ -17,11 +17,9 @@ public class RandomDate {
     }
     public LocalDate generateDateExecutionForOrder() {
         long minDay = LocalDate.of(2023, 01, 01).toEpochDay();
-        long maxDay = LocalDate.of(2023, 04, 01).toEpochDay();
+        long maxDay = LocalDate.of(2023, 07, 23).toEpochDay();
         long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
         LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
         return randomDate;
     }
-
-
 }

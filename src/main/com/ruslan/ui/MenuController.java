@@ -12,6 +12,7 @@ public class MenuController {
     public void run() {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+
         builder.buildMenu();
         Menu rootMenu = builder.getRootMenu();
 

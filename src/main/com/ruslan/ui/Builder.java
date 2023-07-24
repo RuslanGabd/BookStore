@@ -7,25 +7,34 @@ import java.util.Arrays;
 
 public class Builder {
 
-    private Menu rootMenu = new Menu();
+    private final Menu rootMenu = new Menu();
 
     public void buildMenu() {
 
         MenuItem showListBookByAlphabet = new MenuItem("Books sorted by Alphabet",
                 new BookListByAlphabetService(), rootMenu);
-//        showListBookByAlphabet.setTitle("Books sorted by Alphabet");
-//        showListBookByAlphabet.setAction(new BookListByAlphabetService());
-//        showListBookByAlphabet.setNextMenu(rootMenu);
         MenuItem showListBookByDate = new MenuItem("Books sorted by Date Publication",
                 new BookListByDatePublication(), rootMenu);
         MenuItem showListBookByStatus = new MenuItem("Books sorted by Status",
                 new BookListByDatePublication(), rootMenu);
         MenuItem showListBookByPrice = new MenuItem("Books sorted by Price",
                 new BookListByDatePublication(), rootMenu);
-        Menu menuShowListBooks = new Menu("Show list of books", Arrays.asList(showListBookByAlphabet,
-                showListBookByDate, showListBookByStatus, showListBookByPrice));
+        MenuItem showListBookListStaleForPeriodByDate = new MenuItem("Stale books sorted by date",
+                new BookListStaleForPeriodByDate(), rootMenu);
+        MenuItem showListBookListStaleForPeriodByPrice = new MenuItem("Stale books sorted by price",
+                new BookListStaleForPeriodByPrice(), rootMenu);
+        MenuItem showBookDescription = new MenuItem("Description of book",
+                new BookDescription(), rootMenu);
+        Menu menuShowListBooks = new Menu("Books", Arrays.asList(
+                showListBookByAlphabet,
+                showListBookByDate,
+                showListBookByStatus,
+                showListBookByPrice,
+                showListBookListStaleForPeriodByDate,
+                showListBookListStaleForPeriodByPrice,
+                showBookDescription));
 
-        MenuItem showListBooks = new MenuItem("Show lists of books", null, menuShowListBooks);
+        MenuItem showListBooks = new MenuItem("Books", null, menuShowListBooks);
         //________________________________________________________________
 
         MenuItem showListOrderByDateExecution = new MenuItem("Orders sorted by Date Execution",
@@ -34,16 +43,25 @@ public class Builder {
                 new OrderListByPrice(), rootMenu);
         MenuItem showListOrderByStatus = new MenuItem("Orders sorted by Status",
                 new OrderListByStatus(), rootMenu);
+        MenuItem showListOrderForPeriodByStatus = new MenuItem("Completed orders for period sorted by Status",
+                new OrderListCompletedForPeriodByStatus(), rootMenu);
+        MenuItem showListOrderForPeriodByDate = new MenuItem("Completed orders for period sorted by Date",
+                new OrderListCompletedForPeriodByDate(), rootMenu);
+        MenuItem showNumbersCompletedOrders = new MenuItem("Show numbers of completed orders",
+                new OrderNumbersCompletedForPeriod(), rootMenu);
+        MenuItem showOrderDetails = new MenuItem("Show order details",
+                new OrderDetails(), rootMenu);
 
-//        MenuItem showListOrderForPeriod = new MenuItem("Orders sorted by Status",
-//                new OrderListCompletedForPeriod(), rootMenu);
-        Menu menuShowListOrders = new Menu("Show list of orders", Arrays.asList(showListOrderByDateExecution,
-                showListOrderByPrice, showListOrderByStatus));
-        MenuItem showListOrders = new MenuItem("Show lists of orders", null, menuShowListOrders);
-        //________________________________________________________________
+        Menu menuShowListOrders = new Menu("Show list of orders", Arrays.asList(
+                showListOrderByDateExecution,
+                showListOrderByPrice,
+                showListOrderByStatus,
+                showListOrderForPeriodByStatus,
+                showListOrderForPeriodByDate,
+                showNumbersCompletedOrders,
+                showOrderDetails));
 
-
-
+        MenuItem showListOrders = new MenuItem("Orders", null, menuShowListOrders);
         //________________________________________________________________
 
 
@@ -54,32 +72,21 @@ public class Builder {
 
         Menu menuShowListRequest = new Menu("Show list of requests", Arrays.asList(showListRequestsByNumber,
                 showListRequestsByAlphabetically));
-        MenuItem showListRequest = new MenuItem("Show lists of requests", null, menuShowListRequest);
+        MenuItem showListRequest = new MenuItem("Requests", null, menuShowListRequest);
         //________________________________________________________________
 
-        MenuItem orderBook = new MenuItem("Order a book", new CreateOrderBook(), rootMenu);
-        orderBook.setTitle("Order a book");
-        orderBook.setAction(null);
-        orderBook.setNextMenu(rootMenu);
-        // MenuItem orderRequest = new MenuItem();
-        //     orderRequest.setTitle("Create request");
-        //    orderRequest.setAction(null);
-        //    orderRequest.setNextMenu(rootMenu);
-        // MenuItem orderCancel = new MenuItem();
-        //   orderCancel.setTitle("Cancel order");
-        //   orderCancel.setAction(null);
-        //    orderCancel.setNextMenu(rootMenu);
+        MenuItem showEarnedMoney = new MenuItem("Show earned money for period", new EarnedMoney(), rootMenu);
 
-        //    Menu menuOrders = new Menu("Menu orders", Arrays.asList(orderBook, orderRequest, orderCancel));
-        Menu menuOrders = new Menu("Menu orders", Arrays.asList(orderBook));
-        MenuItem order = new MenuItem("Order1", null, menuOrders);
-//        order.setTitle("Order");
-//        order.setAction(null);
-//        order.setNextMenu(menuOrders);m
+
+
         //________________________________________________________________
 
         rootMenu.setName("Root menu");
-        rootMenu.setMenuItems(Arrays.asList(order, showListBooks, showListOrders, showListRequest));
+        rootMenu.setMenuItems(Arrays.asList(
+                showListBooks,
+                showListOrders,
+                showListRequest,
+                showEarnedMoney));
     }
 
     public Menu getRootMenu() {

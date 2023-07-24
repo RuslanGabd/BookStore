@@ -8,6 +8,4 @@ public class RequestListByAlphabetically implements IAction {
         requestService.printMap("Requests sorted by Alphabetically",
                 requestService.getRequestSortedByAlphabetically());
     }
-
-
 }
