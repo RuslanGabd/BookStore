@@ -69,14 +69,6 @@ public class OrderService implements IOrderService {
     }
 
 
-    public List<Order> getListOrdersFulfilled() {
-        return orderRepository.getOrdersList()
-                .stream()
-                .filter(order ->
-                        order.getStatus() == OrderStatus.COMPLETED)
-                .collect(Collectors.toList());
-    }
-
     public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
         for (Order ord : orderRepository.getOrdersList()) {
             if (ord.getId() != orderId) {
@@ -138,6 +130,4 @@ public class OrderService implements IOrderService {
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
     }
-
-
 }
