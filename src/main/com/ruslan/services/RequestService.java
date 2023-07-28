@@ -18,15 +18,6 @@ public class RequestService implements IRequestService {
     }
 
     @Override
-    public void printList(String header, List<Request> list) {
-        System.out.println(header);
-        for (Request req : list) {
-            System.out.println(req.toString() + "; ");
-        }
-        System.out.println();
-    }
-
-    @Override
     public void createRequest(int bookId) {
         requestRepository.saveRequest(new Request(bookRepository.getById(bookId)));
     }
@@ -44,7 +35,6 @@ public class RequestService implements IRequestService {
             }
     }
 
-
     //List of book requests (sort by number of requests, alphabetically);
     public List<Request> getRequestSortedByNumber() {
         List<Request> listReq = requestRepository.getRequestList();
@@ -54,7 +44,9 @@ public class RequestService implements IRequestService {
 
     public List<Request> getRequestSortedByAlphabetically() {
         Map<String, Request> requestTreeMap = new TreeMap<>();
-        requestRepository.getRequestList().forEach(request -> requestTreeMap.put(request.getBook().getTitle(), request));
+        requestRepository.getRequestList()
+                .forEach(request
+                        -> requestTreeMap.put(request.getBook().getTitle(), request));
         return new ArrayList<Request>(requestTreeMap.values());
     }
 }

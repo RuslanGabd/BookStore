@@ -5,10 +5,8 @@ import com.ruslan.data.repository.rinterface.IRequestRepostitory;
 import com.ruslan.data.request.Request;
 import com.ruslan.data.request.RequestCounted;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class RequestRepository implements IRequestRepostitory {
 
@@ -43,5 +41,14 @@ public class RequestRepository implements IRequestRepostitory {
     }
 
     public void createRequest(Book book) {
+    }
+
+    public Request getRequestForBook(int bookId) {
+        return requestMap.values()
+                .stream()
+                .filter(request
+                        -> request.getBook().getId() == bookId)
+                .findAny()
+                .orElse(null);
     }
 }

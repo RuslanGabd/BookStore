@@ -41,11 +41,7 @@ public class TestBookService {
         orderService.createOrder(Arrays.asList(book1, book5, book6));
         orderService.createOrder(Arrays.asList(book3, book5, book6));
 
-        orderService.changeOrderStatus(1, OrderStatus.FULFILLED);
-        orderService.changeOrderStatus(3, OrderStatus.FULFILLED);
-        orderService.changeOrderStatus(4, OrderStatus.FULFILLED);
-        orderService.changeOrderStatus(5, OrderStatus.FULFILLED);
-        orderService.changeOrderStatus(2, OrderStatus.CANCELLED);
+
 
         orderService.changeOrderDateCreated(1, randomDate.generateDateForTest());
         orderService.changeOrderDateCreated(2, randomDate.generateDateForTest());
@@ -59,29 +55,34 @@ public class TestBookService {
         orderService.changeOrderDateExecution(5, randomDate.generateDateExecutionForOrder());
 
         requestService.createRequest(1);
-        requestService.createRequest(5) ;
+        //requestService.createRequest(5) ;
 
+        orderService.changeOrderStatus(1, OrderStatus.COMPLETED);
+        orderService.changeOrderStatus(3, OrderStatus.COMPLETED);
+        orderService.changeOrderStatus(4, OrderStatus.COMPLETED);
+        orderService.changeOrderStatus(5, OrderStatus.COMPLETED);
+        orderService.changeOrderStatus(2, OrderStatus.CANCELLED);
         //List of books (sort alphabetically, by date of publication, by price, by stock availability);
-        bookService.printList("Books sorted by Title Alphabetically:", bookService.getBooksSortedByTitleAlphabetically());
-        bookService.printList("Books sorted by DAte Publication:", bookService.getBooksSortedByDatePublication());
-        bookService.printList("Books sorted by Status:", bookService.getBooksSortedByStatus());
+//        bookService.printList("Books sorted by Title Alphabetically:", bookService.getBooksSortedByTitleAlphabetically());
+//        bookService.printList("Books sorted by DAte Publication:", bookService.getBooksSortedByDatePublication());
+//        bookService.printList("Books sorted by Status:", bookService.getBooksSortedByStatus());
 
 
         //List of orders (sort by date of execution, by price, by status);
-        orderService.printList("Orders sorted by Price:", orderService.getOrdersSortedByPrice());
-        orderService.printList("Orders sorted by Status:", orderService.getOrdersSortedByStatus());
-        orderService.printList("Orders sorted by DateExecution:", orderService.getOrdersSortedByDateExecution());
-
-        //List of book requests (sort by number of requests, alphabetically);
-        requestService.printList("Requests sorted by Number:", requestService.getRequestSortedByNumber());
-        requestService.printList("Requests sorted by Alphabetically", requestService.getRequestSortedByAlphabetically());
-
-
+//        orderService.printList("Orders sorted by Price:", orderService.getOrdersSortedByPrice());
+        //orderService.printList("Orders sorted by Status:", orderService.getOrdersSortedByStatus());
+//        orderService.printList("Orders sorted by DateExecution:", orderService.getOrdersSortedByDateExecution());
+//
+//        //List of book requests (sort by number of requests, alphabetically);
+//        requestService.printList("Requests sorted by Number:", requestService.getRequestSortedByNumber());
+//        requestService.printList("Requests sorted by Alphabetically", requestService.getRequestSortedByAlphabetically());
+//
+//
         //List of completed orders for a period of time (sort by date, by price);
-        orderService.printList("Orders for period sorted by Date", orderService.getOrdersSortedByDateForPeriod(LocalDate.of(1970, 1, 1),
-                LocalDate.of(2023, 06, 30)));
-        orderService.printList("Orders for period sorted by Price", orderService.getOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
-                LocalDate.of(2023, 06, 30)));
+     //   orderService.printList("Orders for period sorted by Date", orderService.getOrdersSortedByDateForPeriod(LocalDate.of(1970, 1, 1),
+        //        LocalDate.of(2023, 06, 30)));
+      //  orderService.printList("Orders for period sorted by Price", orderService.getOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
+       //         LocalDate.of(2023, 06, 30)));
 
         // The amount of money earned over a period of time;
         System.out.println("Earned money for period: "
@@ -90,17 +91,18 @@ public class TestBookService {
 
 
         //The number of completed orders over a period of time;
-        System.out.println("The number of completed orders over a period of time: "
-                + orderService.getNumberFulfilledOrdersForPeriod(LocalDate.of(1970, 1, 1),
+        System.out.println("Total completed orders over a period of time: "
+                + orderService.getCountCompletedOrdersForPeriod(LocalDate.of(1970, 1, 1),
                 LocalDate.of(2023, 06, 30)));
-
-        //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
-        bookService.printList("Stale books sorted by Price", bookService.getStaleBooksSortedByPrice());
-        bookService.printList("Stale books sorted by Date", bookService.getStaleBooksSortedByDate());
+//
+//        //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
+//        bookService.printList("Stale books sorted by Price", bookService.getStaleBooksSortedByPrice());
+//        bookService.printList("Stale books sorted by Date", bookService.getStaleBooksSortedByDate());
 
         //Order details (any customer data + books);
-        orderService.printOrderDetails(5);
+        System.out.println(  orderService.OrderDetails(5));
         //Description of the book.
-        bookService.printDescriptionOfBook(6);
+        bookService.getDescriptionOfBook(6);
+
     }
 }

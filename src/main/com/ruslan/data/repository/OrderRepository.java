@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
 
@@ -47,5 +48,27 @@ public class OrderRepository implements IOrderRepository {
     @Override
     public void setDateExecution(int id, LocalDate date) {
         getById(id).setDateExecution(date);
+    }
+
+    public List<Order> getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2) {
+        return ordersMap.values().stream().filter(order ->
+                        order.getStatus() == OrderStatus.COMPLETED
+                                && order.getDateExecution().isAfter(date1)
+                                && order.getDateExecution().isBefore(date2))
+                .collect(Collectors.toList());
+    }
+
+    public List<Order> getOrdersForPeriodDateExecution(LocalDate date1, LocalDate date2) {
+        return ordersMap.values().stream().filter(order ->
+                        order.getDateExecution().isAfter(date1)
+                                && order.getDateExecution().isBefore(date2))
+                .collect(Collectors.toList());
+    }
+
+    public List<Order> getOrdersForPeriodDateCreation(LocalDate date1, LocalDate date2) {
+        return ordersMap.values().stream().filter(order ->
+                        order.getDateCreated().isAfter(date1)
+                                && order.getDateCreated().isBefore(date2))
+                .collect(Collectors.toList());
     }
 }

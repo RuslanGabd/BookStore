@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IRequestService {
 
-    void printList(String header, List<Request> list);
 
     void createRequest(int id);
 

@@ -9,7 +9,7 @@ import java.util.List;
 public interface IBookService {
 
 
-    void printList(String header, List<Book> list);
+
 
     Book createBook(String title, String author, int price, LocalDate datePublication);
 

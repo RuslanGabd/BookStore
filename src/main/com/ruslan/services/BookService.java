@@ -3,7 +3,6 @@ package com.ruslan.services;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
-import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
@@ -11,10 +10,8 @@ import com.ruslan.data.request.Request;
 import com.ruslan.services.sinterface.IBookService;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class BookService implements IBookService {
@@ -65,31 +62,18 @@ public class BookService implements IBookService {
     }
 
 
-
     //Description of the book.
-    public void printDescriptionOfBook(int bookId) {
-        System.out.println("Description for book with id=" + bookId + ":");
-        System.out.println(bookRepository.getById(bookId).getDescription());
+    public String getDescriptionOfBook(int bookId) {
+        return "Description for book with id=" + bookId + ":\n" +
+                bookRepository.getById(bookId).getDescription();
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
-    public List<Order> orderListForPeriodByExecutionDate(List<Order> orderList, LocalDate date1, LocalDate date2) {
-        return orderList.stream()
-                .filter(order ->
-                        order.getDateExecution().isAfter(date1)
-                                && order.getDateExecution().isBefore(date2))
-                .collect(Collectors.toList());
-    }
 
     public List<Book> getStaleBooks() {
         List<Book> staleBookList = bookRepository.getBooksList();
-        List<Order> fulfilledListOrders =
-                orderRepository.getOrdersList()
-                        .stream()
-                        .filter(order ->
-                                order.getStatus() == OrderStatus.FULFILLED)
-                        .toList();
-        List<Order> orderList = orderListForPeriodByExecutionDate(fulfilledListOrders, LocalDate.now().minusMonths(6),
+        List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(
+                LocalDate.now().minusMonths(6),
                 LocalDate.now());
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
@@ -97,78 +81,48 @@ public class BookService implements IBookService {
 
     public List<Book> getStaleBooksSortedByDate() {
         List<Book> sortedBooks = bookRepository.getBooksList();
-        Collections.sort(sortedBooks, Comparator.comparing(Book::getDatePublication));
+        sortedBooks.sort(Comparator.comparing(Book::getDatePublication));
         return sortedBooks;
     }
 
     public List<Book> getStaleBooksSortedByPrice() {
         List<Book> sortedBooks = bookRepository.getBooksList();
-        Collections.sort(sortedBooks, Comparator.comparing(Book::getPrice));
+        sortedBooks.sort(Comparator.comparing(Book::getPrice));
         return sortedBooks;
     }
 
     //   List of books (sort alphabetically, by date of publication, by price, by stock availability);
-    @Override
-    public void printList(String header, List<Book> list) {
-        System.out.println(header);
-        for (Book bk : list) {
-            System.out.println(bk.toString() + "; ");
-        }
-        System.out.println();
-    }
 
 
     public List<Book> getBooksSortedByTitleAlphabetically() {
         List<Book> bookList = bookRepository.getBooksList();
-        Collections.sort(bookList, (o1, o2) -> CharSequence.compare(o2.getTitle(), o1.getTitle()));
+        bookList.sort((o1, o2) -> CharSequence.compare(o2.getTitle(), o1.getTitle()));
         return bookList;
     }
 
 
     public List<Book> getBooksSortedByDatePublication() {
         List<Book> bookList = bookRepository.getBooksList();
-        Collections.sort(bookList, Comparator.comparing(Book::getDatePublication));
+        bookList.sort(Comparator.comparing(Book::getDatePublication));
         return bookList;
     }
 
 
     public List<Book> getBooksSortedByPrice() {
         List<Book> bookList = bookRepository.getBooksList();
-        Collections.sort(bookList, Comparator.comparingInt(Book::getPrice));
+        bookList.sort(Comparator.comparingInt(Book::getPrice));
         return bookList;
     }
 
     public List<Book> getBooksSortedByStatus() {
-        List<Book> sortedBooks = bookRepository.getBooksList();
-        Book temp;
-        for (Book bk : bookRepository.getBooksList()) {
-            for (int i = 0; i < sortedBooks.size() - 1; i++) {
-                if (sortedBooks.get(i).getStatus() == BookStatus.NOT_AVAILABLE &&
-                        sortedBooks.get(i + 1).getStatus() == BookStatus.IN_STOCK) {
-                    temp = sortedBooks.get(i);
-                    sortedBooks.set(i, sortedBooks.get(i + 1));
-                    sortedBooks.set(i + 1, temp);
-                }
-                if (sortedBooks.get(i).getStatus() == BookStatus.NOT_AVAILABLE &&
-                        sortedBooks.get(i + 1).getStatus() == BookStatus.OUT_OF_STOCK) {
-                    temp = sortedBooks.get(i);
-                    sortedBooks.set(i, sortedBooks.get(i + 1));
-                    sortedBooks.set(i + 1, temp);
-                }
-                if (sortedBooks.get(i).getStatus() == BookStatus.OUT_OF_STOCK &&
-                        sortedBooks.get(i + 1).getStatus() == BookStatus.IN_STOCK) {
-                    temp = sortedBooks.get(i);
-                    sortedBooks.set(i, sortedBooks.get(i + 1));
-                    sortedBooks.set(i + 1, temp);
-                }
-            }
-        }
-        return sortedBooks;
+        List<Book> bookList = bookRepository.getBooksList();
+        bookList.sort(Comparator.comparing(Book::getStatus));
+        return bookList;
     }
 
     public List<Book> getBooksSortedByAuthor() {
         List<Book> sortedBooks = bookRepository.getBooksList();
-        Collections.sort(sortedBooks, (o1, o2) -> CharSequence.compare(o2.getAuthor(), o1.getAuthor()));
+        sortedBooks.sort((o1, o2) -> CharSequence.compare(o2.getAuthor(), o1.getAuthor()));
         return sortedBooks;
     }
 }
