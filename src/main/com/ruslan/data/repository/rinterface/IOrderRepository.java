@@ -5,6 +5,7 @@ import com.ruslan.data.order.OrderStatus;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface IOrderRepository {
 
@@ -13,7 +14,7 @@ public interface IOrderRepository {
 
     List<Order> getOrdersList();
 
-    Order getById(int id);
+    Optional<Order> getById(int id);
 
     void updateStatus(int id, OrderStatus status);
 

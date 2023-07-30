@@ -28,11 +28,9 @@ public class RequestService implements IRequestService {
     }
 
     public void cancelRequestsByBookId(int bookId) {
-        for (Request req : requestRepository.getRequestList())
-            if (req.getBook().getId() == bookId) {
-                requestRepository.removeRequest(req.getId());
-                System.out.println("Request id=" + req.getId() + " canceled");
-            }
+        Optional.of(requestRepository.getRequestForBook(bookId)).ifPresent(request -> {
+            requestRepository.removeRequest(request.getId());
+        });
     }
 
     //List of book requests (sort by number of requests, alphabetically);
@@ -43,10 +41,8 @@ public class RequestService implements IRequestService {
     }
 
     public List<Request> getRequestSortedByAlphabetically() {
-        Map<String, Request> requestTreeMap = new TreeMap<>();
-        requestRepository.getRequestList()
-                .forEach(request
-                        -> requestTreeMap.put(request.getBook().getTitle(), request));
-        return new ArrayList<Request>(requestTreeMap.values());
+        List<Request> listReq = requestRepository.getRequestList();
+        listReq.sort(Comparator.comparing(request -> request.getBook().getTitle()));
+        return listReq;
     }
 }

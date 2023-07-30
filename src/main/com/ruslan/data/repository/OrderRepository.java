@@ -6,10 +6,7 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.rinterface.IOrderRepository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
@@ -30,14 +27,14 @@ public class OrderRepository implements IOrderRepository {
     }
 
     @Override
-    public Order getById(int id) {
-        return ordersMap.get(id);
+    public Optional<Order> getById(int id) {
+        return Optional.of(ordersMap.get(id));
     }
 
 
     @Override
     public void updateStatus(int id, OrderStatus status) {
-        getById(id).setStatus(status);
+        getById(id).ifPresent(order -> order.setStatus(status));
     }
 
     @Override
@@ -47,7 +44,7 @@ public class OrderRepository implements IOrderRepository {
 
     @Override
     public void setDateExecution(int id, LocalDate date) {
-        getById(id).setDateExecution(date);
+        getById(id).ifPresent(order -> order.setDateExecution(date));
     }
 
     public List<Order> getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2) {

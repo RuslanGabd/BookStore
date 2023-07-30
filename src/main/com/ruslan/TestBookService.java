@@ -54,8 +54,8 @@ public class TestBookService {
         orderService.changeOrderDateExecution(4, randomDate.generateDateExecutionForOrder());
         orderService.changeOrderDateExecution(5, randomDate.generateDateExecutionForOrder());
 
-        requestService.createRequest(1);
-        //requestService.createRequest(5) ;
+        requestService.createRequest(5);
+        requestService.createRequest(1) ;
 
         orderService.changeOrderStatus(1, OrderStatus.COMPLETED);
         orderService.changeOrderStatus(3, OrderStatus.COMPLETED);
@@ -103,6 +103,6 @@ public class TestBookService {
         System.out.println(  orderService.OrderDetails(5));
         //Description of the book.
         bookService.getDescriptionOfBook(6);
-
+        System.out.println(requestService.getRequestSortedByAlphabetically());
     }
 }

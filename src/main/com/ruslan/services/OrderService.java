@@ -41,11 +41,11 @@ public class OrderService implements IOrderService {
     }
 
     public void changeOrderDateCreated(int orderId, LocalDate date) {
-        Optional.of(orderRepository.getById(orderId)).ifPresent(order -> order.setDateCreated(date));
+        orderRepository.getById(orderId).ifPresent(order -> order.setDateCreated(date));
     }
 
     public void changeOrderDateExecution(int orderId, LocalDate date) {
-        Optional.of(orderRepository.getById(orderId)).ifPresent(order -> order.setDateExecution(date));
+        orderRepository.getById(orderId).ifPresent(order -> order.setDateExecution(date));
     }
 
     // List of orders (sort by date of execution, by price, by status);
@@ -70,12 +70,9 @@ public class OrderService implements IOrderService {
 
 
     public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
-        for (Order ord : orderRepository.getOrdersList()) {
-            if (ord.getId() != orderId) {
-                continue;
-            }
+        orderRepository.getById(orderId).ifPresent(order -> {
             if (newOrderStatus == OrderStatus.COMPLETED) {
-                for (Book book : ord.getListBook())
+                for (Book book : order.getListBook())
                     if (requestRepository.getRequestForBook(book.getId()) != null) {
                         System.out.println("Request for book with id="
                                 + requestRepository.getRequestForBook(book.getId()).getBook().getId()
@@ -88,9 +85,8 @@ public class OrderService implements IOrderService {
             } else {
                 orderRepository.updateStatus(orderId, newOrderStatus);
                 System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
-
             }
-        }
+        });
     }
 
     @Override
@@ -100,7 +96,7 @@ public class OrderService implements IOrderService {
 
     //Order details (any customer data + books);
     public Order OrderDetails(int orderId) {
-        return orderRepository.getById(orderId);
+        return orderRepository.getById(orderId).orElse(null);
     }
 
     // The number of completed orders over a period of time;
@@ -110,12 +106,10 @@ public class OrderService implements IOrderService {
 
     // The amount of money earned over a period of time;
     public Integer getEarnedMoneyForPeriod(LocalDate date1, LocalDate date2) {
-        return orderRepository.getOrdersList()
+        return orderRepository.getCompletedOrdersForPeriod(date1, date2)
                 .stream()
-                .peek(order -> orderRepository.getCompletedOrdersForPeriod(date1, date2))
                 .map(Order::getTotalPrice)
                 .reduce(0, Integer::sum);
-
     }
 
     // List of completed orders for a period of time (sort by date, by price);
