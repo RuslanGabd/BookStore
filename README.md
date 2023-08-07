@@ -1,49 +1,44 @@
 # TASK 4.1
 
 ## BookStore
-
-Electronic car service administrator
+Electronic bookstore.
 
 The program should allow you to show:
 
-List of available places in service garages;
+List of books (sort alphabetically, by date of publication, by price, by stock availability);
 
-List of orders (sort by submission date, by completion date, by planned start date, by price);
+List of orders (sort by date of execution, by price, by status);
 
-List of mechanics (sort alphabetically, by busyness);
+List of book requests (sort by number of requests, alphabetically);
 
-List of currently executed orders (sort by submission date, by completion date, by price);
+List of completed orders for a period of time (sort by date, by price);
 
-Order executed by a specific mechanic;
+The amount of money earned over a period of time;
 
-Mechanics performing a specific order;
+The number of completed orders over a period of time;
 
-Orders (completed/deleted/canceled) for a period of time (sort by submission date, by completion date, by price);
+List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
 
-The number of available places on the service for any date in the future (calculated from the number of available mechanics and garage space);
+Order details (any customer data + books);
 
-The nearest available date.
+Description of the book.
 
 The program should provide the opportunity to: (already done)
 
-Add/Remove mechanics;
+Change status to "out of stock" if book is not present in warehouse;
 
-Add/remove garage place;
+Create an order;
 
-Add/Delete/Close/Cancel an order;
+Cancel the order;
 
-Shift the order completion time (due to delays in the execution of the current one).
+Change the order status (new, completed, canceled);
 
-Task Requirements:
+Add a book to the warehouse (closes all book requests and changes its status to “in stock”);
 
-The program does NOT implement a console user interface. Check the program's operability from the test class with the main() method;
+Leave a request for a book.
 
-A class diagram should be created for the program;
+__Addition__:
 
-The program must comply with the principles of OOP and the patterns of "high cohesion" and "low coupling";
+All available books are pre-defined. They must be “in stock” or “out of stock". Under “Leave a request for a book” means creating a request for a book that is currently “out of stock".
 
-To output the results of the work, use System.out.println(message);
-
-To output a message, use System.out.println();
-
-Source files .java should be embedded in GIT in the appropriate branch.
+When creating an order with a book that is not available, a request for this book is automatically created. The order cannot be completed until the book request is completed.

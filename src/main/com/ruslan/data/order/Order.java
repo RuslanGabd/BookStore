@@ -19,11 +19,10 @@ public class Order {
 
     private Integer totalPrice;
     private LocalDate dateExecution;
-
+    private LocalDate dateCreated;
 
     public Order(List<Book> listBook) {
         int commonPrice = 0;
-        this.id = OrderCounted.generateNewId();
         this.listBook = listBook;
         this.status = OrderStatus.NEW;
         for (Book bk : listBook) {
@@ -37,6 +36,7 @@ public class Order {
             if (bk.getStatus() == BookStatus.NOT_AVAILABLE) {
                 new Request(bk);
             }
+        this.dateCreated = LocalDate.now();
     }
 
 
@@ -60,7 +60,9 @@ public class Order {
                 ", address=" + address +
                 ", status=" + status +
                 ", totalPrice=" + totalPrice +
-                ", dateExecution=" + dateExecution ;
+                ", dateCreated=" + dateCreated +
+                ", dateExecution=" + dateExecution;
+
     }
 
 
@@ -79,7 +81,6 @@ public class Order {
     public void setListBook(List<Book> listBook) {
         this.listBook = listBook;
     }
-
 
 
     public String getBuyer() {
@@ -120,6 +121,14 @@ public class Order {
 
     public void setTotalPrice(Integer totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public LocalDate getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDate dateCreated) {
+        this.dateCreated = dateCreated;
     }
 }
 

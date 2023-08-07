@@ -2,20 +2,19 @@ package com.ruslan.data.request;
 
 import com.ruslan.data.book.Book;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Request {
     private Book book;
     private int id;
 
-    private Date date;
+    private LocalDate date;
 
     public Request(Book book) {
-
         this.book = book;
-        this.id = new RequestCounted().getId();
-        this.date = new Date();
+        this.date = LocalDate.now();
     }
+
 
     @Override
     public String toString() {
@@ -24,6 +23,7 @@ public class Request {
                 ", bookId=" + book.getId() +
                 ", date=" + date;
     }
+
 
     public Book getBook() {
         return book;
@@ -41,11 +41,11 @@ public class Request {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

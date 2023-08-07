@@ -18,13 +18,12 @@ public class Book {
 
 
     public Book(String title, String author, int price, LocalDate datePublication) {
-        this.id = BookCounted.generateNewId();
+
         this.title = title;
         this.author = author;
         this.price = price;
         this.status = BookStatus.IN_STOCK;
-        this.datePublication = LocalDate.now();
-
+        this.datePublication = datePublication;
     }
 
 
