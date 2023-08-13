@@ -22,6 +22,4 @@ public class RandomDate {
         LocalDate randomDate = LocalDate.ofEpochDay(randomDay);
         return randomDate;
     }
-
-
-}
+ }

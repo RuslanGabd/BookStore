@@ -77,6 +77,7 @@ public class OrderService implements IOrderService {
                         System.out.println("Request for book with id="
                                 + requestRepository.getRequestForBook(book.getId()).getBook().getId()
                                 + " is not finished. Please close request");
+                        break;
                     } else {
                         orderRepository.updateStatus(orderId, newOrderStatus);
                         orderRepository.setDateExecution(orderId, LocalDate.now());

@@ -9,6 +9,7 @@ import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.BookService;
 import com.ruslan.services.OrderService;
 import com.ruslan.services.RequestService;
+import com.ruslan.ui.MenuController;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -17,9 +18,9 @@ public class TestBookService {
 
     public static void main(String[] args) {
 
-        final BookRepository bookRepository = new BookRepository();
-        final OrderRepository orderRepository = new OrderRepository();
-        final RequestRepository requestRepository = new RequestRepository();
+        final BookRepository bookRepository = BookRepository.getInstance();
+        final OrderRepository orderRepository = OrderRepository.getInstance();
+        final RequestRepository requestRepository = RequestRepository.getInstance();
         BookService bookService = new BookService(bookRepository, orderRepository, requestRepository);
         OrderService orderService = new OrderService(orderRepository, requestRepository, bookRepository);
         RequestService requestService = new RequestService(requestRepository, bookRepository);
@@ -85,24 +86,27 @@ public class TestBookService {
        //         LocalDate.of(2023, 06, 30)));
 
         // The amount of money earned over a period of time;
-        System.out.println("Earned money for period: "
-                + orderService.getEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
-                LocalDate.of(2023, 06, 30)));
-
-
-        //The number of completed orders over a period of time;
-        System.out.println("Total completed orders over a period of time: "
-                + orderService.getCountCompletedOrdersForPeriod(LocalDate.of(1970, 1, 1),
-                LocalDate.of(2023, 06, 30)));
+//        System.out.println("Earned money for period: "
+//                + orderService.getEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
+//                LocalDate.of(2023, 06, 30)));
 //
-//        //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
-//        bookService.printList("Stale books sorted by Price", bookService.getStaleBooksSortedByPrice());
-//        bookService.printList("Stale books sorted by Date", bookService.getStaleBooksSortedByDate());
+//
+//        //The number of completed orders over a period of time;
+//        System.out.println("Total completed orders over a period of time: "
+//                + orderService.getCountCompletedOrdersForPeriod(LocalDate.of(1970, 1, 1),
+//                LocalDate.of(2023, 06, 30)));
+////
+////        //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
+////        bookService.printList("Stale books sorted by Price", bookService.getStaleBooksSortedByPrice());
+////        bookService.printList("Stale books sorted by Date", bookService.getStaleBooksSortedByDate());
+//
+//        //Order details (any customer data + books);
+//        System.out.println(  orderService.OrderDetails(5));
+//        //Description of the book.
+//        bookService.getDescriptionOfBook(6);
+//        System.out.println(requestService.getRequestSortedByAlphabetically());
 
-        //Order details (any customer data + books);
-        System.out.println(  orderService.OrderDetails(5));
-        //Description of the book.
-        bookService.getDescriptionOfBook(6);
-        System.out.println(requestService.getRequestSortedByAlphabetically());
+        MenuController menuController = new MenuController();
+        menuController.run();
     }
 }
