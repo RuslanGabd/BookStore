@@ -13,8 +13,6 @@ public class Builder {
 
     private final Menu rootMenu = new Menu();
 
-
-
     public void buildMenu() {
 
         MenuItem showListBookByAlphabet = new MenuItem("Books sorted by Alphabet",
@@ -34,7 +32,7 @@ public class Builder {
         MenuItem AddBookToStock = new MenuItem("Add a book to stock:",
                 new AddBookToStockAndCloseRequests(), rootMenu);
 
-        Menu menuShowListBooks = new Menu("Book menu", Arrays.asList(
+        Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,
                 showListBookByDate,
                 showListBookByStatus,
@@ -44,7 +42,7 @@ public class Builder {
                 showBookDescription,
                 AddBookToStock));
 
-        MenuItem showListBooks = new MenuItem("Book menu", null, menuShowListBooks);
+        MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________
 
         MenuItem showListOrderByDateExecution = new MenuItem("Orders sorted by Date Execution",
@@ -68,7 +66,7 @@ public class Builder {
         MenuItem changeOrderStatus = new MenuItem("Change order status",
                 new ChangeOrderStatus(), rootMenu);
 
-        Menu menuShowListOrders = new Menu("Order menu", Arrays.asList(
+        Menu menuShowOrderMenu = new Menu("Order menu", Arrays.asList(
                 createOrder,
                 cancelOrder,
                 changeOrderStatus,
@@ -80,7 +78,7 @@ public class Builder {
                 showListOrderCompletedForPeriodByDate,
                 showNumbersCompletedOrders));
 
-        MenuItem showListOrders = new MenuItem("Order menu", null, menuShowListOrders);
+        MenuItem showOrderMenu = new MenuItem("Order menu", null, menuShowOrderMenu);
         //________________________________________________________________
 
 
@@ -91,11 +89,11 @@ public class Builder {
         MenuItem CreateRequest = new MenuItem("Create request",
                 new CreateRequest(), rootMenu);
 
-        Menu menuShowListRequest = new Menu("Request menu",
+        Menu menuShowRequestMenu = new Menu("Request menu",
                 Arrays.asList(CreateRequest,
                         showListRequestsByNumber,
                         showListRequestsByAlphabetically));
-        MenuItem showListRequest = new MenuItem("Request menu", null, menuShowListRequest);
+        MenuItem showRequestMenu = new MenuItem("Request menu", null, menuShowRequestMenu);
         //________________________________________________________________
 
         MenuItem showEarnedMoney = new MenuItem("Show earned money for period", new EarnedMoney(), rootMenu);
@@ -105,9 +103,9 @@ public class Builder {
 
         rootMenu.setName("Root menu");
         rootMenu.setMenuItems(Arrays.asList(
-                showListBooks,
-                showListOrders,
-                showListRequest,
+                showBookMenu,
+                showOrderMenu,
+                showRequestMenu,
                 showEarnedMoney));
     }
 
