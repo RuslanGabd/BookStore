@@ -7,12 +7,10 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
-import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderService implements IOrderService {
     private final RequestRepository requestRepository;
