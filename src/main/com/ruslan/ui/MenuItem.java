@@ -1,8 +1,5 @@
 package com.ruslan.ui;
 
-import lombok.Data;
-
-@Data
 public class MenuItem {
     private String title;
 
@@ -18,5 +15,17 @@ public class MenuItem {
 
     public void doAction() {
         action.execute();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public IAction getAction() {
+        return action;
+    }
+
+    public Menu getNextMenu() {
+        return nextMenu;
     }
 }

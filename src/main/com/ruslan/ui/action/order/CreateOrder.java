@@ -1,7 +1,7 @@
 package com.ruslan.ui.action.order;
 
 import com.ruslan.data.book.Book;
-import com.ruslan.data.order.OrderStatus;
+import com.ruslan.data.repository.BookRepository;
 import com.ruslan.ui.IAction;
 
 import java.io.BufferedReader;
@@ -10,9 +10,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class CreateOrder implements IAction {
+public class CreateOrder extends ActionsOrder implements IAction {
+    final BookRepository bookRepository = BookRepository.getInstance();
+
     @Override
     public void execute() {
         while (true)

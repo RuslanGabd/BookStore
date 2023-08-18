@@ -1,7 +1,6 @@
 package com.ruslan.ui;
 
 
-import com.ruslan.ui.action.*;
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
 import com.ruslan.ui.action.request.CreateRequest;
@@ -13,6 +12,8 @@ import java.util.Arrays;
 public class Builder {
 
     private final Menu rootMenu = new Menu();
+
+
 
     public void buildMenu() {
 
@@ -31,7 +32,7 @@ public class Builder {
         MenuItem showBookDescription = new MenuItem("Description of book",
                 new BookDescription(), rootMenu);
         MenuItem AddBookToStock = new MenuItem("Add a book to stock:",
-                new AddBookToStock(), rootMenu);
+                new AddBookToStockAndCloseRequests(), rootMenu);
 
         Menu menuShowListBooks = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,

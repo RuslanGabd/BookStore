@@ -22,25 +22,26 @@ public class MenuController {
         String s;
         Integer selectedItem;
 
-            while (true) {
-                try {
-                    s = reader.readLine();
-                    if (s.equals("exit"))
-                        break;
-                    selectedItem = Integer.valueOf(s);
-                    navigator.navigate(selectedItem);
-                    navigator.printMenu();
-                    System.out.println("\nChoose number of menu");
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (NumberFormatException e) {
-                    System.out.println("Wrong number. For finish write: exit");
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    System.out.println("Wrong number. Please choose number of menu");
-
+        while (true) {
+            try {
+                s = reader.readLine();
+                if (s.equals("exit")) {
+                    break;
                 }
+                selectedItem = Integer.valueOf(s);
+                navigator.navigate(selectedItem);
+                navigator.printMenu();
+                System.out.println("\nChoose number of menu");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (NumberFormatException e) {
+                System.out.println("Wrong number. For finish write: exit");
+            } catch (ArrayIndexOutOfBoundsException e) {
+                System.out.println("Wrong number. Please choose number of menu");
+
             }
         }
+    }
 
 }
 

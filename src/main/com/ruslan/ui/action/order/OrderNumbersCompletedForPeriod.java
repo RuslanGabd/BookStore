@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-public class OrderNumbersCompletedForPeriod implements IAction {
+public class OrderNumbersCompletedForPeriod extends ActionsOrder implements IAction {
     @Override
     public void execute() {
         while (true)

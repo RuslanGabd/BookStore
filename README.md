@@ -1,6 +1,6 @@
-# TASK 5.1
+# TASK 6.1
 
 ## BookStore
-Add a user interface module (UI) to the program from the previous task. The module should contain a user console
-interface and allow you to fully perform all the functions included in the program. To refactor the entire program
-code to bring it into compliance with the principles of MVC. Example of console interface implementation:
+Add to the program being developed the ability to import and export data of the selected entity (you will need to add an ID for each entity). The import must support updating records with the same ID and adding new ones. In addition, the program should automatically establish links between objects. The file format for import/export must be CSV.
+
+The UI should be supplemented with new menu items that allow importing and expor ting for each entity. 

@@ -7,7 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ChangeOrderStatus implements IAction {
+public class ChangeOrderStatus extends ActionsOrder  implements IAction {
 
     @Override
     public void execute() {

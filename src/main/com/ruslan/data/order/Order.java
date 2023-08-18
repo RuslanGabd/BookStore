@@ -4,6 +4,7 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.request.Request;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -25,6 +26,7 @@ public class Order {
         int commonPrice = 0;
         this.listBook = listBook;
         this.status = OrderStatus.NEW;
+        System.out.println(listBook.size());
         for (Book bk : listBook) {
             if (bk.getStatus() == BookStatus.NOT_AVAILABLE) {
                 new Request(bk);

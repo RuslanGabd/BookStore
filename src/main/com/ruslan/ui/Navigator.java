@@ -3,7 +3,7 @@ package com.ruslan.ui;
 import lombok.Data;
 
 import java.util.concurrent.atomic.AtomicInteger;
-@Data
+
 public class Navigator {
     private Menu currentMenu;
 
@@ -24,5 +24,9 @@ public class Navigator {
             currentMenu.getMenuItems().get(index).getAction().execute();
         }
          currentMenu = currentMenu.getMenuItems().get(index).getNextMenu();
+    }
+
+    public Menu getCurrentMenu() {
+        return currentMenu;
     }
 }

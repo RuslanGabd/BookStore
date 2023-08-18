@@ -1,4 +1,4 @@
-package com.ruslan.ui.action;
+package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
 
@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-public class EarnedMoney implements IAction {
+public class EarnedMoney extends ActionsOrder  implements IAction {
     @Override
     public void execute() {
         while (true)

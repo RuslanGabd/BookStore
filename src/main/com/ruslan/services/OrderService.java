@@ -4,27 +4,23 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
-import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
+import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class OrderService implements IOrderService {
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
-    private final BookRepository bookRepository;
 
-    public OrderService(OrderRepository orderRepository, RequestRepository requestRepository,
-                        BookRepository bookRepository) {
+    public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
-        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -32,11 +28,9 @@ public class OrderService implements IOrderService {
         Order ord = new Order(listBooks);
         orderRepository.saveOrder(ord);
         System.out.println("Order created with id=" + ord.getId() + " contains " + listBooks.size() + " books");
-        for (Book book : listBooks) {
-            if (book.getStatus() == BookStatus.OUT_OF_STOCK) {
-                requestRepository.createRequest(book);
-            }
-        }
+        listBooks.stream()
+                .filter(book -> book.getStatus() == BookStatus.OUT_OF_STOCK)
+                .forEach(requestRepository::createRequest);
         return ord;
     }
 
@@ -72,23 +66,24 @@ public class OrderService implements IOrderService {
     public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
         orderRepository.getById(orderId).ifPresent(order -> {
             if (newOrderStatus == OrderStatus.COMPLETED) {
-                for (Book book : order.getListBook())
-                    if (requestRepository.getRequestForBook(book.getId()) != null) {
-                        System.out.println("Request for book with id="
-                                + requestRepository.getRequestForBook(book.getId()).getBook().getId()
-                                + " is not finished. Please close request");
-                        break;
-                    } else {
-                        orderRepository.updateStatus(orderId, newOrderStatus);
-                        orderRepository.setDateExecution(orderId, LocalDate.now());
-                        System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
-                    }
+                order.getListBook().stream().filter(book ->
+                                requestRepository.getRequestForBook(book.getId()) != null)
+                        .findAny().ifPresentOrElse(book -> {
+                            System.out.println("Request for book with id="
+                                    + requestRepository.getRequestForBook(book.getId()).getBook().getId()
+                                    + " is not finished. Please close request");
+                        }, () -> {
+                            orderRepository.updateStatus(orderId, newOrderStatus);
+                            orderRepository.setDateExecution(orderId, LocalDate.now());
+                            System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
+                        });
             } else {
                 orderRepository.updateStatus(orderId, newOrderStatus);
                 System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
             }
         });
     }
+
 
     @Override
     public void removeOrder(int orderId) {

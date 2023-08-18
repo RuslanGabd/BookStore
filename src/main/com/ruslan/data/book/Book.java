@@ -1,9 +1,10 @@
 package com.ruslan.data.book;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Book {
+public class Book implements Serializable {
 
     private int id;
     private BookStatus status;

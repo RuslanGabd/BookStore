@@ -2,7 +2,7 @@ package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
 
-public class OrderListByStatus implements IAction {
+public class OrderListByStatus extends ActionsOrder implements IAction {
 
     @Override
     public void execute() {

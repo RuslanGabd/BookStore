@@ -1,10 +1,9 @@
 package com.ruslan.ui.action.book;
 
 import com.ruslan.ui.IAction;
-import lombok.Data;
 
-@Data
-public class BookListByAlphabetically implements IAction {
+
+public class BookListByAlphabetically extends ActionsBook implements IAction {
 
     @Override
     public void execute() {

@@ -12,6 +12,7 @@ import com.ruslan.services.sinterface.IBookService;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class BookService implements IBookService {
@@ -31,7 +32,7 @@ public class BookService implements IBookService {
     public Book createBook(String title, String author, int price, LocalDate datePublication) {
         Book bk = new Book(title, author, price, datePublication);
         bookRepository.saveBook(bk);
-        System.out.println("Created book: " + bk.toString());
+        System.out.println("Created book: " + bk);
         return bk;
     }
 
@@ -54,11 +55,15 @@ public class BookService implements IBookService {
     }
 
     public void cancelRequestsByIdBook(int bookId) {
-        for (Request req : requestRepository.getRequestList())
-            if (req.getBook().equals(bookRepository.getById(bookId))) {
-                requestRepository.removeRequest(req.getId());
-                System.out.println("Request id=" + req.getId() + " canceled");
-            }
+        requestRepository.getRequestList().stream()
+                .filter(request ->
+                        request.getBook()
+                                .equals(bookRepository.getById(bookId)))
+                .forEach(request -> {
+                    requestRepository
+                            .removeRequest(request.getId());
+                    System.out.println("Request id=" + request.getId() + " canceled");
+                });
     }
 
 
@@ -80,7 +85,7 @@ public class BookService implements IBookService {
     }
 
     public List<Book> getStaleBooksSortedByDate() {
-        List<Book> sortedBooks = bookRepository.getBooksList();
+        List<Book> sortedBooks = getStaleBooks();
         sortedBooks.sort(Comparator.comparing(Book::getDatePublication));
         return sortedBooks;
     }

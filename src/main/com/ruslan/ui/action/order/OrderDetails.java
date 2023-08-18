@@ -6,7 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class OrderDetails implements IAction {
+public class OrderDetails extends ActionsOrder implements IAction {
     @Override
     public void execute() {
         while (true)
