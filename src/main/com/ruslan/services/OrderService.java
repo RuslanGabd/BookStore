@@ -4,7 +4,6 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
-import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
@@ -165,8 +164,8 @@ public class OrderService implements IOrderService {
     public Order getOrderFromFile(int id) {
         return getOrderListFromFile()
                 .stream()
-                .filter(book ->
-                        book.getId() == id)
+                .filter(order ->
+                        order.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

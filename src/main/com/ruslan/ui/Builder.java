@@ -3,9 +3,7 @@ package com.ruslan.ui;
 
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
-import com.ruslan.ui.action.request.CreateRequest;
-import com.ruslan.ui.action.request.RequestListByAlphabetically;
-import com.ruslan.ui.action.request.RequestListByNumber;
+import com.ruslan.ui.action.request.*;
 
 import java.util.Arrays;
 
@@ -31,9 +29,9 @@ public class Builder {
                 new BookDescription(), rootMenu);
         MenuItem AddBookToStock = new MenuItem("Add a book to stock:",
                 new AddBookToStockAndCloseRequests(), rootMenu);
-        MenuItem saveBookToFile = new MenuItem("Save book to CSV file",
+        MenuItem saveBookToFile = new MenuItem("Save book to file",
                 new WriteBookToFile(), rootMenu);
-        MenuItem readBookFromFile = new MenuItem("Read book from CSV file",
+        MenuItem readBookFromFile = new MenuItem("Read book from file",
                 new ReadBookFromFile(), rootMenu);
 
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
@@ -72,7 +70,7 @@ public class Builder {
         MenuItem changeOrderStatus = new MenuItem("Change order status",
                 new ChangeOrderStatus(), rootMenu);
         MenuItem saveOrderToFile = new MenuItem("Save order to file",
-                new WtiteOrderToFile(), rootMenu);
+                new WriteOrderToFile(), rootMenu);
         MenuItem readOrderFromFile = new MenuItem("Read order to file",
                 new ReadOrderFromFile(), rootMenu);
 
@@ -98,13 +96,19 @@ public class Builder {
                 new RequestListByNumber(), rootMenu);
         MenuItem showListRequestsByAlphabetically = new MenuItem("Request sorted by  alphabetically",
                 new RequestListByAlphabetically(), rootMenu);
-        MenuItem CreateRequest = new MenuItem("Create request",
+        MenuItem createRequest = new MenuItem("Create request",
                 new CreateRequest(), rootMenu);
+        MenuItem saveRequest = new MenuItem("Save request to file",
+                new WriteRequestToFile(), rootMenu);
+        MenuItem readRequest = new MenuItem("Read request from file",
+                new ReadRequestFromFile(), rootMenu);
 
         Menu menuShowRequestMenu = new Menu("Request menu",
-                Arrays.asList(CreateRequest,
+                Arrays.asList(createRequest,
                         showListRequestsByNumber,
-                        showListRequestsByAlphabetically));
+                        showListRequestsByAlphabetically,
+                        saveRequest,
+                        readRequest));
         MenuItem showRequestMenu = new MenuItem("Request menu", null, menuShowRequestMenu);
         //________________________________________________________________
 

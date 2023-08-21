@@ -95,8 +95,8 @@ public class RequestService implements IRequestService {
     public Request getRequestFromFile(int id) {
         return getRequestListFromFile()
                 .stream()
-                .filter(book ->
-                        book.getId() == id)
+                .filter(request ->
+                        request.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

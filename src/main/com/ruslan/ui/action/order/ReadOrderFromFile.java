@@ -24,13 +24,13 @@ public class ReadOrderFromFile extends ActionsOrder implements IAction {
                     System.out.println(ord);
                     ord.getListBook().forEach(System.out::println);
                 } else {
-                    System.out.println("Order with id: " + id + "not found");
+                    System.out.println("Order with id=" + id + " not found");
                 }
                 break;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } catch (NumberFormatException e) {
-                System.out.println("You need enter numbers of book ID");
+                System.out.println("You need enter numbers of order ID");
             }
     }
 }
