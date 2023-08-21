@@ -126,6 +126,7 @@ public class OrderService implements IOrderService {
         FileOutputStream fos;
         ObjectOutputStream oos;
         List<Order> orderList;
+
         if (orderFile.exists()) {
             orderList = getOrderListFromFile();
         } else {

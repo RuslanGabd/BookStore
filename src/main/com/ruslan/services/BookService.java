@@ -133,7 +133,6 @@ public class BookService implements IBookService {
 
     public void writeBookToFile(int id) {
         File bookFile = new File("Books.csv");
-
         FileOutputStream bookCSV;
         ObjectOutputStream oos;
         List<Book> bookList;
@@ -158,17 +157,12 @@ public class BookService implements IBookService {
     }
 
     public List<Book> getBookListFromFile() {
-
-
         FileInputStream fis;
         ObjectInputStream ois;
         List<Book> bookList;
 
-
         {
-
             try {
-
                 fis = new FileInputStream("Books.csv");
                 ois = new ObjectInputStream(fis);
                 bookList = (List<Book>) ois.readObject();
