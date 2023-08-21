@@ -4,11 +4,14 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
+import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
 
+import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -117,5 +120,54 @@ public class OrderService implements IOrderService {
         List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(date1, date2);
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
+    }
+
+    public void writeOrderToFile(int id) {
+        File orderFile = new File("Orders.csv");
+        FileOutputStream fos;
+        ObjectOutputStream oos;
+        List<Order> orderList;
+        if (orderFile.exists()) {
+            orderList = getOrderListFromFile();
+        } else {
+            orderList = new ArrayList<>();
+        }
+        orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
+        {
+            try {
+                orderFile.createNewFile(); // if file already exists will do nothing
+                fos = new FileOutputStream(orderFile);
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(orderList);
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public List<Order> getOrderListFromFile() {
+        FileInputStream fis;
+        ObjectInputStream ois;
+        List<Order> orderList;
+        {
+            try {
+                fis = new FileInputStream("Orders.csv");
+                ois = new ObjectInputStream(fis);
+                orderList = (List<Order>) ois.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return orderList;
+    }
+
+    public Order getOrderFromFile(int id) {
+        return getOrderListFromFile()
+                .stream()
+                .filter(book ->
+                        book.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -8,7 +8,9 @@ import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IBookService;
 
+import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -127,5 +129,62 @@ public class BookService implements IBookService {
         List<Book> sortedBooks = bookRepository.getBooksList();
         sortedBooks.sort((o1, o2) -> CharSequence.compare(o2.getAuthor(), o1.getAuthor()));
         return sortedBooks;
+    }
+
+    public void writeBookToFile(int id) {
+        File bookFile = new File("Books.csv");
+
+        FileOutputStream bookCSV;
+        ObjectOutputStream oos;
+        List<Book> bookList;
+
+        if (bookFile.exists()) {
+            bookList = getBookListFromFile();
+        } else {
+            bookList = new ArrayList<>();
+        }
+        bookList.add(BookRepository.getInstance().getById(id));
+        {
+            try {
+                bookFile.createNewFile();
+                bookCSV = new FileOutputStream(bookFile);
+                oos = new ObjectOutputStream(bookCSV);
+                oos.writeObject(bookList);
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public List<Book> getBookListFromFile() {
+
+
+        FileInputStream fis;
+        ObjectInputStream ois;
+        List<Book> bookList;
+
+
+        {
+
+            try {
+
+                fis = new FileInputStream("Books.csv");
+                ois = new ObjectInputStream(fis);
+                bookList = (List<Book>) ois.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return bookList;
+    }
+
+    public Book getBookFromFile(int id) {
+        return getBookListFromFile()
+                .stream()
+                .filter(book ->
+                        book.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

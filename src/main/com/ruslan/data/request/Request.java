@@ -2,9 +2,10 @@ package com.ruslan.data.request;
 
 import com.ruslan.data.book.Book;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Request {
+public class Request implements Serializable {
     private Book book;
     private int id;
 

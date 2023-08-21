@@ -1,10 +1,13 @@
 package com.ruslan.services;
 
+import com.ruslan.data.order.Order;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.data.request.Request;
 import com.ruslan.services.sinterface.IRequestService;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -46,5 +49,55 @@ public class RequestService implements IRequestService {
         List<Request> listReq = requestRepository.getRequestList();
         listReq.sort(Comparator.comparing(request -> request.getBook().getTitle()));
         return listReq;
+    }
+
+
+    public void writeOrderToFile(int id) {
+        File requestFile = new File("Requests.csv");
+        FileOutputStream fos;
+        ObjectOutputStream oos;
+        List<Request> requestsList;
+        if (requestFile.exists()) {
+            requestsList = getRequestListFromFile();
+        } else {
+            requestsList = new ArrayList<>();
+        }
+        requestsList.add(RequestRepository.getInstance().getById(id));
+        {
+            try {
+                requestFile.createNewFile(); // if file already exists will do nothing
+                fos = new FileOutputStream(requestFile);
+                oos = new ObjectOutputStream(fos);
+                oos.writeObject(requestsList);
+                oos.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public List<Request> getRequestListFromFile() {
+        FileInputStream fis;
+        ObjectInputStream ois;
+        List<Request> requestList;
+        {
+            try {
+                fis = new FileInputStream("Requests.csv");
+                ois = new ObjectInputStream(fis);
+                requestList = (List<Request>) ois.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return requestList;
+    }
+
+    public Request getRequestFromFile(int id) {
+        return getRequestListFromFile()
+                .stream()
+                .filter(book ->
+                        book.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

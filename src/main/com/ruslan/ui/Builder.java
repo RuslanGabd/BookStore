@@ -31,6 +31,10 @@ public class Builder {
                 new BookDescription(), rootMenu);
         MenuItem AddBookToStock = new MenuItem("Add a book to stock:",
                 new AddBookToStockAndCloseRequests(), rootMenu);
+        MenuItem saveBookToFile = new MenuItem("Save book to CSV file",
+                new WriteBookToFile(), rootMenu);
+        MenuItem readBookFromFile = new MenuItem("Read book from CSV file",
+                new ReadBookFromFile(), rootMenu);
 
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,
@@ -40,7 +44,9 @@ public class Builder {
                 showListBookListStaleByDate,
                 showListBookListStaleByPrice,
                 showBookDescription,
-                AddBookToStock));
+                AddBookToStock,
+                saveBookToFile,
+                readBookFromFile));
 
         MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________
@@ -65,8 +71,14 @@ public class Builder {
                 new CancelOrder(), rootMenu);
         MenuItem changeOrderStatus = new MenuItem("Change order status",
                 new ChangeOrderStatus(), rootMenu);
+        MenuItem saveOrderToFile = new MenuItem("Save order to file",
+                new WtiteOrderToFile(), rootMenu);
+        MenuItem readOrderFromFile = new MenuItem("Read order to file",
+                new ReadOrderFromFile(), rootMenu);
 
         Menu menuShowOrderMenu = new Menu("Order menu", Arrays.asList(
+                saveOrderToFile,
+                readOrderFromFile,
                 createOrder,
                 cancelOrder,
                 changeOrderStatus,
