@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class BookRepository implements IBookRepository {
-
+    public static final BookRepository INSTANCE = new BookRepository();
     private Map<Integer, Book> booksMap = new HashMap<>();
 
 
@@ -41,7 +41,11 @@ public class BookRepository implements IBookRepository {
         return new ArrayList<>(booksMap.values());
     }
 
-     public void saveAll(List<Book> bookList) {
-       bookList.forEach(this::saveBook);
+    public void saveAll(List<Book> bookList) {
+        bookList.forEach(this::saveBook);
+    }
+
+    public static BookRepository getInstance() {
+        return INSTANCE;
     }
 }

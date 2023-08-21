@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class RequestRepository implements IRequestRepostitory {
 
+    public static final RequestRepository INSTANCE = new RequestRepository();
+
+
     private Map<Integer, Request> requestMap = new HashMap<>();
 
     public void removeRequest(int id) {
@@ -50,5 +53,9 @@ public class RequestRepository implements IRequestRepostitory {
                         -> request.getBook().getId() == bookId)
                 .findAny()
                 .orElse(null);
+    }
+
+    public static RequestRepository getInstance() {
+        return INSTANCE;
     }
 }

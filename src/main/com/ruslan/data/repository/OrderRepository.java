@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
 
+    public static final OrderRepository INSTANCE = new OrderRepository();
+
+
+
     private final Map<Integer, Order> ordersMap = new HashMap<>();
 
 
@@ -53,5 +57,9 @@ public class OrderRepository implements IOrderRepository {
                                 && order.getDateExecution().isAfter(date1)
                                 && order.getDateExecution().isBefore(date2))
                 .collect(Collectors.toList());
+    }
+
+    public static OrderRepository getInstance() {
+        return INSTANCE;
     }
 }
