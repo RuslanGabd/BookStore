@@ -1,6 +1,5 @@
 package com.ruslan.services;
 
-import com.ruslan.data.order.Order;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.data.request.Request;
@@ -16,6 +15,8 @@ public class RequestService implements IRequestService {
 
     private final RequestRepository requestRepository;
     private final BookRepository bookRepository;
+
+    private static final String fileCSV = "Requests.csv";
 
     public RequestService(RequestRepository requestRepository, BookRepository bookRepository) {
         this.requestRepository = requestRepository;
@@ -52,26 +53,34 @@ public class RequestService implements IRequestService {
     }
 
 
-    public void writeOrderToFile(int id) {
-        File requestFile = new File("Requests.csv");
+    public void writeRequestToFile(int id) {
+        File requestFile = new File(fileCSV);
         FileOutputStream fos;
         ObjectOutputStream oos;
         List<Request> requestsList;
-        if (requestFile.exists()) {
-            requestsList = getRequestListFromFile();
-        } else {
-            requestsList = new ArrayList<>();
-        }
-        requestsList.add(RequestRepository.getInstance().getById(id));
-        {
+
+
+        while (true) {
             try {
                 requestFile.createNewFile(); // if file already exists will do nothing
                 fos = new FileOutputStream(requestFile);
                 oos = new ObjectOutputStream(fos);
+
+                requestsList = getRequestListFromFile();
+                requestsList.add(RequestRepository.getInstance().getById(id));
                 oos.writeObject(requestsList);
                 oos.close();
+                break;
+            } catch (FileNotFoundException e) {
+                System.out.println("File not created. Please repeat operation");
+                break;
+            } catch (NullPointerException e) {
+                System.out.println("Couldn't get List from file or crete new List");
+                break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Could not write to file");
+                e.printStackTrace();
+                break;
             }
         }
     }
@@ -80,16 +89,32 @@ public class RequestService implements IRequestService {
         FileInputStream fis;
         ObjectInputStream ois;
         List<Request> requestList;
-        {
+        File requestFile = new File(fileCSV);
+        while (true) {
             try {
-                fis = new FileInputStream("Requests.csv");
+                fis = new FileInputStream(fileCSV);
                 ois = new ObjectInputStream(fis);
                 requestList = (List<Request>) ois.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
+                ois.close();
+                return requestList;
+            } catch (ClassNotFoundException e) {
+                System.out.println("Data received in unknown format");
+                e.printStackTrace();
+                break;
+            } catch (EOFException e) {
+                System.out.println("File Books.csv was empty");
+                return requestList = new ArrayList<>();
+            } catch (StreamCorruptedException e) {
+                System.out.println("Uncorrected data in file. Data was erased");
+                requestFile.delete();
+                return requestList = new ArrayList<>();
+            } catch (IOException e) {
+                System.out.println("Could not read from file");
+                e.printStackTrace();
+                break;
             }
         }
-        return requestList;
+        return null;
     }
 
     public Request getRequestFromFile(int id) {

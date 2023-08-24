@@ -11,6 +11,7 @@ import com.ruslan.services.sinterface.IBookService;
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class BookService implements IBookService {
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
+    private static final String fileCSV = "Books.csv";
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
         this.bookRepository = bookRepository;
@@ -131,27 +133,32 @@ public class BookService implements IBookService {
         return sortedBooks;
     }
 
-    public void writeBookToFile(int id) {
+    public void writeBookToFile(int id) throws IOException {
         File bookFile = new File("Books.csv");
         FileOutputStream bookCSV;
         ObjectOutputStream oos;
         List<Book> bookList;
 
-        if (bookFile.exists()) {
-            bookList = getBookListFromFile();
-        } else {
-            bookList = new ArrayList<>();
-        }
-        bookList.add(BookRepository.getInstance().getById(id));
         {
+            bookCSV = new FileOutputStream(bookFile);
+            oos = new ObjectOutputStream(bookCSV);
             try {
-                bookFile.createNewFile();
-                bookCSV = new FileOutputStream(bookFile);
-                oos = new ObjectOutputStream(bookCSV);
+               bookFile.createNewFile();
+                bookList = getBookListFromFile();
+                bookList.add(BookRepository.getInstance().getById(id));
                 oos.writeObject(bookList);
                 oos.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("File not created. Please repeat operation");
+
+            } catch (NullPointerException e) {
+                System.out.println("Couldn't get List from file or crete new List");
+
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Could not write to file");
+                e.printStackTrace();
+
             }
         }
     }
@@ -161,16 +168,42 @@ public class BookService implements IBookService {
         ObjectInputStream ois;
         List<Book> bookList;
 
-        {
+  {
+
             try {
                 fis = new FileInputStream("Books.csv");
                 ois = new ObjectInputStream(fis);
-                bookList = (List<Book>) ois.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
+                System.out.println(ois.readObject());
+                bookList = (ArrayList<Book>) ois.readObject();
+
+
+                return bookList;
+
+            } catch (ClassNotFoundException e) {
+                System.out.println("Data received in unknown format");
+                e.printStackTrace();
+            } catch (EOFException e) {
+                    if (e.getStackTrace()[0].getMethodName().equals("peekByte")) {
+                        e.printStackTrace();
+                    System.out.println("File Books.csv was empty");
+                    return bookList = new ArrayList<>();
+
+                } else if (e.getStackTrace()[0].getMethodName().equals("peekByte")) {
+
+                } else
+                    e.printStackTrace();
+
+
+            } catch (StreamCorruptedException e) {
+                System.out.println("Uncorrected data in file. Data was erased");
+                return bookList = new ArrayList<>();
+            } catch (IOException e) {
+                System.out.println("Could not read from file");
+                e.printStackTrace();
+
             }
         }
-        return bookList;
+        return null;
     }
 
     public Book getBookFromFile(int id) {

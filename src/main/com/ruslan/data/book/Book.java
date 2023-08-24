@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Book implements Serializable {
-
     private int id;
     private BookStatus status;
     private String title;

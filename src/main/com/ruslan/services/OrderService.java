@@ -18,6 +18,8 @@ public class OrderService implements IOrderService {
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
+    private static final String fileCSV = "Orders.csv";
+
     public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
@@ -122,26 +124,32 @@ public class OrderService implements IOrderService {
     }
 
     public void writeOrderToFile(int id) {
-        File orderFile = new File("Orders.csv");
+        File orderFile = new File(fileCSV);
         FileOutputStream fos;
         ObjectOutputStream oos;
         List<Order> orderList;
 
-        if (orderFile.exists()) {
-            orderList = getOrderListFromFile();
-        } else {
-            orderList = new ArrayList<>();
-        }
-        orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
-        {
+
+        while (true) {
             try {
                 orderFile.createNewFile(); // if file already exists will do nothing
                 fos = new FileOutputStream(orderFile);
                 oos = new ObjectOutputStream(fos);
+                orderList = getOrderListFromFile();
+                orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
                 oos.writeObject(orderList);
                 oos.close();
+                break;
+            } catch (FileNotFoundException e) {
+                System.out.println("File not created. Please repeat operation");
+                break;
+            } catch (NullPointerException e) {
+                System.out.println("Couldn't get List from file or crete new List");
+                break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Could not write to file");
+                e.printStackTrace();
+                break;
             }
         }
     }
@@ -150,16 +158,30 @@ public class OrderService implements IOrderService {
         FileInputStream fis;
         ObjectInputStream ois;
         List<Order> orderList;
-        {
+        while (true) {
             try {
-                fis = new FileInputStream("Orders.csv");
+                fis = new FileInputStream(fileCSV);
                 ois = new ObjectInputStream(fis);
                 orderList = (List<Order>) ois.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
+                ois.close();
+                return orderList;
+            } catch (ClassNotFoundException e) {
+                System.out.println("Data received in unknown format");
+                e.printStackTrace();
+                break;
+            } catch (EOFException e) {
+                System.out.println("File Books.csv was empty");
+                return orderList = new ArrayList<>();
+            } catch (StreamCorruptedException e) {
+                System.out.println("Uncorrected data in file. Data was erased");
+                return orderList = new ArrayList<>();
+            } catch (IOException e) {
+                System.out.println("Could not read from file");
+                e.printStackTrace();
+                break;
             }
         }
-        return orderList;
+        return null;
     }
 
     public Order getOrderFromFile(int id) {
