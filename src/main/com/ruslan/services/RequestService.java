@@ -51,7 +51,7 @@ public class RequestService implements IRequestService {
     }
 
 
-    public void writeOrderToFile(int id) {
+    public void writeRequestToFile(int id) {
         File requestFile = new File(fileName);
         FileOutputStream fos;
         ObjectOutputStream oos;

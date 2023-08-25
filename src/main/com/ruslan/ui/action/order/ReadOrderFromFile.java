@@ -17,7 +17,6 @@ public class ReadOrderFromFile extends ActionsOrder implements IAction {
                 System.out.println("Enter id order:");
                 String s1 = reader.readLine();
                 int id = Integer.parseInt(s1);
-                //System.out.println("Order was gotten from file Order.CSV");
                 Order ord = orderService.getOrderFromFile(id);
                 if (ord != null) {
                     System.out.println("Order was gotten from file Order.CSV");

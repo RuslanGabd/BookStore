@@ -20,7 +20,6 @@ public class ReadRequestFromFile extends ActionsRequest implements IAction {
                 String s1 = reader.readLine();
                 int id = Integer.parseInt(s1);
                 Request req = requestService.getRequestFromFile(id);
-                System.out.println(req);
                 if (req != null) {
                     System.out.println("Request was gotten from file Requests.csv");
                     System.out.println(req);
