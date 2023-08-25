@@ -16,7 +16,7 @@ import java.util.List;
 
 
 public class BookService implements IBookService {
-
+    private static final String fileName = "Books.csv";
     private final BookRepository bookRepository;
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
@@ -132,27 +132,27 @@ public class BookService implements IBookService {
     }
 
     public void writeBookToFile(int id) {
-        File bookFile = new File("Books.csv");
+        File bookFile = new File(fileName);
         FileOutputStream bookCSV;
         ObjectOutputStream oos;
         List<Book> bookList;
 
-        if (bookFile.exists()) {
+        try {
+            bookFile.createNewFile();
             bookList = getBookListFromFile();
-        } else {
-            bookList = new ArrayList<>();
-        }
-        bookList.add(BookRepository.getInstance().getById(id));
-        {
-            try {
-                bookFile.createNewFile();
-                bookCSV = new FileOutputStream(bookFile);
-                oos = new ObjectOutputStream(bookCSV);
-                oos.writeObject(bookList);
-                oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            bookList.add(BookRepository.getInstance().getById(id));
+
+            bookCSV = new FileOutputStream(bookFile);
+            oos = new ObjectOutputStream(bookCSV);
+            oos.writeObject(bookList);
+            oos.close();
+        } catch (NullPointerException e) {
+            System.out.println("Could not get data from file.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not created. Please repeat operation");
+        } catch (IOException e) {
+            System.out.println("Could not write data to file");
+            e.printStackTrace();
         }
     }
 
@@ -161,14 +161,24 @@ public class BookService implements IBookService {
         ObjectInputStream ois;
         List<Book> bookList;
 
-        {
-            try {
-                fis = new FileInputStream("Books.csv");
-                ois = new ObjectInputStream(fis);
-                bookList = (List<Book>) ois.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            fis = new FileInputStream(fileName);
+            ois = new ObjectInputStream(fis);
+            bookList = (List<Book>) ois.readObject();
+            ois.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Class 'Book' not found!");
+            return null;
+        } catch (EOFException e) {
+            System.out.println("File Books.csv was empty");
+            return bookList = new ArrayList<>();
+        } catch (StreamCorruptedException e) {
+            System.out.println("Uncorrected data in file. Data was erased");
+            return bookList = new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Could not read data from file");
+            e.printStackTrace();
+            return null;
         }
         return bookList;
     }

@@ -15,8 +15,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OrderService implements IOrderService {
+
+    private static final String fileName = "Orders.csv";
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
+
 
     public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
         this.orderRepository = orderRepository;
@@ -122,45 +125,58 @@ public class OrderService implements IOrderService {
     }
 
     public void writeOrderToFile(int id) {
-        File orderFile = new File("Orders.csv");
+        File orderFile = new File(fileName);
         FileOutputStream fos;
         ObjectOutputStream oos;
         List<Order> orderList;
 
-        if (orderFile.exists()) {
+        try {
+            orderFile.createNewFile(); // if file already exists will do nothing
             orderList = getOrderListFromFile();
-        } else {
-            orderList = new ArrayList<>();
-        }
-        orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
-        {
-            try {
-                orderFile.createNewFile(); // if file already exists will do nothing
-                fos = new FileOutputStream(orderFile);
-                oos = new ObjectOutputStream(fos);
-                oos.writeObject(orderList);
-                oos.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
+
+            fos = new FileOutputStream(orderFile);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(orderList);
+            oos.close();
+        } catch (NullPointerException e) {
+            System.out.println("Could not get data from file.");
+        } catch (FileNotFoundException e) {
+            System.out.println("File not created. Please repeat operation");
+        } catch (IOException e) {
+            System.out.println("Could not write data to file");
+            e.printStackTrace();
         }
     }
+
 
     public List<Order> getOrderListFromFile() {
         FileInputStream fis;
         ObjectInputStream ois;
         List<Order> orderList;
-        {
-            try {
-                fis = new FileInputStream("Orders.csv");
-                ois = new ObjectInputStream(fis);
-                orderList = (List<Order>) ois.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new RuntimeException(e);
-            }
+
+        try {
+            fis = new FileInputStream(fileName);
+            ois = new ObjectInputStream(fis);
+            orderList = (List<Order>) ois.readObject();
+            ois.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Class 'Order' not found!");
+            return null;
+        } catch (EOFException e) {
+            System.out.println("File Orders.csv was empty");
+            return orderList = new ArrayList<>();
+        } catch (StreamCorruptedException e) {
+            System.out.println("Uncorrected data in file. Data was erased");
+            return orderList = new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Could not read data from file");
+            e.printStackTrace();
+            return null;
         }
         return orderList;
     }
+
 
     public Order getOrderFromFile(int id) {
         return getOrderListFromFile()

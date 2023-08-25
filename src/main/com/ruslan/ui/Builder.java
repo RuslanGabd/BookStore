@@ -75,8 +75,6 @@ public class Builder {
                 new ReadOrderFromFile(), rootMenu);
 
         Menu menuShowOrderMenu = new Menu("Order menu", Arrays.asList(
-                saveOrderToFile,
-                readOrderFromFile,
                 createOrder,
                 cancelOrder,
                 changeOrderStatus,
@@ -86,7 +84,9 @@ public class Builder {
                 showListOrderByStatus,
                 showListOrderCompletedForPeriodByStatus,
                 showListOrderCompletedForPeriodByDate,
-                showNumbersCompletedOrders));
+                showNumbersCompletedOrders,
+                saveOrderToFile,
+                readOrderFromFile));
 
         MenuItem showOrderMenu = new MenuItem("Order menu", null, menuShowOrderMenu);
         //________________________________________________________________
