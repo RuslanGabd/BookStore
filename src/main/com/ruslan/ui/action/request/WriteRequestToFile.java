@@ -1,7 +1,6 @@
 package com.ruslan.ui.action.request;
 
 import com.ruslan.ui.IAction;
-import com.ruslan.ui.action.order.ActionsOrder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,7 +16,7 @@ public class WriteRequestToFile extends ActionsRequest implements IAction {
                 System.out.println("Enter id request:");
                 String s1 = reader.readLine();
                 int id = Integer.parseInt(s1);
-                requestService.writeOrderToFile(id);
+                requestService.writeRequestToFile(id);
                 System.out.println("Request was written to file Requests.csv");
                 break;
             } catch (IOException e) {
