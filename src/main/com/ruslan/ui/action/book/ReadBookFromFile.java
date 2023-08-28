@@ -1,9 +1,7 @@
 package com.ruslan.ui.action.book;
 
 import com.ruslan.data.book.Book;
-import com.ruslan.data.order.Order;
 import com.ruslan.ui.IAction;
-import com.ruslan.ui.action.order.ActionsOrder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +11,7 @@ public class ReadBookFromFile extends ActionsBook implements IAction {
 
     @Override
     public void execute() {
-        while (true)
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter id book:");
@@ -28,9 +26,13 @@ public class ReadBookFromFile extends ActionsBook implements IAction {
                 }
                 break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Something went wrong.\n" +
+                        "If error will repeat please sent information to example@gmail.com");
+                logger.error("Something went wrong.", e);
             } catch (NumberFormatException e) {
-                System.out.println("You need enter numbers of book ID");
+                System.out.println("You need enter numbers of Book ID");
+                logger.error("Not number", e);
             }
+        }
     }
 }

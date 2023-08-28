@@ -7,11 +7,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ChangeOrderStatus extends ActionsOrder  implements IAction {
+public class ChangeOrderStatus extends ActionsOrder implements IAction {
 
     @Override
     public void execute() {
-        while (true)
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter id order:");
@@ -23,9 +23,13 @@ public class ChangeOrderStatus extends ActionsOrder  implements IAction {
                 orderService.changeOrderStatus(id, status);
                 break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Something went wrong.\n" +
+                        "If error will repeat please sent information to example@gmail.com");
+                logger.error("Something went wrong.", e);
             } catch (NumberFormatException e) {
-                System.out.println("You need enter numbers of orders ID");
+                System.out.println("You need enter numbers of order ID");
+                logger.error("Not number", e);
             }
+        }
     }
 }

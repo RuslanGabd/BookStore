@@ -10,7 +10,7 @@ public class WriteRequestToFile extends ActionsRequest implements IAction {
 
     @Override
     public void execute() {
-        while (true)
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter id request:");
@@ -20,9 +20,13 @@ public class WriteRequestToFile extends ActionsRequest implements IAction {
                 System.out.println("Request was written to file Requests.csv");
                 break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Something went wrong.\n" +
+                        "If error will repeat please sent information to example@gmail.com");
+                logger.error("Something went wrong.", e);
             } catch (NumberFormatException e) {
-                System.out.println("You need enter numbers of request ID");
+                System.out.println("You need enter number of request ID");
+                logger.error("Wrong number format", e);
             }
+        }
     }
 }

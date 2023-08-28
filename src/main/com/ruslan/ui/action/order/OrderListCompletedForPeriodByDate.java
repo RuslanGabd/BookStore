@@ -11,7 +11,7 @@ import java.time.LocalDate;
 public class OrderListCompletedForPeriodByDate extends ActionsOrder implements IAction {
     @Override
     public void execute() {
-        while (true)
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter first date format: YYYY-MM-DD");
@@ -24,10 +24,14 @@ public class OrderListCompletedForPeriodByDate extends ActionsOrder implements I
                         orderService.getCompletedOrdersSortedByDateForPeriod(date1, date2));
                 break;
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.out.println("Something went wrong.\n" +
+                        "If error will repeat please sent information to example@gmail.com");
+                logger.error("Something went wrong.", e);
             } catch (DateTimeException e) {
                 System.out.println("You need enter date format: YYYY-MM-DD");
+                logger.error("Wrong date format", e);
             }
+        }
     }
 }
 

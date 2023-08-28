@@ -16,21 +16,23 @@ public class CreateOrder extends ActionsOrder implements IAction {
 
     @Override
     public void execute() {
-        while (true)
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter id books using comma if more than one book:");
                 System.out.println("Example: 1,2,3,4");
                 String s1 = reader.readLine();
-                List<String> idBook = new ArrayList<String>(Arrays.asList(s1.split(",")));
-                List<Book> bookList = idBook.stream()
-                        .map(Integer::parseInt)
-                        .map(bookRepository::getById)
-                        .toList();
-                orderService.createOrder(bookList);
-                break;
+                if (s1.matches("((?<!^,)\\d+(,(?!$)|$))+")) {
+                    List<Book> bookList = Arrays.stream(s1.split(",")).map(Integer::parseInt)
+                            .map(bookRepository::getById).toList();
+                    orderService.createOrder(bookList);
+                    break;
+                } else {
+                    System.out.println("You need enter a book ID to create an order");
+                }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                logger.error("Error", e);
             }
+        }
     }
 }
