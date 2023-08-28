@@ -7,6 +7,8 @@ import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IBookService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -16,6 +18,7 @@ import java.util.List;
 
 
 public class BookService implements IBookService {
+    private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
     private final BookRepository bookRepository;
     private final RequestRepository requestRepository;
@@ -148,11 +151,13 @@ public class BookService implements IBookService {
             oos.close();
         } catch (NullPointerException e) {
             System.out.println("Could not get data from file.");
+            logger.error("Could not get data to file", e);
         } catch (FileNotFoundException e) {
-            System.out.println("File not created. Please repeat operation");
+            System.out.println("File not found. Please repeat operation");
+            logger.error("File not found", e);
         } catch (IOException e) {
             System.out.println("Could not write data to file");
-            e.printStackTrace();
+            logger.error("Could not write data from file", e);
         }
     }
 
@@ -168,6 +173,7 @@ public class BookService implements IBookService {
             ois.close();
         } catch (ClassNotFoundException e) {
             System.out.println("Class 'Book' not found!");
+            logger.error("Class 'Book' not found!", e);
             return null;
         } catch (EOFException e) {
             System.out.println("File Books.csv was empty");
@@ -177,7 +183,7 @@ public class BookService implements IBookService {
             return bookList = new ArrayList<>();
         } catch (IOException e) {
             System.out.println("Could not read data from file");
-            e.printStackTrace();
+            logger.error("Could not read data from file", e);
             return null;
         }
         return bookList;

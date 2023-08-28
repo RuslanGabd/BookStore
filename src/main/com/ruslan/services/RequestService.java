@@ -4,6 +4,8 @@ import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.data.request.Request;
 import com.ruslan.services.sinterface.IRequestService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class RequestService implements IRequestService {
+    private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Requests.csv";
     private final RequestRepository requestRepository;
     private final BookRepository bookRepository;
@@ -68,11 +71,13 @@ public class RequestService implements IRequestService {
             oos.close();
         } catch (NullPointerException e) {
             System.out.println("Could not get data from file.");
+            logger.error("Could not get data to file", e);
         } catch (FileNotFoundException e) {
-            System.out.println("File not created. Please repeat operation");
+            System.out.println("File not found. Please repeat operation");
+            logger.error("File not found", e);
         } catch (IOException e) {
             System.out.println("Could not write data to file");
-            e.printStackTrace();
+            logger.error("Could not write data to file", e);
         }
     }
 
@@ -88,6 +93,7 @@ public class RequestService implements IRequestService {
             ois.close();
         } catch (ClassNotFoundException e) {
             System.out.println("Class 'Request' not found!");
+            logger.error("Class 'Request' not found!", e);
             return null;
         } catch (EOFException e) {
             System.out.println("File Requests.csv was empty");
@@ -97,7 +103,7 @@ public class RequestService implements IRequestService {
             return requestList = new ArrayList<>();
         } catch (IOException e) {
             System.out.println("Could not read data from file");
-            e.printStackTrace();
+            logger.error("Could not read data to file", e);
             return null;
         }
         return requestList;

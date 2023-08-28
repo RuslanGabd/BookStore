@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class MenuController {
-    private static final Logger logger = LogManager.getLogger(ActionsRequest.class);
+    private static final Logger logger = LogManager.getLogger();
     private Builder builder = new Builder();
     private Navigator navigator;
 

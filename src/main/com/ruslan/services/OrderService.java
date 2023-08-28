@@ -7,6 +7,8 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -15,7 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OrderService implements IOrderService {
-
+    private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Orders.csv";
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
@@ -141,11 +143,13 @@ public class OrderService implements IOrderService {
             oos.close();
         } catch (NullPointerException e) {
             System.out.println("Could not get data from file.");
+            logger.error("Could not get data to file", e);
         } catch (FileNotFoundException e) {
-            System.out.println("File not created. Please repeat operation");
+            System.out.println("File not found. Please repeat operation");
+            logger.error("File not found", e);
         } catch (IOException e) {
             System.out.println("Could not write data to file");
-            e.printStackTrace();
+            logger.error("Could not write data to file", e);
         }
     }
 
@@ -162,6 +166,7 @@ public class OrderService implements IOrderService {
             ois.close();
         } catch (ClassNotFoundException e) {
             System.out.println("Class 'Order' not found!");
+            logger.error("Class 'Order' not found!", e);
             return null;
         } catch (EOFException e) {
             System.out.println("File Orders.csv was empty");
@@ -171,7 +176,7 @@ public class OrderService implements IOrderService {
             return orderList = new ArrayList<>();
         } catch (IOException e) {
             System.out.println("Could not read data from file");
-            e.printStackTrace();
+            logger.error("Could not read data from file", e);
             return null;
         }
         return orderList;
