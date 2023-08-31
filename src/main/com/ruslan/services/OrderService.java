@@ -7,14 +7,21 @@ import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.sinterface.IOrderService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class OrderService implements IOrderService {
+    private static final Logger logger = LogManager.getLogger();
+    private static final String fileName = "Orders.csv";
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
+
 
     public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
         this.orderRepository = orderRepository;
@@ -117,5 +124,71 @@ public class OrderService implements IOrderService {
         List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(date1, date2);
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
+    }
+
+    public void writeOrderToFile(int id) {
+        File orderFile = new File(fileName);
+        FileOutputStream fos;
+        ObjectOutputStream oos;
+        List<Order> orderList;
+
+        try {
+            orderFile.createNewFile(); // if file already exists will do nothing
+            orderList = getOrderListFromFile();
+            orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
+
+            fos = new FileOutputStream(orderFile);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(orderList);
+            oos.close();
+        } catch (NullPointerException e) {
+            System.out.println("Could not get data from file.");
+            logger.error("Could not get data to file", e);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found. Please repeat operation");
+            logger.error("File not found", e);
+        } catch (IOException e) {
+            System.out.println("Could not write data to file");
+            logger.error("Could not write data to file", e);
+        }
+    }
+
+
+    public List<Order> getOrderListFromFile() {
+        FileInputStream fis;
+        ObjectInputStream ois;
+        List<Order> orderList;
+
+        try {
+            fis = new FileInputStream(fileName);
+            ois = new ObjectInputStream(fis);
+            orderList = (List<Order>) ois.readObject();
+            ois.close();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Class 'Order' not found!");
+            logger.error("Class 'Order' not found!", e);
+            return null;
+        } catch (EOFException e) {
+            System.out.println("File Orders.csv was empty");
+            return orderList = new ArrayList<>();
+        } catch (StreamCorruptedException e) {
+            System.out.println("Uncorrected data in file. Data was erased");
+            return orderList = new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Could not read data from file");
+            logger.error("Could not read data from file", e);
+            return null;
+        }
+        return orderList;
+    }
+
+
+    public Order getOrderFromFile(int id) {
+        return getOrderListFromFile()
+                .stream()
+                .filter(order ->
+                        order.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

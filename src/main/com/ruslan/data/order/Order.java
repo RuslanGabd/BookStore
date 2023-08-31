@@ -4,12 +4,13 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.request.Request;
 
+import java.io.Serializable;
 import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
     private Integer id;
     private List<Book> listBook;
 
