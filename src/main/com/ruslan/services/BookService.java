@@ -222,19 +222,31 @@ public class BookService implements IBookService {
                 .orElse(null);
     }
 
-    public void setNumberMonthsOfStaleBooks(String number) throws IOException {
-        properties.load(Files.newInputStream(path));
-        properties.setProperty(numberOfMonths, number);
-        properties.store(Files.newOutputStream(path), "This file stores the value number of months to mark a book as \"stale\" " +
-                "and Switch for mark requests as completed when adding a book to the warehouse");
+    public void setNumberMonthsOfStaleBooks(String number)  {
+        try {
+            properties.load(Files.newInputStream(path));
+            properties.setProperty(numberOfMonths, number);
+            properties.store(Files.newOutputStream(path), "This file stores the value number of months to mark a book as \"stale\" " +
+                    "and Switch for mark requests as completed when adding a book to the warehouse");
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+        }
+
     }
 
-    public void setAutoClosedRequestIfBookAddToStock(String switchOnOff) throws IOException {
-        properties.load(Files.newInputStream(path));
-        properties.setProperty(autoRequestsClosed, switchOnOff);
-        properties.store(Files.newOutputStream(path),
-                "This file stores the value number of months to mark a book as \"stale\" " +
-                        "and Switch for mark requests as completed when adding a book to the warehouse");
+    public void setAutoClosedRequestIfBookAddToStock(String switchOnOff) {
+        try {
+            properties.load(Files.newInputStream(path));
+            properties.setProperty(autoRequestsClosed, switchOnOff);
+            properties.store(Files.newOutputStream(path),
+                    "This file stores the value number of months to mark a book as \"stale\" " +
+                            "and Switch for mark requests as completed when adding a book to the warehouse");
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+        }
+
     }
 
     public Integer getNumberMonthsOfStaleBooks() throws IOException {
