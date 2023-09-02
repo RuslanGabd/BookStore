@@ -33,6 +33,10 @@ public class Builder {
                 new WriteBookToFile(), rootMenu);
         MenuItem readBookFromFile = new MenuItem("Read book from file",
                 new ReadBookFromFile(), rootMenu);
+        MenuItem setNumberOfMonthsForStaleBooks = new MenuItem("Change number of months for stale books",
+                new SetNumberOfMonthsForStaleBooks(), rootMenu);
+        MenuItem setAutoClosedRequestIfBookAddToStock = new MenuItem("Set auto closed request, book added to warehouse",
+                new SetAutoClosedRequestIfBookAddToStock(), rootMenu);
 
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,
@@ -44,7 +48,9 @@ public class Builder {
                 showBookDescription,
                 AddBookToStock,
                 saveBookToFile,
-                readBookFromFile));
+                readBookFromFile,
+                setNumberOfMonthsForStaleBooks,
+                setAutoClosedRequestIfBookAddToStock));
 
         MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________

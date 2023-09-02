@@ -11,10 +11,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 
 
 public class BookService implements IBookService {
@@ -24,6 +28,13 @@ public class BookService implements IBookService {
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
+    private final Path path = Paths.get("config.properties");
+
+    private final String numberOfMonths = "NumberOfMonths";
+
+    private final String autoRequestsClosed = "AutoRequestsClosed";
+
+    Properties properties = new Properties();
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
         this.bookRepository = bookRepository;
@@ -53,7 +64,14 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        cancelRequestsByIdBook(bookId);
+        try {
+            if (getAutoRequestsClosedIfBookAddStock().equals("on")) {
+                cancelRequestsByIdBook(bookId);
+            }
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+        }
         System.out.println("Book " + bookId + " add to stock");
     }
 
@@ -80,9 +98,15 @@ public class BookService implements IBookService {
 
     public List<Book> getStaleBooks() {
         List<Book> staleBookList = bookRepository.getBooksList();
-        List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(
-                LocalDate.now().minusMonths(6),
-                LocalDate.now());
+        List<Order> orderList = null;
+        try {
+            orderList = orderRepository.getCompletedOrdersForPeriod(
+                    LocalDate.now().minusMonths(getNumberMonthsOfStaleBooks()),
+                    LocalDate.now());
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+        }
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
     }
@@ -94,7 +118,7 @@ public class BookService implements IBookService {
     }
 
     public List<Book> getStaleBooksSortedByPrice() {
-        List<Book> sortedBooks = bookRepository.getBooksList();
+        List<Book> sortedBooks = getStaleBooks();
         sortedBooks.sort(Comparator.comparing(Book::getPrice));
         return sortedBooks;
     }
@@ -196,5 +220,30 @@ public class BookService implements IBookService {
                         book.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void setNumberMonthsOfStaleBooks(String number) throws IOException {
+        properties.load(Files.newInputStream(path));
+        properties.setProperty(numberOfMonths, number);
+        properties.store(Files.newOutputStream(path), "This file stores the value number of months to mark a book as \"stale\" " +
+                "and Switch for mark requests as completed when adding a book to the warehouse");
+    }
+
+    public void setAutoClosedRequestIfBookAddToStock(String switchOnOff) throws IOException {
+        properties.load(Files.newInputStream(path));
+        properties.setProperty(autoRequestsClosed, switchOnOff);
+        properties.store(Files.newOutputStream(path),
+                "This file stores the value number of months to mark a book as \"stale\" " +
+                        "and Switch for mark requests as completed when adding a book to the warehouse");
+    }
+
+    public Integer getNumberMonthsOfStaleBooks() throws IOException {
+        properties.load(Files.newInputStream(path));
+        return Integer.parseInt(properties.getProperty(numberOfMonths));
+    }
+
+    public String getAutoRequestsClosedIfBookAddStock() throws IOException {
+        properties.load(Files.newInputStream(path));
+        return properties.getProperty(autoRequestsClosed);
     }
 }

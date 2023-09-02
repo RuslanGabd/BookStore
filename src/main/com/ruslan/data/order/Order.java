@@ -27,7 +27,6 @@ public class Order implements Serializable {
         int commonPrice = 0;
         this.listBook = listBook;
         this.status = OrderStatus.NEW;
-        System.out.println(listBook.size());
         for (Book bk : listBook) {
             if (bk.getStatus() == BookStatus.NOT_AVAILABLE) {
                 new Request(bk);
