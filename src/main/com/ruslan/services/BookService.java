@@ -38,7 +38,6 @@ public class BookService implements IBookService {
         this.bookRepository = bookRepository;
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
-        this.jsonWriter = jsonWriter;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class BookService implements IBookService {
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
         try {
-            if (configProperties.getAutoRequestsClosedIfBookAddStock().equals("on")) {
+            if (configProperties.getAutoRequestsClosedIfBookAddStock()) {
                 cancelRequestsByIdBook(bookId);
             }
         } catch (IOException e) {

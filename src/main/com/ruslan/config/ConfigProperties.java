@@ -19,11 +19,11 @@ public class ConfigProperties {
 
     public Integer getNumberMonthsOfStaleBooks() throws IOException {
         properties.load(Files.newInputStream(path));
-        return Integer.parseInt(properties.getProperty("Number-Of-Months"));
+        return Integer.parseInt(properties.getProperty("number-of-months"));
     }
 
     public Boolean getAutoRequestsClosedIfBookAddStock() throws IOException {
         properties.load(Files.newInputStream(path));
-        return Boolean.parseBoolean(properties.getProperty("Auto-Request-Closed"));
+        return Boolean.parseBoolean(properties.getProperty("auto-request-closed"));
     }
 }

@@ -127,7 +127,7 @@ public class Builder {
 
         //________________________________________________________________
         MenuItem SaveAllData = new MenuItem("Save All Data To JSON", new ExportAllDataToJSON(), rootMenu);
-        MenuItem LoadAllData = new MenuItem("Load All Data To JSON", new ImportAllDataToJSON(), rootMenu);
+        MenuItem LoadAllData = new MenuItem("Load All Data From JSON", new ImportAllDataToJSON(), rootMenu);
         //________________________________________________________________
         rootMenu.setName("Root menu");
         rootMenu.setMenuItems(Arrays.asList(
