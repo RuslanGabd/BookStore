@@ -1,28 +1,26 @@
-package com.ruslan.ui.action.book;
+package com.ruslan.ui.action;
 
-import com.ruslan.config.ConfigProperties;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.services.BookService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.ruslan.services.OrderService;
+import com.ruslan.services.RequestService;
 
-
-public class ActionsBook {
-    static final Logger logger = LogManager.getLogger(ActionsBook.class);
+public class Action {
     final BookRepository bookRepository;
     final OrderRepository orderRepository;
     final RequestRepository requestRepository;
     BookService bookService;
+    RequestService requestService;
+    OrderService orderService;
 
-    ConfigProperties configProperties = new ConfigProperties();
-
-    public ActionsBook() {
+    public Action() {
         this.bookRepository = BookRepository.getInstance();
         this.orderRepository = OrderRepository.getInstance();
         this.requestRepository = RequestRepository.getInstance();
         this.bookService = new BookService(bookRepository, orderRepository, requestRepository);
+        this.requestService = new RequestService(requestRepository, bookRepository);
+        this.orderService = new OrderService(orderRepository, requestRepository);
     }
-
 }

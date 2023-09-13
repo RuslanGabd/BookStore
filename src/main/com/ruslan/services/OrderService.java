@@ -6,6 +6,8 @@ import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
+import com.ruslan.jsonHandlers.JsonReader;
+import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,9 +21,13 @@ import java.util.List;
 public class OrderService implements IOrderService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Orders.csv";
+
+    public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
+    private final JsonReader jsonReader = JsonReader.getInstance();
+    private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
     public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
         this.orderRepository = orderRepository;
@@ -190,5 +196,15 @@ public class OrderService implements IOrderService {
                         order.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void importOrdersFromJson() {
+        List<Order> orderList = jsonReader.readEntities(Order.class, pathOrdersJSON);
+        orderList.forEach(order -> orderRepository.addOrder(order.getId(), order));
+    }
+
+
+    public void exportOrdersToJson() {
+        jsonWriter.writeEntities(orderRepository.getOrdersList(), pathOrdersJSON);
     }
 }

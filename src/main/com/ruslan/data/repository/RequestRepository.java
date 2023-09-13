@@ -1,6 +1,7 @@
 package com.ruslan.data.repository;
 
 import com.ruslan.data.book.Book;
+import com.ruslan.data.order.Order;
 import com.ruslan.data.repository.rinterface.IRequestRepostitory;
 import com.ruslan.data.request.Request;
 import com.ruslan.data.request.RequestCounted;
@@ -26,7 +27,9 @@ public class RequestRepository implements IRequestRepostitory {
         System.out.print("New request created with id=" + request.getId());
         System.out.println(" Total requests: " + requestMap.size());
     }
-
+    public void addOrder(int idRequest, Request request) {
+        requestMap.put(idRequest, request);
+    }
     @Override
     public Request getById(int id) {
         return requestMap.get(id);

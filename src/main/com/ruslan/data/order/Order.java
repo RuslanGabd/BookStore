@@ -23,6 +23,9 @@ public class Order implements Serializable {
     private LocalDate dateExecution;
     private LocalDate dateCreated;
 
+    public Order() {
+    }
+
     public Order(List<Book> listBook) {
         int commonPrice = 0;
         this.listBook = listBook;

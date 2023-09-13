@@ -3,6 +3,8 @@ package com.ruslan.services;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.RequestRepository;
 import com.ruslan.data.request.Request;
+import com.ruslan.jsonHandlers.JsonReader;
+import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,10 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class RequestService implements IRequestService {
-    private static final Logger logger = LogManager.getLogger();
+
+    public static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Requests.csv";
+    public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
     private final RequestRepository requestRepository;
     private final BookRepository bookRepository;
+    private final JsonReader jsonReader = JsonReader.getInstance();
+    private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
     public RequestService(RequestRepository requestRepository, BookRepository bookRepository) {
         this.requestRepository = requestRepository;
@@ -52,7 +58,6 @@ public class RequestService implements IRequestService {
         listReq.sort(Comparator.comparing(request -> request.getBook().getTitle()));
         return listReq;
     }
-
 
     public void writeRequestToFile(int id) {
         File requestFile = new File(fileName);
@@ -116,5 +121,14 @@ public class RequestService implements IRequestService {
                         request.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void importRequestsFromJson() {
+        List<Request> requestsList = jsonReader.readEntities(Request.class, pathRequestJSON);
+        requestsList.forEach(request -> requestRepository.addOrder(request.getId(), request));
+    }
+
+    public void exportRequestsToJson() {
+        jsonWriter.writeEntities(requestRepository.getRequestList(), pathRequestJSON);
     }
 }

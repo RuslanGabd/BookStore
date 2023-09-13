@@ -1,45 +1,44 @@
 package com.ruslan.services;
 
+import com.ruslan.config.ConfigProperties;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
+import com.ruslan.jsonHandlers.JsonReader;
+import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Properties;
 
 
 public class BookService implements IBookService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
+
+    public static String pathBookSJSON = "src\\main\\resources\\Books.json";
     private final BookRepository bookRepository;
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
-    private final Path path = Paths.get("config.properties");
+    private JsonReader jsonReader = JsonReader.getInstance();
+    private JsonWriter jsonWriter = JsonWriter.getInstance();
 
-    private final String numberOfMonths = "NumberOfMonths";
-
-    private final String autoRequestsClosed = "AutoRequestsClosed";
-
-    Properties properties = new Properties();
+    ConfigProperties configProperties = new ConfigProperties();
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
         this.bookRepository = bookRepository;
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
+        this.jsonWriter = jsonWriter;
     }
 
     @Override
@@ -65,7 +64,7 @@ public class BookService implements IBookService {
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
         try {
-            if (getAutoRequestsClosedIfBookAddStock().equals("on")) {
+            if (configProperties.getAutoRequestsClosedIfBookAddStock().equals("on")) {
                 cancelRequestsByIdBook(bookId);
             }
         } catch (IOException e) {
@@ -101,7 +100,7 @@ public class BookService implements IBookService {
         List<Order> orderList = null;
         try {
             orderList = orderRepository.getCompletedOrdersForPeriod(
-                    LocalDate.now().minusMonths(getNumberMonthsOfStaleBooks()),
+                    LocalDate.now().minusMonths(configProperties.getNumberMonthsOfStaleBooks()),
                     LocalDate.now());
         } catch (IOException e) {
             System.out.println("Something went wrong.");
@@ -222,40 +221,13 @@ public class BookService implements IBookService {
                 .orElse(null);
     }
 
-    public void setNumberMonthsOfStaleBooks(String number)  {
-        try {
-            properties.load(Files.newInputStream(path));
-            properties.setProperty(numberOfMonths, number);
-            properties.store(Files.newOutputStream(path), "This file stores the value number of months to mark a book as \"stale\" " +
-                    "and Switch for mark requests as completed when adding a book to the warehouse");
-        } catch (IOException e) {
-            System.out.println("Something went wrong.");
-            logger.error("Something went wrong.", e);
-        }
-
+    public void importBooksFromJson() {
+        List<Book> bookList = jsonReader.readEntities(Book.class, pathBookSJSON);
+        bookList.forEach(book -> bookRepository.addBook(book.getId(), book));
     }
 
-    public void setAutoClosedRequestIfBookAddToStock(String switchOnOff) {
-        try {
-            properties.load(Files.newInputStream(path));
-            properties.setProperty(autoRequestsClosed, switchOnOff);
-            properties.store(Files.newOutputStream(path),
-                    "This file stores the value number of months to mark a book as \"stale\" " +
-                            "and Switch for mark requests as completed when adding a book to the warehouse");
-        } catch (IOException e) {
-            System.out.println("Something went wrong.");
-            logger.error("Something went wrong.", e);
-        }
 
-    }
-
-    public Integer getNumberMonthsOfStaleBooks() throws IOException {
-        properties.load(Files.newInputStream(path));
-        return Integer.parseInt(properties.getProperty(numberOfMonths));
-    }
-
-    public String getAutoRequestsClosedIfBookAddStock() throws IOException {
-        properties.load(Files.newInputStream(path));
-        return properties.getProperty(autoRequestsClosed);
+    public void exportBooksToJson() {
+        jsonWriter.writeEntities(bookRepository.getBooksList(), pathBookSJSON);
     }
 }

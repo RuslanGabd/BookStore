@@ -5,6 +5,10 @@ import com.ruslan.data.book.BookCounted;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.repository.rinterface.IBookRepository;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +22,9 @@ public class BookRepository implements IBookRepository {
     public void saveBook(Book book) {
         int idBook = BookCounted.generateNewId();
         book.setId(idBook);
+        booksMap.put(idBook, book);
+    }
+    public void addBook(int idBook,Book book) {
         booksMap.put(idBook, book);
     }
 
@@ -48,4 +55,6 @@ public class BookRepository implements IBookRepository {
     public static BookRepository getInstance() {
         return INSTANCE;
     }
+
+
 }

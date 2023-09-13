@@ -1,6 +1,8 @@
 package com.ruslan.ui;
 
 
+import com.ruslan.ui.action.ExportAllDataToJSON;
+import com.ruslan.ui.action.ImportAllDataToJSON;
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
 import com.ruslan.ui.action.request.*;
@@ -33,10 +35,10 @@ public class Builder {
                 new WriteBookToFile(), rootMenu);
         MenuItem readBookFromFile = new MenuItem("Read book from file",
                 new ReadBookFromFile(), rootMenu);
-        MenuItem setNumberOfMonthsForStaleBooks = new MenuItem("Change number of months for stale books",
-                new SetNumberOfMonthsForStaleBooks(), rootMenu);
-        MenuItem setAutoClosedRequestIfBookAddToStock = new MenuItem("Set auto closed request, book added to warehouse",
-                new SetAutoClosedRequestIfBookAddToStock(), rootMenu);
+//        MenuItem setNumberOfMonthsForStaleBooks = new MenuItem("Change number of months for stale books",
+//                new SetNumberOfMonthsForStaleBooks(), rootMenu);
+//        MenuItem setAutoClosedRequestIfBookAddToStock = new MenuItem("Set auto closed request, book added to warehouse",
+//                new SetAutoClosedRequestIfBookAddToStock(), rootMenu);
 
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,
@@ -48,9 +50,9 @@ public class Builder {
                 showBookDescription,
                 AddBookToStock,
                 saveBookToFile,
-                readBookFromFile,
-                setNumberOfMonthsForStaleBooks,
-                setAutoClosedRequestIfBookAddToStock));
+                readBookFromFile
+
+        ));
 
         MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________
@@ -109,6 +111,8 @@ public class Builder {
         MenuItem readRequest = new MenuItem("Read request from file",
                 new ReadRequestFromFile(), rootMenu);
 
+
+
         Menu menuShowRequestMenu = new Menu("Request menu",
                 Arrays.asList(createRequest,
                         showListRequestsByNumber,
@@ -122,13 +126,17 @@ public class Builder {
 
 
         //________________________________________________________________
-
+        MenuItem SaveAllData = new MenuItem("Save All Data To JSON", new ExportAllDataToJSON(), rootMenu);
+        MenuItem LoadAllData = new MenuItem("Load All Data To JSON", new ImportAllDataToJSON(), rootMenu);
+        //________________________________________________________________
         rootMenu.setName("Root menu");
         rootMenu.setMenuItems(Arrays.asList(
                 showBookMenu,
                 showOrderMenu,
                 showRequestMenu,
-                showEarnedMoney));
+                showEarnedMoney,
+                LoadAllData,
+                SaveAllData));
     }
 
 
