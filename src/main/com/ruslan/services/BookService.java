@@ -1,11 +1,14 @@
 package com.ruslan.services;
 
+import com.ruslan.config.ConfigProperties;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
+import com.ruslan.jsonHandlers.JsonReader;
+import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,9 +23,15 @@ import java.util.List;
 public class BookService implements IBookService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
+
+    public static String pathBookSJSON = "src\\main\\resources\\Books.json";
     private final BookRepository bookRepository;
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
+
+    private JsonReader jsonReader = JsonReader.getInstance();
+    private JsonWriter jsonWriter = JsonWriter.getInstance();
+    private ConfigProperties configProperties = ConfigProperties.getINSTANCE();
 
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
@@ -53,7 +62,9 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        cancelRequestsByIdBook(bookId);
+        if (configProperties.getBooleanProperty("auto-request-closed-when-book-add-to-stock")) {
+            cancelRequestsByIdBook(bookId);
+        }
         System.out.println("Book " + bookId + " add to stock");
     }
 
@@ -80,9 +91,12 @@ public class BookService implements IBookService {
 
     public List<Book> getStaleBooks() {
         List<Book> staleBookList = bookRepository.getBooksList();
-        List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(
-                LocalDate.now().minusMonths(6),
-                LocalDate.now());
+        List<Order> orderList = null;
+
+            orderList = orderRepository.getCompletedOrdersForPeriod(
+                    LocalDate.now().minusMonths(configProperties.getIntProperty("number-of-months-to-mark-book-stale")),
+                    LocalDate.now());
+
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
     }
@@ -94,7 +108,7 @@ public class BookService implements IBookService {
     }
 
     public List<Book> getStaleBooksSortedByPrice() {
-        List<Book> sortedBooks = bookRepository.getBooksList();
+        List<Book> sortedBooks = getStaleBooks();
         sortedBooks.sort(Comparator.comparing(Book::getPrice));
         return sortedBooks;
     }
@@ -196,5 +210,15 @@ public class BookService implements IBookService {
                         book.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void importBooksFromJson() {
+        List<Book> bookList = jsonReader.readEntities(Book.class, pathBookSJSON);
+        bookList.forEach(book -> bookRepository.addBook(book.getId(), book));
+    }
+
+
+    public void exportBooksToJson() {
+        jsonWriter.writeEntities(bookRepository.getBooksList(), pathBookSJSON);
     }
 }

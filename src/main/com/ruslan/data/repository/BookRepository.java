@@ -20,6 +20,9 @@ public class BookRepository implements IBookRepository {
         book.setId(idBook);
         booksMap.put(idBook, book);
     }
+    public void addBook(int idBook,Book book) {
+        booksMap.put(idBook, book);
+    }
 
     public Book getById(int id) {
         return booksMap.get(id);
@@ -48,4 +51,6 @@ public class BookRepository implements IBookRepository {
     public static BookRepository getInstance() {
         return INSTANCE;
     }
+
+
 }

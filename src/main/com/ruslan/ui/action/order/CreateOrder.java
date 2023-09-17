@@ -13,7 +13,7 @@ import java.util.List;
 
 public class CreateOrder extends ActionsOrder implements IAction {
     final BookRepository bookRepository = BookRepository.getInstance();
-    private final static String regexForCreateOrder = "((?<!^,)\\d+(,(?!$)|$))+";
+    private final static String checkNumbersSeparatedComma = "((?<!^,)\\d+(,(?!$)|$))+";
 
     @Override
     public void execute() {
@@ -23,7 +23,7 @@ public class CreateOrder extends ActionsOrder implements IAction {
                 System.out.println("Enter id books using comma if more than one book:");
                 System.out.println("Example: 1,2,3,4");
                 String s1 = reader.readLine();
-                if (s1.matches(regexForCreateOrder)) {
+                if (s1.matches(checkNumbersSeparatedComma)) {
                     List<Book> bookList = Arrays.stream(s1.split(",")).map(Integer::parseInt)
                             .map(bookRepository::getById).toList();
                     orderService.createOrder(bookList);

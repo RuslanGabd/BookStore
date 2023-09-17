@@ -9,8 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 public class ActionsOrder {
     static final Logger logger = LogManager.getLogger(ActionsOrder.class);
-    final OrderRepository orderRepository;
-    final RequestRepository requestRepository;
+    private   final OrderRepository orderRepository;
+    private  final RequestRepository requestRepository;
 
     OrderService orderService;
 

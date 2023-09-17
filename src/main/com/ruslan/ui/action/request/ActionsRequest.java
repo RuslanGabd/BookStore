@@ -8,9 +8,10 @@ import org.apache.logging.log4j.Logger;
 
 public class ActionsRequest {
     static final Logger logger = LogManager.getLogger(ActionsRequest.class);
-    final RequestRepository requestRepository;
-    final BookRepository bookRepository;
+    private final RequestRepository requestRepository;
+    private final BookRepository bookRepository;
     RequestService requestService;
+
     public ActionsRequest() {
         this.requestRepository = RequestRepository.getInstance();
         this.bookRepository = BookRepository.getInstance();

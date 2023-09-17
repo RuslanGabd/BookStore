@@ -11,6 +11,9 @@ public class Request implements Serializable {
 
     private LocalDate date;
 
+    public Request() {
+    }
+
     public Request(Book book) {
         this.book = book;
         this.date = LocalDate.now();

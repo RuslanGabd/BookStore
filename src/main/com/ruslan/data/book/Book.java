@@ -1,6 +1,7 @@
 package com.ruslan.data.book;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -16,6 +17,8 @@ public class Book implements Serializable {
 
     private String description;
 
+    public Book() {
+    }
 
     public Book(String title, String author, int price, LocalDate datePublication) {
 

@@ -1,5 +1,6 @@
 package com.ruslan.data.repository;
 
+import com.ruslan.data.book.Book;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderCounted;
 import com.ruslan.data.order.OrderStatus;
@@ -24,7 +25,9 @@ public class OrderRepository implements IOrderRepository {
         order.setId(id);
         ordersMap.put(id, order);
     }
-
+    public void addOrder(int idOrder, Order order) {
+        ordersMap.put(idOrder, order);
+    }
     @Override
     public List<Order> getOrdersList() {
         return new ArrayList<>(ordersMap.values());

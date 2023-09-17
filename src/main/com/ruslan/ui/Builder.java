@@ -1,6 +1,8 @@
 package com.ruslan.ui;
 
 
+import com.ruslan.ui.action.ExportAllDataToJSON;
+import com.ruslan.ui.action.ImportAllDataToJSON;
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
 import com.ruslan.ui.action.request.*;
@@ -34,6 +36,7 @@ public class Builder {
         MenuItem readBookFromFile = new MenuItem("Read book from file",
                 new ReadBookFromFile(), rootMenu);
 
+
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
                 showListBookByAlphabet,
                 showListBookByDate,
@@ -44,7 +47,9 @@ public class Builder {
                 showBookDescription,
                 AddBookToStock,
                 saveBookToFile,
-                readBookFromFile));
+                readBookFromFile
+
+        ));
 
         MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________
@@ -103,6 +108,8 @@ public class Builder {
         MenuItem readRequest = new MenuItem("Read request from file",
                 new ReadRequestFromFile(), rootMenu);
 
+
+
         Menu menuShowRequestMenu = new Menu("Request menu",
                 Arrays.asList(createRequest,
                         showListRequestsByNumber,
@@ -116,13 +123,17 @@ public class Builder {
 
 
         //________________________________________________________________
-
+        MenuItem SaveAllData = new MenuItem("Save All Data To JSON", new ExportAllDataToJSON(), rootMenu);
+        MenuItem LoadAllData = new MenuItem("Load All Data From JSON", new ImportAllDataToJSON(), rootMenu);
+        //________________________________________________________________
         rootMenu.setName("Root menu");
         rootMenu.setMenuItems(Arrays.asList(
                 showBookMenu,
                 showOrderMenu,
                 showRequestMenu,
-                showEarnedMoney));
+                showEarnedMoney,
+                LoadAllData,
+                SaveAllData));
     }
 
 
