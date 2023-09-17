@@ -16,7 +16,7 @@ public class ActionsBook {
     private final RequestRepository requestRepository;
     BookService bookService;
 
-    ConfigProperties configProperties = new ConfigProperties();
+    ConfigProperties configProperties = ConfigProperties.getINSTANCE();
 
     public ActionsBook() {
         this.bookRepository = BookRepository.getInstance();
