@@ -11,7 +11,8 @@ import java.util.Properties;
 
 
 public class ConfigProperties {
-    public static final ConfigProperties INSTANCE = new ConfigProperties();
+    public static ConfigProperties INSTANCE = new ConfigProperties();
+
     private final Path path = Paths.get("config.properties");
 
     private static final Logger logger = LogManager.getLogger();
@@ -38,5 +39,9 @@ public class ConfigProperties {
             throw new RuntimeException();
         }
         return Boolean.parseBoolean(properties.getProperty("auto-request-closed-when-book-add-to-stock"));
+    }
+
+    public static ConfigProperties getINSTANCE() {
+        return INSTANCE;
     }
 }

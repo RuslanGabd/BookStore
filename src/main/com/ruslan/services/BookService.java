@@ -31,8 +31,8 @@ public class BookService implements IBookService {
 
     private JsonReader jsonReader = JsonReader.getInstance();
     private JsonWriter jsonWriter = JsonWriter.getInstance();
+    private ConfigProperties configProperties = ConfigProperties.getINSTANCE();
 
-    ConfigProperties configProperties = new ConfigProperties();
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
         this.bookRepository = bookRepository;
