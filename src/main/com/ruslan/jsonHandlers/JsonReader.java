@@ -11,12 +11,13 @@ import java.util.Collections;
 import java.util.List;
 
 
-
 public class JsonReader {
     private static final Logger logger = LogManager.getLogger();
     private static JsonReader INSTANCE;
+    ObjectMapper objectMapper;
 
-    public JsonReader() {
+    private JsonReader() {
+        this.objectMapper = new ObjectMapper();
     }
 
     public static JsonReader getInstance() {
@@ -27,8 +28,6 @@ public class JsonReader {
     }
 
     public List readEntities(Class entityClass, String path) {
-
-        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         try {
             return objectMapper.readValue(new File(path), objectMapper.getTypeFactory().constructCollectionType(List.class, entityClass));

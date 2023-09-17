@@ -11,7 +11,7 @@ import com.ruslan.ui.IAction;
 public class ImportAllDataToJSON extends Action implements IAction {
 
     public void execute() {
-    //    bookService.importBooksFromJson();
+        bookService.importBooksFromJson();
         orderService.importOrdersFromJson();
         requestService.importRequestsFromJson();
     }

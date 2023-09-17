@@ -11,19 +11,32 @@ import java.util.Properties;
 
 
 public class ConfigProperties {
+    public static final ConfigProperties INSTANCE = new ConfigProperties();
     private final Path path = Paths.get("config.properties");
 
     private static final Logger logger = LogManager.getLogger();
     Properties properties = new Properties();
 
 
-    public Integer getNumberMonthsOfStaleBooks() throws IOException {
-        properties.load(Files.newInputStream(path));
-        return Integer.parseInt(properties.getProperty("number-of-months"));
+    public Integer getNumberMonthsOfStaleBooks() {
+        try {
+            properties.load(Files.newInputStream(path));
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+            throw new RuntimeException();
+        }
+        return Integer.parseInt(properties.getProperty("number-of-months-to-mark-book-stale"));
     }
 
-    public Boolean getAutoRequestsClosedIfBookAddStock() throws IOException {
-        properties.load(Files.newInputStream(path));
-        return Boolean.parseBoolean(properties.getProperty("auto-request-closed"));
+    public Boolean getAutoRequestsClosedIfBookAddStock() {
+        try {
+            properties.load(Files.newInputStream(path));
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");
+            logger.error("Something went wrong.", e);
+            throw new RuntimeException();
+        }
+        return Boolean.parseBoolean(properties.getProperty("auto-request-closed-when-book-add-to-stock"));
     }
 }

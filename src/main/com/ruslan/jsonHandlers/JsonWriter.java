@@ -13,7 +13,10 @@ public class JsonWriter {
     private static final Logger logger = LogManager.getLogger();
     private static JsonWriter INSTANCE;
 
-    public JsonWriter() {
+    ObjectMapper objectMapper;
+
+    private JsonWriter() {
+        this.objectMapper = new ObjectMapper();
     }
 
     public static JsonWriter getInstance() {
@@ -24,7 +27,6 @@ public class JsonWriter {
     }
 
     public void writeEntities(List entities, String path) {
-        ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         try {
             objectMapper.writeValue(new FileWriter(path), entities);

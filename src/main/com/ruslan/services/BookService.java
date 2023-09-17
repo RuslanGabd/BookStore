@@ -62,13 +62,8 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        try {
-            if (configProperties.getAutoRequestsClosedIfBookAddStock()) {
-                cancelRequestsByIdBook(bookId);
-            }
-        } catch (IOException e) {
-            System.out.println("Something went wrong.");
-            logger.error("Something went wrong.", e);
+        if (configProperties.getAutoRequestsClosedIfBookAddStock()) {
+            cancelRequestsByIdBook(bookId);
         }
         System.out.println("Book " + bookId + " add to stock");
     }
@@ -97,14 +92,11 @@ public class BookService implements IBookService {
     public List<Book> getStaleBooks() {
         List<Book> staleBookList = bookRepository.getBooksList();
         List<Order> orderList = null;
-        try {
+
             orderList = orderRepository.getCompletedOrdersForPeriod(
                     LocalDate.now().minusMonths(configProperties.getNumberMonthsOfStaleBooks()),
                     LocalDate.now());
-        } catch (IOException e) {
-            System.out.println("Something went wrong.");
-            logger.error("Something went wrong.", e);
-        }
+
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
     }

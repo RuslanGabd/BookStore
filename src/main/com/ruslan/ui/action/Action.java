@@ -8,9 +8,9 @@ import com.ruslan.services.OrderService;
 import com.ruslan.services.RequestService;
 
 public class Action {
-    final BookRepository bookRepository;
-    final OrderRepository orderRepository;
-    final RequestRepository requestRepository;
+    private final BookRepository bookRepository;
+    private final OrderRepository orderRepository;
+    private final RequestRepository requestRepository;
     BookService bookService;
     RequestService requestService;
     OrderService orderService;

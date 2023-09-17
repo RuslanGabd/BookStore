@@ -11,9 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 public class ActionsBook {
     static final Logger logger = LogManager.getLogger(ActionsBook.class);
-    final BookRepository bookRepository;
-    final OrderRepository orderRepository;
-    final RequestRepository requestRepository;
+    private final BookRepository bookRepository;
+    private final OrderRepository orderRepository;
+    private final RequestRepository requestRepository;
     BookService bookService;
 
     ConfigProperties configProperties = new ConfigProperties();
