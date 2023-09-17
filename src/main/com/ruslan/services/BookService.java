@@ -62,7 +62,7 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        if (configProperties.getAutoRequestsClosedIfBookAddStock()) {
+        if (configProperties.getBooleanProperty("auto-request-closed-when-book-add-to-stock")) {
             cancelRequestsByIdBook(bookId);
         }
         System.out.println("Book " + bookId + " add to stock");
@@ -94,7 +94,7 @@ public class BookService implements IBookService {
         List<Order> orderList = null;
 
             orderList = orderRepository.getCompletedOrdersForPeriod(
-                    LocalDate.now().minusMonths(configProperties.getNumberMonthsOfStaleBooks()),
+                    LocalDate.now().minusMonths(configProperties.getIntProperty("number-of-months-to-mark-book-stale")),
                     LocalDate.now());
 
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));

@@ -13,11 +13,10 @@ public class ConfigProperties {
     private static final Logger logger = LogManager.getLogger();
     public static ConfigProperties INSTANCE = new ConfigProperties();
 
-    final private Integer numberMonthsOfStaleBooks;
-    final private Boolean autoRequestsClosedIfBookAddStock;
+    private final Properties properties;
 
     ConfigProperties() {
-        final Properties properties = new Properties();
+        this.properties = new Properties();
         try {
             properties.load(Files.newInputStream(Paths.get("config.properties")));
         } catch (IOException e) {
@@ -25,17 +24,14 @@ public class ConfigProperties {
             logger.error("Something went wrong.", e);
             throw new RuntimeException();
         }
-        numberMonthsOfStaleBooks = Integer.parseInt(properties.getProperty("number-of-months-to-mark-book-stale"));
-        autoRequestsClosedIfBookAddStock = Boolean.parseBoolean(properties.getProperty("auto-request-closed-when-book-add-to-stock"));
-
     }
 
-    public Integer getNumberMonthsOfStaleBooks() {
-        return numberMonthsOfStaleBooks;
+    public Integer getIntProperty(String propertyName) {
+        return Integer.parseInt(properties.getProperty(propertyName));
     }
 
-    public Boolean getAutoRequestsClosedIfBookAddStock() {
-        return autoRequestsClosedIfBookAddStock;
+    public Boolean getBooleanProperty(String propertyName) {
+        return Boolean.parseBoolean(properties.getProperty(propertyName));
     }
 
     public static ConfigProperties getINSTANCE() {
