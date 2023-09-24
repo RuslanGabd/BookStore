@@ -1,6 +1,9 @@
 package com.ruslan.services;
 
 import com.ruslan.config.ConfigProperties;
+import com.ruslan.config.ConfigPropertiesOld;
+import com.ruslan.config.Configuration;
+import com.ruslan.config.ConfigurationProcessor;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
+@Configuration
 public class BookService implements IBookService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
@@ -29,9 +32,14 @@ public class BookService implements IBookService {
     private final RequestRepository requestRepository;
     private final OrderRepository orderRepository;
 
+    @ConfigProperties(propertyName = "auto-request-closed-when-book-add-to-stock", type = Boolean.class)
+    private Boolean isAutoRequestClosed;
+    @ConfigProperties(propertyName = "number-of-months-to-mark-book-stale", type = Integer.class)
+    private Integer numberOfMonths;
+
     private JsonReader jsonReader = JsonReader.getInstance();
     private JsonWriter jsonWriter = JsonWriter.getInstance();
-    private ConfigProperties configProperties = ConfigProperties.getINSTANCE();
+    private ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
 
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
@@ -62,7 +70,7 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        if (configProperties.getBooleanProperty("auto-request-closed-when-book-add-to-stock")) {
+        if (this.isAutoRequestClosed) {
             cancelRequestsByIdBook(bookId);
         }
         System.out.println("Book " + bookId + " add to stock");
@@ -94,7 +102,7 @@ public class BookService implements IBookService {
         List<Order> orderList = null;
 
             orderList = orderRepository.getCompletedOrdersForPeriod(
-                    LocalDate.now().minusMonths(configProperties.getIntProperty("number-of-months-to-mark-book-stale")),
+                    LocalDate.now().minusMonths(numberOfMonths),
                     LocalDate.now());
 
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));

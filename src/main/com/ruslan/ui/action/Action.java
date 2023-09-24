@@ -1,5 +1,7 @@
 package com.ruslan.ui.action;
 
+import com.ruslan.config.Configuration;
+import com.ruslan.config.ConfigurationProcessor;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
@@ -20,6 +22,7 @@ public class Action {
         this.orderRepository = OrderRepository.getInstance();
         this.requestRepository = RequestRepository.getInstance();
         this.bookService = new BookService(bookRepository, orderRepository, requestRepository);
+        ConfigurationProcessor.configure(bookService);
         this.requestService = new RequestService(requestRepository, bookRepository);
         this.orderService = new OrderService(orderRepository, requestRepository);
     }

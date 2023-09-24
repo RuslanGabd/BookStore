@@ -1,6 +1,7 @@
 package com.ruslan.ui.action.book;
 
-import com.ruslan.config.ConfigProperties;
+import com.ruslan.config.ConfigPropertiesOld;
+import com.ruslan.config.ConfigurationProcessor;
 import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.OrderRepository;
 import com.ruslan.data.repository.RequestRepository;
@@ -16,13 +17,14 @@ public class ActionsBook {
     private final RequestRepository requestRepository;
     BookService bookService;
 
-    ConfigProperties configProperties = ConfigProperties.getINSTANCE();
+    ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
     public ActionsBook() {
         this.bookRepository = BookRepository.getInstance();
         this.orderRepository = OrderRepository.getInstance();
         this.requestRepository = RequestRepository.getInstance();
         this.bookService = new BookService(bookRepository, orderRepository, requestRepository);
+        ConfigurationProcessor.configure(bookService);
     }
 
 }
