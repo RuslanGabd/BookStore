@@ -1,7 +1,5 @@
 package com.ruslan.ui;
 
-import lombok.Data;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Navigator {
