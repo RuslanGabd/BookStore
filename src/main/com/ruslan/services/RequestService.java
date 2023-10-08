@@ -1,9 +1,9 @@
 package com.ruslan.services;
 
-import com.ruslan.data.repository.BookRepository;
-import com.ruslan.data.repository.RequestRepository;
+import com.ruslan.DI.annotation.Inject;
+import com.ruslan.data.repository.rinterface.IBookRepository;
+import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.data.request.Request;
-import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
@@ -20,14 +20,13 @@ public class RequestService implements IRequestService {
     public static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Requests.csv";
     public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
-    private final RequestRepository requestRepository;
-    private final BookRepository bookRepository;
-    private final JsonReader jsonReader = JsonReader.getInstance();
+    @Inject
+    private IRequestRepository requestRepository;
+    @Inject
+    private IBookRepository bookRepository;
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
-    public RequestService(RequestRepository requestRepository, BookRepository bookRepository) {
-        this.requestRepository = requestRepository;
-        this.bookRepository = bookRepository;
+    public RequestService() {
     }
 
     @Override
@@ -68,8 +67,7 @@ public class RequestService implements IRequestService {
         try {
             requestFile.createNewFile(); // if file already exists will do nothing
             requestsList = getRequestListFromFile();
-            requestsList.add(RequestRepository.getInstance().getById(id));
-
+            requestsList.add(requestRepository.getById(id));
             fos = new FileOutputStream(requestFile);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(requestsList);
@@ -123,10 +121,6 @@ public class RequestService implements IRequestService {
                 .orElse(null);
     }
 
-    public void importRequestsFromJson() {
-        List<Request> requestsList = jsonReader.readEntities(Request.class, pathRequestJSON);
-        requestsList.forEach(request -> requestRepository.addOrder(request.getId(), request));
-    }
 
     public void exportRequestsToJson() {
         jsonWriter.writeEntities(requestRepository.getRequestList(), pathRequestJSON);

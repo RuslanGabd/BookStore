@@ -1,6 +1,6 @@
 package com.ruslan.ui;
 
-import com.ruslan.ui.action.request.ActionsRequest;
+import com.ruslan.DI.annotation.Inject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 
 public class MenuController {
     private static final Logger logger = LogManager.getLogger();
-    private Builder builder = new Builder();
+    @Inject
+    private Builder builder;
+    @Inject
     private Navigator navigator;
 
     public void run() {

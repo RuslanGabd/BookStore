@@ -1,10 +1,11 @@
 package com.ruslan.data.repository;
 
-import com.ruslan.data.book.Book;
+import com.ruslan.DI.annotation.PostConstruct;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderCounted;
 import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.rinterface.IOrderRepository;
+import com.ruslan.jsonHandlers.JsonReader;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -12,11 +13,17 @@ import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
 
-    public static final OrderRepository INSTANCE = new OrderRepository();
+    //   public static final OrderRepository INSTANCE = new OrderRepository();
 
-
-
+    public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
+    private final JsonReader jsonReader = JsonReader.getInstance();
     private final Map<Integer, Order> ordersMap = new HashMap<>();
+
+    @PostConstruct
+    public void importOrdersFromJson() {
+        List<Order> orderList = jsonReader.readEntities(Order.class, pathOrdersJSON);
+        orderList.forEach(order -> this.addOrder(order.getId(), order));
+    }
 
 
     @Override
@@ -25,9 +32,11 @@ public class OrderRepository implements IOrderRepository {
         order.setId(id);
         ordersMap.put(id, order);
     }
+
     public void addOrder(int idOrder, Order order) {
         ordersMap.put(idOrder, order);
     }
+
     @Override
     public List<Order> getOrdersList() {
         return new ArrayList<>(ordersMap.values());
@@ -54,6 +63,11 @@ public class OrderRepository implements IOrderRepository {
         getById(id).ifPresent(order -> order.setDateExecution(date));
     }
 
+    @Override
+    public void addOrder(Integer id, Order order) {
+
+    }
+
     public List<Order> getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2) {
         return ordersMap.values().stream().filter(order ->
                         order.getStatus() == OrderStatus.COMPLETED
@@ -62,7 +76,5 @@ public class OrderRepository implements IOrderRepository {
                 .collect(Collectors.toList());
     }
 
-    public static OrderRepository getInstance() {
-        return INSTANCE;
-    }
+
 }

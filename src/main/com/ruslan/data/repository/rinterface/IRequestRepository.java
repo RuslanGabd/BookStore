@@ -7,7 +7,7 @@ import com.ruslan.data.request.Request;
 import java.util.List;
 import java.util.Map;
 
-public interface IRequestRepostitory {
+public interface IRequestRepository {
 
     Request getById(int id);
 
@@ -15,5 +15,11 @@ public interface IRequestRepostitory {
 
     void removeById(int id);
 
+    void createRequest(Book book) ;
+
     List<Request> getRequestList();
+
+    Request getRequestForBook(int id);
+
+    void removeRequest(int id);
 }

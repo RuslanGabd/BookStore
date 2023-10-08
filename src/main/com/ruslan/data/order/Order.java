@@ -19,7 +19,7 @@ public class Order implements Serializable {
     private OrderStatus status;
 
 
-    private Integer totalPrice;
+    private static Integer totalPrice;
     private LocalDate dateExecution;
     private LocalDate dateCreated;
 
@@ -120,12 +120,12 @@ public class Order implements Serializable {
         this.dateExecution = dateExecution;
     }
 
-    public Integer getTotalPrice() {
+    public static Integer getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Integer totalPrice) {
-        this.totalPrice = totalPrice;
+    public static void setTotalPrice(Integer totalPrice) {
+        Order.totalPrice = totalPrice;
     }
 
     public LocalDate getDateCreated() {
@@ -134,6 +134,11 @@ public class Order implements Serializable {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+
+    public static int getTotalPrice(Object o) {
+        return getTotalPrice();
     }
 }
 

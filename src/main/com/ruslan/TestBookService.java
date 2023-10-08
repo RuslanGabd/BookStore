@@ -2,12 +2,16 @@ package com.ruslan;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ruslan.DI.ObjectFactory;
+import com.ruslan.DI.context.ApplicationContext;
+import com.ruslan.data.repository.BookRepository;
 import com.ruslan.ui.MenuController;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TestBookService {
-
 
     public static void main(String[] args) throws IOException, ClassNotFoundException, JsonProcessingException {
 //
@@ -57,15 +61,15 @@ public class TestBookService {
 //        orderService.changeOrderStatus(4, OrderStatus.COMPLETED);
 //        orderService.changeOrderStatus(5, OrderStatus.COMPLETED);
 //        orderService.changeOrderStatus(2, OrderStatus.CANCELLED);
-        //List of books (sort alphabetically, by date of publication, by price, by stock availability);
+//        List of books (sort alphabetically, by date of publication, by price, by stock availability);
 //        bookService.printList("Books sorted by Title Alphabetically:", bookService.getBooksSortedByTitleAlphabetically());
 //        bookService.printList("Books sorted by DAte Publication:", bookService.getBooksSortedByDatePublication());
 //        bookService.printList("Books sorted by Status:", bookService.getBooksSortedByStatus());
-
-
-        //List of orders (sort by date of execution, by price, by status);
+//
+//
+//        List of orders (sort by date of execution, by price, by status);
 //        orderService.printList("Orders sorted by Price:", orderService.getOrdersSortedByPrice());
-        //orderService.printList("Orders sorted by Status:", orderService.getOrdersSortedByStatus());
+//        orderService.printList("Orders sorted by Status:", orderService.getOrdersSortedByStatus());
 //        orderService.printList("Orders sorted by DateExecution:", orderService.getOrdersSortedByDateExecution());
 //
 //        //List of book requests (sort by number of requests, alphabetically);
@@ -73,13 +77,13 @@ public class TestBookService {
 //        requestService.printList("Requests sorted by Alphabetically", requestService.getRequestSortedByAlphabetically());
 //
 //
-        //List of completed orders for a period of time (sort by date, by price);
-     //   orderService.printList("Orders for period sorted by Date", orderService.getOrdersSortedByDateForPeriod(LocalDate.of(1970, 1, 1),
-        //        LocalDate.of(2023, 06, 30)));
-      //  orderService.printList("Orders for period sorted by Price", orderService.getOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
-       //         LocalDate.of(2023, 06, 30)));
-
-        // The amount of money earned over a period of time;
+//        List of completed orders for a period of time (sort by date, by price);
+//           orderService.printList("Orders for period sorted by Date", orderService.getOrdersSortedByDateForPeriod(LocalDate.of(1970, 1, 1),
+//                LocalDate.of(2023, 06, 30)));
+//          orderService.printList("Orders for period sorted by Price", orderService.getOrdersSortedByPriceForPeriod(LocalDate.of(1970, 1, 1),
+//                 LocalDate.of(2023, 06, 30)));
+//
+//         The amount of money earned over a period of time;
 //        System.out.println("Earned money for period: "
 //                + orderService.getEarnedMoneyForPeriod(LocalDate.of(1970, 1, 1),
 //                LocalDate.of(2023, 06, 30)));
@@ -103,18 +107,18 @@ public class TestBookService {
 //                new GsonBuilder()
 //                        .registerTypeAdapter( Instant.class , new GsonInstantTypeAdapter() )
 //                        .create();
-
-        // Write to JSON.
+//
+//         Write to JSON.
 //       l Person person = new Person( "John Doe" , Instant.now() ); //For example: 2022-02-02T11:11:510Z
 //        String personAsJson = gson.toJson( person );
-
-     //  System.out.println( "personAsJson = " + personAsJson );
-
-        // Parse JSON.
-        //Person p = gson.fromJson( personAsJson , Person.class );
-
-     //   System.out.println( "p.toString() = " + p );
-      //  new Gson().toJson(BookRepository.getInstance());
+//
+//          System.out.println( "personAsJson = " + personAsJson );
+//
+//         Parse JSON.
+//        Person p = gson.fromJson( personAsJson , Person.class );
+//
+//           System.out.println( "p.toString() = " + p );
+//          new Gson().toJson(BookRepository.getInstance());
 //        JsonReader jsonReader;
 //        JsonWriter jsonWriter = new JsonWriter();
 //        jsonWriter.writeEntities(bookRepository.getBooksList(),  "src\\main\\resources\\craftsmen.json");
@@ -124,12 +128,10 @@ public class TestBookService {
 //        ObjectMapper mapper = new ObjectMapper();
 //        ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
 //        writer.writeValue(new File("dataTwo.json"), jacksonData);
-
-
-
-        MenuController menuController = new MenuController();
+        ApplicationContext applicationContext = new ApplicationContext();
+        ObjectFactory objectFactory = new ObjectFactory(applicationContext, new HashMap<>());
+        applicationContext.setObjectFactory(objectFactory);
+        MenuController menuController = applicationContext.getObject(MenuController.class);
         menuController.run();
-
-
     }
 }

@@ -1,12 +1,12 @@
 package com.ruslan.services;
 
+import com.ruslan.DI.annotation.Inject;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
-import com.ruslan.data.repository.OrderRepository;
-import com.ruslan.data.repository.RequestRepository;
-import com.ruslan.jsonHandlers.JsonReader;
+import com.ruslan.data.repository.rinterface.IOrderRepository;
+import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
 import org.apache.logging.log4j.LogManager;
@@ -23,15 +23,15 @@ public class OrderService implements IOrderService {
     private static final String fileName = "Orders.csv";
 
     public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
-    private final RequestRepository requestRepository;
-    private final OrderRepository orderRepository;
 
-    private final JsonReader jsonReader = JsonReader.getInstance();
+    @Inject
+    private IRequestRepository requestRepository;
+
+    @Inject
+    private IOrderRepository orderRepository;
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
-    public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
-        this.orderRepository = orderRepository;
-        this.requestRepository = requestRepository;
+    public OrderService() {
     }
 
     @Override
@@ -101,6 +101,7 @@ public class OrderService implements IOrderService {
         orderRepository.removeById(orderId);
     }
 
+
     //Order details (any customer data + books);
     public Order OrderDetails(int orderId) {
         return orderRepository.getById(orderId).orElse(null);
@@ -114,9 +115,8 @@ public class OrderService implements IOrderService {
     // The amount of money earned over a period of time;
     public Integer getEarnedMoneyForPeriod(LocalDate date1, LocalDate date2) {
         return orderRepository.getCompletedOrdersForPeriod(date1, date2)
-                .stream()
-                .map(Order::getTotalPrice)
-                .reduce(0, Integer::sum);
+                .stream().mapToInt(Order::getTotalPrice).sum();
+
     }
 
     // List of completed orders for a period of time (sort by date, by price);
@@ -141,7 +141,7 @@ public class OrderService implements IOrderService {
         try {
             orderFile.createNewFile(); // if file already exists will do nothing
             orderList = getOrderListFromFile();
-            orderList.add(OrderRepository.getInstance().getById(id).orElse(null));
+            orderList.add(orderRepository.getById(id).orElse(null));
 
             fos = new FileOutputStream(orderFile);
             oos = new ObjectOutputStream(fos);
@@ -197,12 +197,6 @@ public class OrderService implements IOrderService {
                 .findFirst()
                 .orElse(null);
     }
-
-    public void importOrdersFromJson() {
-        List<Order> orderList = jsonReader.readEntities(Order.class, pathOrdersJSON);
-        orderList.forEach(order -> orderRepository.addOrder(order.getId(), order));
-    }
-
 
     public void exportOrdersToJson() {
         jsonWriter.writeEntities(orderRepository.getOrdersList(), pathOrdersJSON);
