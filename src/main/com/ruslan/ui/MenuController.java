@@ -8,7 +8,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class MenuController {
+public class  MenuController {
     private static final Logger logger = LogManager.getLogger();
     @Inject
     private Builder builder;

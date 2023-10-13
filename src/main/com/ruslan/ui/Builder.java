@@ -198,8 +198,6 @@ public class Builder {
                 loadAllData,
                 saveAllData));
     }
-
-
     public Menu getRootMenu() {
         return rootMenu;
     }

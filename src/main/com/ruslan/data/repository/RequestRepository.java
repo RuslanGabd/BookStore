@@ -14,7 +14,6 @@ import java.util.Map;
 
 public class RequestRepository implements IRequestRepository {
 
-    //  public static final RequestRepository INSTANCE = new RequestRepository();
     public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
     private final JsonReader jsonReader = JsonReader.getInstance();
 

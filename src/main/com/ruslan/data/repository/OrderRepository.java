@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
 
-    //   public static final OrderRepository INSTANCE = new OrderRepository();
-
     public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final Map<Integer, Order> ordersMap = new HashMap<>();
@@ -65,7 +63,7 @@ public class OrderRepository implements IOrderRepository {
 
     @Override
     public void addOrder(Integer id, Order order) {
-
+        ordersMap.put(id, order);
     }
 
     public List<Order> getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2) {
@@ -75,6 +73,4 @@ public class OrderRepository implements IOrderRepository {
                                 && order.getDateExecution().isBefore(date2))
                 .collect(Collectors.toList());
     }
-
-
 }
