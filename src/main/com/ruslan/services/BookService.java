@@ -33,7 +33,7 @@ public class BookService implements IBookService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
     @Inject
-    private BookRepository bookRepository;
+    private IBookRepository bookRepository;
     @Inject
     private IRequestRepository requestRepository;
     @Inject
