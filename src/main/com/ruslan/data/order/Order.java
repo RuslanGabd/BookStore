@@ -5,7 +5,6 @@ import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.request.Request;
 
 import java.io.Serializable;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +18,7 @@ public class Order implements Serializable {
     private OrderStatus status;
 
 
-    private static Integer totalPrice;
+    private Integer totalPrice;
     private LocalDate dateExecution;
     private LocalDate dateCreated;
 
@@ -120,12 +119,12 @@ public class Order implements Serializable {
         this.dateExecution = dateExecution;
     }
 
-    public static Integer getTotalPrice() {
-        return totalPrice;
+    public Integer getTotalPrice() {
+        return this.totalPrice;
     }
 
-    public static void setTotalPrice(Integer totalPrice) {
-        Order.totalPrice = totalPrice;
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public LocalDate getDateCreated() {
@@ -134,11 +133,6 @@ public class Order implements Serializable {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-
-    public static int getTotalPrice(Object o) {
-        return getTotalPrice();
     }
 }
 

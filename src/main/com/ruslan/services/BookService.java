@@ -9,6 +9,7 @@ import com.ruslan.config.ConfigurationProcessor;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
+import com.ruslan.data.repository.BookRepository;
 import com.ruslan.data.repository.rinterface.IBookRepository;
 import com.ruslan.data.repository.rinterface.IOrderRepository;
 import com.ruslan.data.repository.rinterface.IRequestRepository;
@@ -32,7 +33,7 @@ public class BookService implements IBookService {
     private static final Logger logger = LogManager.getLogger();
     private static final String fileName = "Books.csv";
     @Inject
-    private IBookRepository bookRepository;
+    private BookRepository bookRepository;
     @Inject
     private IRequestRepository requestRepository;
     @Inject

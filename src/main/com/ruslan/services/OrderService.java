@@ -116,7 +116,6 @@ public class OrderService implements IOrderService {
     public Integer getEarnedMoneyForPeriod(LocalDate date1, LocalDate date2) {
         return orderRepository.getCompletedOrdersForPeriod(date1, date2)
                 .stream().mapToInt(Order::getTotalPrice).sum();
-
     }
 
     // List of completed orders for a period of time (sort by date, by price);

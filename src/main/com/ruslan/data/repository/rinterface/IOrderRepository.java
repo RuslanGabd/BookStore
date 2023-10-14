@@ -12,7 +12,6 @@ public interface IOrderRepository {
 
     void saveOrder(Order order);
 
-
     List<Order> getOrdersList();
 
     Optional<Order> getById(int id);
@@ -25,5 +24,5 @@ public interface IOrderRepository {
 
     void addOrder(Integer id, Order order);
 
-    List getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2);
+    List<Order> getCompletedOrdersForPeriod(LocalDate date1, LocalDate date2);
 }
