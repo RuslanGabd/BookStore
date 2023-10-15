@@ -48,11 +48,6 @@ public class BookService implements IBookService {
     private JsonWriter jsonWriter = JsonWriter.getInstance();
     private ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
-    @PostConstruct
-    public void configure() {
-        ConfigurationProcessor.configure(this);
-    }
-
     @Override
     public Book createBook(String title, String author, int price, LocalDate datePublication) {
         Book bk = new Book(title, author, price, datePublication);

@@ -2,6 +2,7 @@ package com.ruslan.DI;
 
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.DI.context.ApplicationContext;
+import com.ruslan.config.ConfigurationProcessor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.reflections.Reflections;
@@ -10,14 +11,13 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class ObjectFactory {
-
-    Reflections scanner;
+    private final ConfigurationProcessor configurationProcessor;
     @Getter
     private final ObjectConfigurator objectConfigurator;
-
     @Getter
     private final Configuration configuration;
-    private ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
+    private final Reflections scanner;
 
     public ObjectFactory(ApplicationContext applicationContext, Map<Class, Class> interfaceToImplementation) {
         this.applicationContext = applicationContext;
@@ -25,6 +25,7 @@ public class ObjectFactory {
         this.objectConfigurator = new JavaObjectConfigurator(configuration.getPackageToScan(),
                 interfaceToImplementation);
         this.scanner = new Reflections(configuration.getPackageToScan());
+        this.configurationProcessor = new ConfigurationProcessor();
     }
 
     @SneakyThrows
@@ -41,6 +42,8 @@ public class ObjectFactory {
             field.setAccessible(true);
             field.set(object, applicationContext.getObject(field.getType()));
         }
+
+        this.configurationProcessor.configure(object);
         return object;
     }
 //
