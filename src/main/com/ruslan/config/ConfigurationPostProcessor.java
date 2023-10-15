@@ -1,5 +1,6 @@
 package com.ruslan.config;
 
+import com.ruslan.DI.postProcessor.ObjectPostProcessor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,13 +13,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-public class ConfigurationProcessor {
+public class ConfigurationPostProcessor implements ObjectPostProcessor {
 
     private static final String DEFAULT_PATH_NAME = "config.properties";
     private static final Logger logger = LogManager.getLogger();
     private final Properties properties;
     private final Map <String, Set<Map.Entry<Object, Object>>> mapProperties = new HashMap<>();
-    public ConfigurationProcessor() {
+    public ConfigurationPostProcessor() {
         this.properties = new Properties();
         try {
             properties.load(Files.newInputStream(Paths.get(DEFAULT_PATH_NAME)));
@@ -30,7 +31,7 @@ public class ConfigurationProcessor {
         }
     }
 
-    public void configure(final Object object) {
+    public void process(final Object object) {
         final Class<?> clazz = object.getClass();
         if (!clazz.isAnnotationPresent(Configuration.class)) {
             return;

@@ -23,27 +23,7 @@ public class ApplicationContext {
         }
 
         T object = objectFactory.getObject(clazz);
-        callPostProcessor(object);
         objectMap.put(clazz, object);
         return object;
     }
-
-    public void callPostProcessor(Object object) {
-        objectFactory.getObjectConfigurator().getScanner().getSubTypesOf(ObjectPostProcessor.class)
-                .forEach(processor-> {
-                    ObjectPostProcessor postProcessor;
-                    try {
-                        postProcessor = processor.getDeclaredConstructor().newInstance();
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                             NoSuchMethodException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        postProcessor.process(object);
-                    } catch (InvocationTargetException | IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                } );
-    }
-
 }

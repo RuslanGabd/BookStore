@@ -2,16 +2,17 @@ package com.ruslan.DI;
 
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.DI.context.ApplicationContext;
-import com.ruslan.config.ConfigurationProcessor;
+import com.ruslan.DI.postProcessor.ObjectPostProcessor;
+import com.ruslan.config.ConfigurationPostProcessor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class ObjectFactory {
-    private final ConfigurationProcessor configurationProcessor;
     @Getter
     private final ObjectConfigurator objectConfigurator;
     @Getter
@@ -25,7 +26,6 @@ public class ObjectFactory {
         this.objectConfigurator = new JavaObjectConfigurator(configuration.getPackageToScan(),
                 interfaceToImplementation);
         this.scanner = new Reflections(configuration.getPackageToScan());
-        this.configurationProcessor = new ConfigurationProcessor();
     }
 
     @SneakyThrows
@@ -43,8 +43,26 @@ public class ObjectFactory {
             field.set(object, applicationContext.getObject(field.getType()));
         }
 
-        this.configurationProcessor.configure(object);
+        callPostProcessor(object);
         return object;
+    }
+
+    public void callPostProcessor(Object object) {
+        getObjectConfigurator().getScanner().getSubTypesOf(ObjectPostProcessor.class)
+                .forEach(processor-> {
+                    ObjectPostProcessor postProcessor;
+                    try {
+                        postProcessor = processor.getDeclaredConstructor().newInstance();
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                             NoSuchMethodException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        postProcessor.process(object);
+                    } catch (InvocationTargetException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                } );
     }
 //
 }
