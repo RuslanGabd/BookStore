@@ -9,6 +9,7 @@ import com.ruslan.data.repository.rinterface.IOrderRepository;
 import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
+import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +27,8 @@ public class OrderService implements IOrderService {
 
     @Inject
     private IRequestRepository requestRepository;
-
+    @Inject
+    IRequestService requestService;
     @Inject
     private IOrderRepository orderRepository;
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
@@ -41,7 +43,7 @@ public class OrderService implements IOrderService {
         System.out.println("Order created with id=" + ord.getId() + " contains " + listBooks.size() + " books");
         listBooks.stream()
                 .filter(book -> book.getStatus() == BookStatus.OUT_OF_STOCK)
-                .forEach(requestRepository::createRequest);
+                .forEach(book -> requestService.createRequest(book.getId()));
         return ord;
     }
 

@@ -57,9 +57,10 @@ public class RequestRepository implements IRequestRepository {
         return new ArrayList<>(requestMap.values());
     }
 
-    @Override
-    public void createRequest(Book book) {
-    }
+//    @Override
+//    public void createRequest(Book book) {
+//    saveRequest(new Request(bookRepository.getById(bookId)));
+//    }
 
     public Request getRequestForBook(int bookId) {
         return requestMap.values()

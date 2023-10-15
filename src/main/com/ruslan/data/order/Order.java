@@ -120,7 +120,7 @@ public class Order implements Serializable {
     }
 
     public Integer getTotalPrice() {
-        return this.totalPrice;
+        return totalPrice;
     }
 
     public void setTotalPrice(Integer totalPrice) {
