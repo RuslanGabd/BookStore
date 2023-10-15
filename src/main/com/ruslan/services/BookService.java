@@ -1,12 +1,15 @@
 package com.ruslan.services;
 
+import com.ruslan.DI.annotation.Inject;
 import com.ruslan.config.ConfigProperties;
+import com.ruslan.config.ConfigPropertiesOld;
+import com.ruslan.config.Configuration;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
-import com.ruslan.data.repository.BookRepository;
-import com.ruslan.data.repository.OrderRepository;
-import com.ruslan.data.repository.RequestRepository;
+import com.ruslan.data.repository.rinterface.IBookRepository;
+import com.ruslan.data.repository.rinterface.IOrderRepository;
+import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
@@ -19,26 +22,28 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
+@Configuration
 public class BookService implements IBookService {
-    private static final Logger logger = LogManager.getLogger();
-    private static final String fileName = "Books.csv";
 
     public static String pathBookSJSON = "src\\main\\resources\\Books.json";
-    private final BookRepository bookRepository;
-    private final RequestRepository requestRepository;
-    private final OrderRepository orderRepository;
+
+    private static final Logger logger = LogManager.getLogger();
+    private static final String fileName = "Books.csv";
+    @Inject
+    private IBookRepository bookRepository;
+    @Inject
+    private IRequestRepository requestRepository;
+    @Inject
+    private IOrderRepository orderRepository;
+
+    @ConfigProperties(propertyName = "auto-request-closed-when-book-add-to-stock", type = Boolean.class)
+    private Boolean isAutoRequestClosed;
+    @ConfigProperties(propertyName = "number-of-months-to-mark-book-stale", type = Integer.class)
+    private Integer numberOfMonths;
 
     private JsonReader jsonReader = JsonReader.getInstance();
     private JsonWriter jsonWriter = JsonWriter.getInstance();
-    private ConfigProperties configProperties = ConfigProperties.getINSTANCE();
-
-
-    public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {
-        this.bookRepository = bookRepository;
-        this.orderRepository = orderRepository;
-        this.requestRepository = requestRepository;
-    }
+    private ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
     @Override
     public Book createBook(String title, String author, int price, LocalDate datePublication) {
@@ -62,7 +67,7 @@ public class BookService implements IBookService {
 
     public void addBookToStockAndCancelRequests(int bookId) {
         bookRepository.updateStatus(bookId, BookStatus.IN_STOCK);
-        if (configProperties.getBooleanProperty("auto-request-closed-when-book-add-to-stock")) {
+        if (this.isAutoRequestClosed) {
             cancelRequestsByIdBook(bookId);
         }
         System.out.println("Book " + bookId + " add to stock");
@@ -93,9 +98,9 @@ public class BookService implements IBookService {
         List<Book> staleBookList = bookRepository.getBooksList();
         List<Order> orderList = null;
 
-            orderList = orderRepository.getCompletedOrdersForPeriod(
-                    LocalDate.now().minusMonths(configProperties.getIntProperty("number-of-months-to-mark-book-stale")),
-                    LocalDate.now());
+        orderList = orderRepository.getCompletedOrdersForPeriod(
+                LocalDate.now().minusMonths(numberOfMonths),
+                LocalDate.now());
 
         orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
         return staleBookList;
@@ -157,8 +162,7 @@ public class BookService implements IBookService {
         try {
             bookFile.createNewFile();
             bookList = getBookListFromFile();
-            bookList.add(BookRepository.getInstance().getById(id));
-
+            bookList.add(bookRepository.getById(id));
             bookCSV = new FileOutputStream(bookFile);
             oos = new ObjectOutputStream(bookCSV);
             oos.writeObject(bookList);
@@ -211,12 +215,6 @@ public class BookService implements IBookService {
                 .findFirst()
                 .orElse(null);
     }
-
-    public void importBooksFromJson() {
-        List<Book> bookList = jsonReader.readEntities(Book.class, pathBookSJSON);
-        bookList.forEach(book -> bookRepository.addBook(book.getId(), book));
-    }
-
 
     public void exportBooksToJson() {
         jsonWriter.writeEntities(bookRepository.getBooksList(), pathBookSJSON);

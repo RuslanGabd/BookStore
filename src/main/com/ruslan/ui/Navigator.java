@@ -1,11 +1,11 @@
 package com.ruslan.ui;
 
-import lombok.Data;
-
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Navigator {
     private Menu currentMenu;
+
+    public Navigator(){}
 
     public Navigator(Menu currentMenu) {
         this.currentMenu = currentMenu;
@@ -21,7 +21,7 @@ public class Navigator {
 
     public void navigate(Integer index) {
         if (currentMenu.getMenuItems().get(index).getAction() != null) {
-            currentMenu.getMenuItems().get(index).getAction().execute();
+            currentMenu.getMenuItems().get(index).doAction();
         }
          currentMenu = currentMenu.getMenuItems().get(index).getNextMenu();
     }

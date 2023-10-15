@@ -11,9 +11,10 @@
     <name>bookstore</name>
 
     <properties>
-        <maven.compiler.source>19.0</maven.compiler.source>
-        <maven.compiler.target>19.0</maven.compiler.target>
+        <maven.compiler.source>17.0</maven.compiler.source>
+        <maven.compiler.target>17.0</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.springframework.version>5.2.21.RELEASE</org.springframework.version>
     </properties>
 
     <build>
@@ -70,6 +71,11 @@
             <version>2.20.0</version>
         </dependency>
         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.14.2</version>
@@ -77,7 +83,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.14.2</version>
+            <!--            <version>2.14.2</version>-->
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -85,8 +91,25 @@
             <version>2.10.1</version>
         </dependency>
         <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-inject-bean</artifactId>
             <version>2.6.0</version>
         </dependency>
     </dependencies>

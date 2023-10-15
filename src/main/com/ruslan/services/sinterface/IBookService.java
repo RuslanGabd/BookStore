@@ -4,11 +4,8 @@ import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public interface IBookService {
-
-
 
 
     Book createBook(String title, String author, int price, LocalDate datePublication);

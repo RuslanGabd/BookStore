@@ -5,7 +5,6 @@ import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.request.Request;
 
 import java.io.Serializable;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;

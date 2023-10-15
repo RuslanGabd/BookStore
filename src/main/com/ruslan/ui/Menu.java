@@ -1,13 +1,12 @@
 package com.ruslan.ui;
 
 
-
 import java.util.List;
 
 public class Menu {
 
-   private List<MenuItem> menuItems ;
-   private String name;
+    private List<MenuItem> menuItems;
+    private String name;
 
     public Menu(String name, List<MenuItem> menuItems) {
         this.menuItems = menuItems;

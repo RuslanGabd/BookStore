@@ -1,18 +1,29 @@
 package com.ruslan.data.repository;
 
+
+import com.ruslan.DI.annotation.PostConstruct;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookCounted;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.repository.rinterface.IBookRepository;
+import com.ruslan.jsonHandlers.JsonReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 public class BookRepository implements IBookRepository {
-    public static final BookRepository INSTANCE = new BookRepository();
+    public static String pathBookSJSON = "src\\main\\resources\\Books.json";
     private Map<Integer, Book> booksMap = new HashMap<>();
+    private JsonReader jsonReader = JsonReader.getInstance();
+
+    @PostConstruct
+    public void importBooksFromJson() {
+        List<Book> bookList = jsonReader.readEntities(Book.class, pathBookSJSON);
+        bookList.forEach(book -> this.addBook(book.getId(), book));
+    }
 
 
     public void saveBook(Book book) {
@@ -20,7 +31,8 @@ public class BookRepository implements IBookRepository {
         book.setId(idBook);
         booksMap.put(idBook, book);
     }
-    public void addBook(int idBook,Book book) {
+
+    public void addBook(int idBook, Book book) {
         booksMap.put(idBook, book);
     }
 
@@ -46,10 +58,6 @@ public class BookRepository implements IBookRepository {
 
     public void saveAll(List<Book> bookList) {
         bookList.forEach(this::saveBook);
-    }
-
-    public static BookRepository getInstance() {
-        return INSTANCE;
     }
 
 

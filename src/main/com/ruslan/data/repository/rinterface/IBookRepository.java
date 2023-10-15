@@ -20,4 +20,6 @@ public interface IBookRepository {
 
     List<Book> getBooksList();
 
+    void addBook(int idBook,Book book);
+
 }

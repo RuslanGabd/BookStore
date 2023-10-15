@@ -1,18 +1,20 @@
 package com.ruslan.ui.action.order;
 
+import com.ruslan.DI.annotation.Inject;
 import com.ruslan.data.book.Book;
-import com.ruslan.data.repository.BookRepository;
+import com.ruslan.data.repository.rinterface.IBookRepository;
 import com.ruslan.ui.IAction;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CreateOrder extends ActionsOrder implements IAction {
-    final BookRepository bookRepository = BookRepository.getInstance();
+
+    @Inject
+    private IBookRepository bookRepository;
     private final static String checkNumbersSeparatedComma = "((?<!^,)\\d+(,(?!$)|$))+";
 
     @Override
