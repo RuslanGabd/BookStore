@@ -17,13 +17,12 @@ public class ConfigurationPostProcessor implements ObjectPostProcessor {
 
     private static final String DEFAULT_PATH_NAME = "config.properties";
     private static final Logger logger = LogManager.getLogger();
-    private final Properties properties;
-    private final Map <String, Set<Map.Entry<Object, Object>>> mapProperties = new HashMap<>();
+    private final Map <String, Properties> mapProperties = new HashMap<>();
     public ConfigurationPostProcessor() {
-        this.properties = new Properties();
+        final Properties properties = new Properties();
         try {
             properties.load(Files.newInputStream(Paths.get(DEFAULT_PATH_NAME)));
-            mapProperties.put(DEFAULT_PATH_NAME, properties.entrySet());
+            mapProperties.put(DEFAULT_PATH_NAME, properties);
         } catch (IOException e) {
             System.out.println("Something went wrong.");
             logger.error("Something went wrong.", e);
@@ -49,17 +48,17 @@ public class ConfigurationPostProcessor implements ObjectPostProcessor {
                 final String fileName = configProperties.configFileName();
                 final String propertyName = configProperties.propertyName();
                 if (DEFAULT_PATH_NAME.equals(fileName) || this.mapProperties.containsKey(fileName)) {
-                    Object value = this.mapProperties.get(fileName).stream().filter(entry ->
-                            propertyName.equals(entry.getKey())).findFirst().map(Map.Entry::getValue).orElse(null);
+                    Object value = this.mapProperties.get(fileName).get(propertyName);
                     if (value == null) {
                         return;
                     }
                     field.setAccessible(true);
                     field.set(object, castStringToType(configProperties, value.toString()));
                 } else {
-                    this.properties.load(Files.newInputStream(Paths.get(fileName)));
-                    this.mapProperties.put(fileName, this.properties.entrySet());
-                    final String propertyValue = this.properties.getProperty(configProperties.propertyName());
+                    final Properties properties = new Properties();
+                    properties.load(Files.newInputStream(Paths.get(fileName)));
+                    this.mapProperties.put(fileName, properties);
+                    final String propertyValue = properties.getProperty(configProperties.propertyName());
                     field.setAccessible(true);
                     field.set(object, castStringToType(configProperties, propertyValue));
                 }

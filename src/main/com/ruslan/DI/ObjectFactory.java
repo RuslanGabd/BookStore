@@ -3,7 +3,6 @@ package com.ruslan.DI;
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.DI.context.ApplicationContext;
 import com.ruslan.DI.postProcessor.ObjectPostProcessor;
-import com.ruslan.config.ConfigurationPostProcessor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.reflections.Reflections;
