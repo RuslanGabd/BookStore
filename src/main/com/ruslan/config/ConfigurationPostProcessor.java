@@ -47,7 +47,7 @@ public class ConfigurationPostProcessor implements ObjectPostProcessor {
             try {
                 final String fileName = configProperties.configFileName();
                 final String propertyName = configProperties.propertyName();
-                if (DEFAULT_PATH_NAME.equals(fileName) || this.mapProperties.containsKey(fileName)) {
+                if (this.mapProperties.containsKey(fileName)) {
                     Object value = this.mapProperties.get(fileName).get(propertyName);
                     if (value == null) {
                         return;
