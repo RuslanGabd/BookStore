@@ -14,9 +14,10 @@ import java.util.Properties;
 
 public class ConfigurationPostProcessor implements ObjectPostProcessor {
 
-    private static final String DEFAULT_PATH_NAME = "config.properties";
-    private static final Logger logger = LogManager.getLogger();
-    private final Map <String, Properties> mapProperties = new HashMap<>();
+    private final String DEFAULT_PATH_NAME = "config.properties";
+    private final Logger logger = LogManager.getLogger();
+    private final Map<String, Properties> mapProperties = new HashMap<>();
+
     public ConfigurationPostProcessor() {
         final Properties properties = new Properties();
         try {

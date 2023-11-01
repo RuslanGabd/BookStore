@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class OrderRepository implements IOrderRepository {
 
-    public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
+    public final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final Map<Integer, Order> ordersMap = new HashMap<>();
 

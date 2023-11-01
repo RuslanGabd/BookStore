@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class ConfigPropertiesOld {
-    private static final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     public static ConfigPropertiesOld INSTANCE = new ConfigPropertiesOld();
 
     private final Properties properties;

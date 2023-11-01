@@ -12,7 +12,7 @@ import java.util.List;
 
 
 public class JsonReader {
-    private static final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     private static JsonReader INSTANCE;
     ObjectMapper objectMapper;
 

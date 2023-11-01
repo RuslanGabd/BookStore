@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class RequestRepository implements IRequestRepository {
 
-    public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
+    public final String pathRequestJSON = "src\\main\\resources\\Requests.json";
 
 
     private Map<Integer, Request> requestMap = new HashMap<>();

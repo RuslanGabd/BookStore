@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class AddBookToStockAndCloseRequests extends ActionsBook implements IAction {
-    // private static final Logger log = Logger.getLogger(AddBookToStockAndCloseRequests.class);
+
 
     @Override
     public void execute() {

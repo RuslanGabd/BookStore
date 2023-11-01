@@ -29,7 +29,7 @@ public final class ConnectionManager {
     @ConfigProperties(configFileName = "database.properties", propertyName = "driver-url")
     private String driverUrl;
 
-    private static final Integer DEFAULT_POOL_SIZE = 5;
+    private final Integer DEFAULT_POOL_SIZE = 5;
     private BlockingQueue<Connection> pool;
 
     public ConnectionManager() {
