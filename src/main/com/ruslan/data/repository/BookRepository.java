@@ -59,6 +59,4 @@ public class BookRepository implements IBookRepository {
     public void saveAll(List<Book> bookList) {
         bookList.forEach(this::saveBook);
     }
-
-
 }

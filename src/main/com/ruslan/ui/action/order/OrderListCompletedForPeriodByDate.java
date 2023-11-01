@@ -21,7 +21,7 @@ public class OrderListCompletedForPeriodByDate extends ActionsOrder implements I
                 String s2 = reader.readLine();
                 LocalDate date2 = LocalDate.parse(s2);
                 System.out.println("Completed orders for period sorted by date:" +
-                        orderService.getCompletedOrdersSortedByDateForPeriod(date1, date2));
+                        orderService.getCompletedOrderSortedByDateForPeriod(date1, date2));
                 break;
             } catch (IOException e) {
                 System.out.println("Something went wrong.\n" +

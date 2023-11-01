@@ -9,13 +9,13 @@ import java.io.InputStreamReader;
 public class BookDescription extends ActionsBook implements IAction {
     @Override
     public void execute() {
-        while (true){
+        while (true) {
             try {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
                 System.out.println("Enter id book:");
                 String s1 = reader.readLine();
                 int id = Integer.parseInt(s1);
-                bookService.getDescriptionOfBook(id);
+                System.out.println(bookService.getDescriptionOfBook(id));
                 break;
             } catch (IOException e) {
                 System.out.println("Something went wrong.\n" +
@@ -25,6 +25,6 @@ public class BookDescription extends ActionsBook implements IAction {
                 System.out.println("You need enter numbers of Book ID");
                 logger.error("Wrong number format", e);
             }
-    }
+        }
     }
 }

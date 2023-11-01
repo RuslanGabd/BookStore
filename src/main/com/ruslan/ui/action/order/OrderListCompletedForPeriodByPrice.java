@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
-public class OrderListCompletedForPeriodByStatus extends ActionsOrder implements IAction {
+public class OrderListCompletedForPeriodByPrice extends ActionsOrder implements IAction {
 
     public void execute() {
         while (true) {
@@ -21,7 +21,7 @@ public class OrderListCompletedForPeriodByStatus extends ActionsOrder implements
                 String s2 = reader.readLine();
                 LocalDate date2 = LocalDate.parse(s2);
                 System.out.println("Completed orders for period sorted by status:" +
-                        orderService.getCompletedOrdersSortedByDateForPeriod(date1, date2));
+                        orderService.getCompletedOrdersSortedByPriceForPeriod(date1, date2));
                 break;
             } catch (IOException e) {
                 System.out.println("Something went wrong.\n" +

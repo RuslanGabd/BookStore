@@ -30,6 +30,7 @@ public class ConfigurationPostProcessor implements ObjectPostProcessor {
         }
     }
 
+    @Override
     public void process(final Object object) {
         final Class<?> clazz = object.getClass();
         if (!clazz.isAnnotationPresent(Configuration.class)) {

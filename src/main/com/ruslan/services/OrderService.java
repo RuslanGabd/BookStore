@@ -1,5 +1,8 @@
 package com.ruslan.services;
 
+import com.ruslan.DAO.IOrderDao;
+import com.ruslan.DAO.IRequestDao;
+import com.ruslan.DAO.OrderDao;
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
@@ -7,6 +10,8 @@ import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
 import com.ruslan.data.repository.rinterface.IOrderRepository;
 import com.ruslan.data.repository.rinterface.IRequestRepository;
+import com.ruslan.data.request.Request;
+import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
 import com.ruslan.services.sinterface.IRequestService;
@@ -25,12 +30,14 @@ public class OrderService implements IOrderService {
 
     public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
 
+
     @Inject
-    private IRequestRepository requestRepository;
+    private IRequestService requestService;
     @Inject
-    IRequestService requestService;
+    private IOrderDao orderDao;
     @Inject
-    private IOrderRepository orderRepository;
+    private IRequestDao requestDao;
+    private JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
     public OrderService() {
@@ -39,59 +46,68 @@ public class OrderService implements IOrderService {
     @Override
     public Order createOrder(List<Book> listBooks) {
         Order ord = new Order(listBooks);
-        orderRepository.saveOrder(ord);
+        orderDao.saveOrder(ord);
         System.out.println("Order created with id=" + ord.getId() + " contains " + listBooks.size() + " books");
         listBooks.stream()
                 .filter(book -> book.getStatus() == BookStatus.OUT_OF_STOCK)
-                .forEach(book -> requestService.createRequest(book.getId()));
+                .forEach(book -> requestDao.saveRequest(new Request(book)));
         return ord;
     }
 
     public void changeOrderDateCreated(int orderId, LocalDate date) {
-        orderRepository.getById(orderId).ifPresent(order -> order.setDateCreated(date));
+        orderDao.findById(orderId).ifPresent(order -> {
+            order.setDateCreated(date);
+            orderDao.update(order);
+        });
     }
 
     public void changeOrderDateExecution(int orderId, LocalDate date) {
-        orderRepository.getById(orderId).ifPresent(order -> order.setDateExecution(date));
+        orderDao.findById(orderId).ifPresent(order -> {
+            order.setDateExecution(date);
+            orderDao.update(order);
+        });
     }
 
     // List of orders (sort by date of execution, by price, by status);
     public List<Order> getOrdersSortedByDateExecution() {
-        List<Order> orderList = orderRepository.getOrdersList();
+        List<Order> orderList = orderDao.getOrdersList();
         orderList.sort(Comparator.comparing(Order::getDateExecution,
                 Comparator.nullsLast(Comparator.naturalOrder())));
         return orderList;
     }
 
     public List<Order> getOrdersSortedByPrice() {
-        List<Order> orderList = orderRepository.getOrdersList();
+
+        List<Order> orderList = orderDao.getOrdersList();
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
     }
 
     public List<Order> getOrdersSortedByStatus() {
-        List<Order> orderList = orderRepository.getOrdersList();
+        List<Order> orderList = orderDao.getOrdersList();
         orderList.sort(Comparator.comparing(Order::getStatus));
         return orderList;
     }
 
 
     public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
-        orderRepository.getById(orderId).ifPresent(order -> {
+        orderDao.findById(orderId).ifPresent(order -> {
             if (newOrderStatus == OrderStatus.COMPLETED) {
                 order.getListBook().stream().filter(book ->
-                                requestRepository.getRequestForBook(book.getId()) != null)
+                                requestDao.findRequestByBookId(book.getId()).orElse(null) != null)
                         .findAny().ifPresentOrElse(book -> {
-                            System.out.println("Request for book with id="
-                                    + requestRepository.getRequestForBook(book.getId()).getBook().getId()
+                            System.out.println("Request with id="
+                                    + requestDao.findRequestByBookId(book.getId()).orElse(null).getId()
                                     + " is not finished. Please close request");
                         }, () -> {
-                            orderRepository.updateStatus(orderId, newOrderStatus);
-                            orderRepository.setDateExecution(orderId, LocalDate.now());
+                            order.setStatus(newOrderStatus);
+                            order.setDateExecution(LocalDate.now());
+                            orderDao.update(order);
                             System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
                         });
             } else {
-                orderRepository.updateStatus(orderId, newOrderStatus);
+                order.setStatus(newOrderStatus);
+                orderDao.update(order);
                 System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
             }
         });
@@ -100,35 +116,35 @@ public class OrderService implements IOrderService {
 
     @Override
     public void removeOrder(int orderId) {
-        orderRepository.removeById(orderId);
+        orderDao.removeById(orderId);
     }
 
 
     //Order details (any customer data + books);
     public Order OrderDetails(int orderId) {
-        return orderRepository.getById(orderId).orElse(null);
+        return orderDao.getById(orderId).orElse(null);
     }
 
     // The number of completed orders over a period of time;
     public int getCountCompletedOrdersForPeriod(LocalDate date1, LocalDate date2) {
-        return orderRepository.getCompletedOrdersForPeriod(date1, date2).size();
+        return orderDao.getCompletedOrdersForPeriod(date1, date2).size();
     }
 
     // The amount of money earned over a period of time;
     public Integer getEarnedMoneyForPeriod(LocalDate date1, LocalDate date2) {
-        return orderRepository.getCompletedOrdersForPeriod(date1, date2)
+        return orderDao.getCompletedOrdersForPeriod(date1, date2)
                 .stream().mapToInt(Order::getTotalPrice).sum();
     }
 
     // List of completed orders for a period of time (sort by date, by price);
-    public List<Order> getCompletedOrdersSortedByDateForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(date1, date2);
+    public List<Order> getCompletedOrderSortedByDateForPeriod(LocalDate date1, LocalDate date2) {
+        List<Order> orderList = orderDao.getCompletedOrdersForPeriod(date1, date2);
         orderList.sort(Comparator.comparing(Order::getDateCreated));
         return orderList;
     }
 
     public List<Order> getCompletedOrdersSortedByPriceForPeriod(LocalDate date1, LocalDate date2) {
-        List<Order> orderList = orderRepository.getCompletedOrdersForPeriod(date1, date2);
+        List<Order> orderList = orderDao.getCompletedOrdersForPeriod(date1, date2);
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
     }
@@ -142,7 +158,7 @@ public class OrderService implements IOrderService {
         try {
             orderFile.createNewFile(); // if file already exists will do nothing
             orderList = getOrderListFromFile();
-            orderList.add(orderRepository.getById(id).orElse(null));
+            orderList.add(orderDao.getById(id).orElse(null));
 
             fos = new FileOutputStream(orderFile);
             oos = new ObjectOutputStream(fos);
@@ -199,7 +215,12 @@ public class OrderService implements IOrderService {
                 .orElse(null);
     }
 
+    public void importOrdersFromJson() {
+        List<Order> orderList = jsonReader.readEntities(Order.class, pathOrdersJSON);
+        orderList.forEach(order -> orderDao.saveOrder(order));
+    }
+
     public void exportOrdersToJson() {
-        jsonWriter.writeEntities(orderRepository.getOrdersList(), pathOrdersJSON);
+        jsonWriter.writeEntities(orderDao.getOrdersList(), pathOrdersJSON);
     }
 }

@@ -15,7 +15,6 @@ public interface IRequestRepository {
 
     void removeById(int id);
 
-//    void createRequest(Book book) ;
 
     List<Request> getRequestList();
 

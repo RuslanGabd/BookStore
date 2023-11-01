@@ -1,15 +1,20 @@
 package com.ruslan.DI;
 
 import com.ruslan.DI.annotation.Inject;
+import com.ruslan.DI.annotation.PostConstruct;
 import com.ruslan.DI.context.ApplicationContext;
 import com.ruslan.DI.postProcessor.ObjectPostProcessor;
+import com.ruslan.DI.postProcessor.PostConstructorObjectPostProcessor;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ObjectFactory {
     @Getter
@@ -27,28 +32,55 @@ public class ObjectFactory {
         this.scanner = new Reflections(configuration.getPackageToScan());
     }
 
-    @SneakyThrows
+
     public <T> T getObject(Class<T> clazz) {
 
         Class<? extends T> implementationClass = clazz;
         if (implementationClass.isInterface()) {
             implementationClass = objectConfigurator.getImplementationClass(clazz);
         }
-        T object = implementationClass.getDeclaredConstructor().newInstance();
+        T object = null;
+        try {
+            object = implementationClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
         List<Field> allFields = new ArrayList<>(Arrays.asList(implementationClass.getDeclaredFields()));
         allFields.addAll(Arrays.asList(implementationClass.getSuperclass().getDeclaredFields()));
         for (Field field : allFields.stream().filter(field -> field.isAnnotationPresent(Inject.class)).toList()) {
             field.setAccessible(true);
-            field.set(object, applicationContext.getObject(field.getType()));
+            try {
+                field.set(object, applicationContext.getObject(field.getType()));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         callPostProcessor(object);
+
+        for (Method method : object.getClass().getDeclaredMethods()) {
+            if (method.isAnnotationPresent(PostConstruct.class)) {
+                try {
+                    method.invoke(object);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
         return object;
     }
 
     public void callPostProcessor(Object object) {
         getObjectConfigurator().getScanner().getSubTypesOf(ObjectPostProcessor.class)
-                .forEach(processor-> {
+                .forEach(processor -> {
                     ObjectPostProcessor postProcessor;
                     try {
                         postProcessor = processor.getDeclaredConstructor().newInstance();
@@ -61,7 +93,16 @@ public class ObjectFactory {
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
-                } );
+
+                });
+
+        try {
+            final PostConstructorObjectPostProcessor postProcessor =
+                    PostConstructorObjectPostProcessor.class.getDeclaredConstructor().newInstance();
+            postProcessor.process(object);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
     }
 //
 }

@@ -43,6 +43,18 @@ public class Order implements Serializable {
         this.dateCreated = LocalDate.now();
     }
 
+    public Order(int id, String buyer, String address, OrderStatus status, int totalPrice, LocalDate dateCreated,
+                 LocalDate dateExecution, List<Book> listBooks) {
+        this.id = id;
+        this.buyer = buyer;
+        this.address = address;
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.dateCreated = dateCreated;
+        this.dateExecution = dateExecution;
+        this.listBook = listBooks;
+    }
+
 
     @Override
     public boolean equals(Object o) {
