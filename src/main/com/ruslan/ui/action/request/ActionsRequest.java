@@ -7,7 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ActionsRequest {
-    static final Logger logger = LogManager.getLogger(ActionsRequest.class);
+    final Logger logger = LogManager.getLogger(ActionsRequest.class);
     @Inject
     RequestService requestService;
     @Inject

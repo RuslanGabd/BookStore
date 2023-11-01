@@ -10,9 +10,6 @@ import com.ruslan.config.Configuration;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
-import com.ruslan.data.repository.rinterface.IBookRepository;
-import com.ruslan.data.repository.rinterface.IOrderRepository;
-import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
@@ -29,10 +26,10 @@ import java.util.Optional;
 @Configuration
 public class BookService implements IBookService {
 
-    public static String pathBookSJSON = "src\\main\\resources\\Books.json";
+    public String pathBookSJSON = "src\\main\\resources\\Books.json";
 
-    private static final Logger logger = LogManager.getLogger();
-    private static final String fileName = "Books.csv";
+    private final Logger logger = LogManager.getLogger();
+    private final String fileName = "Books.csv";
 
     @Inject
     private IBookDao bookDao;

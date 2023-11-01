@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class JsonWriter {
-    private static final Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
     private static JsonWriter INSTANCE;
 
     ObjectMapper objectMapper;

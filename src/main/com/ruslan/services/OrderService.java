@@ -2,14 +2,11 @@ package com.ruslan.services;
 
 import com.ruslan.DAO.IOrderDao;
 import com.ruslan.DAO.IRequestDao;
-import com.ruslan.DAO.OrderDao;
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
-import com.ruslan.data.repository.rinterface.IOrderRepository;
-import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.data.request.Request;
 import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
@@ -25,10 +22,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OrderService implements IOrderService {
-    private static final Logger logger = LogManager.getLogger();
-    private static final String fileName = "Orders.csv";
+    private final Logger logger = LogManager.getLogger();
+    private final String fileName = "Orders.csv";
 
-    public static final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
+    public final String pathOrdersJSON = "src\\main\\resources\\Orders.json";
 
 
     @Inject

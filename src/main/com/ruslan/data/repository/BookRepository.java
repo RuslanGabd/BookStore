@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 public class BookRepository implements IBookRepository {
-    public static String pathBookSJSON = "src\\main\\resources\\Books.json";
+    public  String pathBookSJSON = "src\\main\\resources\\Books.json";
     private Map<Integer, Book> booksMap = new HashMap<>();
     private JsonReader jsonReader = JsonReader.getInstance();
 
