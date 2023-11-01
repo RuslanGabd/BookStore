@@ -2,8 +2,6 @@ package com.ruslan.services;
 
 import com.ruslan.DAO.IRequestDao;
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.data.repository.rinterface.IBookRepository;
-import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.data.request.Request;
 import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
@@ -15,13 +13,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class RequestService implements IRequestService {
 
-    public static final Logger logger = LogManager.getLogger();
-    private static final String fileName = "Requests.csv";
-    public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
+    public final Logger logger = LogManager.getLogger();
+    private final String fileName = "Requests.csv";
+    public final String pathRequestJSON = "src\\main\\resources\\Requests.json";
 
     @Inject
     private IRequestDao requestDao;

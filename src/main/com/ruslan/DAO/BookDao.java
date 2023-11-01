@@ -4,7 +4,9 @@ import com.ruslan.DI.annotation.Inject;
 import com.ruslan.JDBC.ConnectionManager;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.book.BookStatus;
-import exception.DaoException;
+import com.ruslan.exception.DaoException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -15,7 +17,7 @@ import java.util.Optional;
 public class BookDao implements IBookDao {
     @Inject
     ConnectionManager connectionManager;
-
+    public final Logger logger = LogManager.getLogger();
 
 
     private final String deleteBook = """
@@ -161,6 +163,7 @@ public class BookDao implements IBookDao {
                     resultSet.getDate(7).toLocalDate()
             );
         } catch (SQLException e) {
+            logger.error("Something went wrong.", e);
             throw new DaoException(e);
         }
     }

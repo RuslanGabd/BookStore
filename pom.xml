@@ -18,11 +18,31 @@
     </properties>
 
     <build>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <configuration>
+                    <configLocation>${basedir}/config/checkstyle/checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+
                 <configuration>
                     <compilerArgs>
                         <arg>--add-opens</arg>
@@ -42,9 +62,7 @@
                         <goals>
                             <goal>compile</goal>
                         </goals>
-
                         <phase>process-classes</phase>
-
                         <configuration>
                             <proc>only</proc>
                             <annotationProcessors>
@@ -112,15 +130,10 @@
             <artifactId>sisu-inject-bean</artifactId>
             <version>2.6.0</version>
         </dependency>
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
-
-
     </dependencies>
-
-
 </project>

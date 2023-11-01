@@ -4,7 +4,7 @@ import com.ruslan.DI.annotation.Inject;
 import com.ruslan.JDBC.ConnectionManager;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.request.Request;
-import exception.DaoException;
+import com.ruslan.exception.DaoException;
 
 import java.sql.*;
 import java.util.ArrayList;

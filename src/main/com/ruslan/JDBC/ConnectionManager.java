@@ -4,8 +4,6 @@ import com.ruslan.DI.annotation.PostConstruct;
 import com.ruslan.config.ConfigProperties;
 import com.ruslan.config.Configuration;
 
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
 import java.sql.DriverManager;
