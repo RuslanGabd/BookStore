@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -112,14 +113,14 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public void removeOrder(int orderId) {
+    public void removeOrder(int orderId) throws SQLException {
         orderDao.removeById(orderId);
     }
 
 
     //Order details (any customer data + books);
     public Order OrderDetails(int orderId) {
-        return orderDao.getById(orderId).orElse(null);
+        return orderDao.findById(orderId).orElse(null);
     }
 
     // The number of completed orders over a period of time;
@@ -155,7 +156,7 @@ public class OrderService implements IOrderService {
         try {
             orderFile.createNewFile(); // if file already exists will do nothing
             orderList = getOrderListFromFile();
-            orderList.add(orderDao.getById(id).orElse(null));
+            orderList.add(orderDao.findById(id).orElse(null));
 
             fos = new FileOutputStream(orderFile);
             oos = new ObjectOutputStream(fos);

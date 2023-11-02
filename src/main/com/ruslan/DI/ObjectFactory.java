@@ -42,13 +42,8 @@ public class ObjectFactory {
         T object = null;
         try {
             object = implementationClass.getDeclaredConstructor().newInstance();
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
         List<Field> allFields = new ArrayList<>(Arrays.asList(implementationClass.getDeclaredFields()));
@@ -68,9 +63,7 @@ public class ObjectFactory {
             if (method.isAnnotationPresent(PostConstruct.class)) {
                 try {
                     method.invoke(object);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -93,16 +86,12 @@ public class ObjectFactory {
                     } catch (InvocationTargetException | IllegalAccessException e) {
                         throw new RuntimeException(e);
                     }
-
                 });
-
         try {
-            final PostConstructorObjectPostProcessor postProcessor =
-                    PostConstructorObjectPostProcessor.class.getDeclaredConstructor().newInstance();
+            final PostConstructorObjectPostProcessor postProcessor = new PostConstructorObjectPostProcessor();
             postProcessor.process(object);
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
-//
 }

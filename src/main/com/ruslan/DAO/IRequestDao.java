@@ -15,9 +15,9 @@ public interface IRequestDao {
 
     Boolean removeByRequestId(int id);
 
-     Boolean removeByBookId(int id);
-    List<Request> getRequestsList();
+    Boolean removeByBookId(int id);
 
+    List<Request> getRequestsList();
 
 
 }
