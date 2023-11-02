@@ -3,12 +3,10 @@ package com.ruslan.DAO;
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.JDBC.ConnectionManager;
 import com.ruslan.data.book.Book;
-import com.ruslan.data.book.BookStatus;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
 import exception.DaoException;
 
-import java.lang.ref.PhantomReference;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
@@ -25,6 +23,10 @@ public class OrderDao implements IOrderDao {
     private final String deleteOrder = """
             DELETE FROM `order`
             WHERE id = ?
+            """;
+    private final String deleteOrderFromBooksOrder = """
+            DELETE FROM `booksOrder`
+            WHERE orderId = ?
             """;
     private final String saveOrder = """
             INSERT INTO `order` ( `buyer`, `address`, `status`, `totalPrice`, `dateCreated`, `dateExecution` )
@@ -53,6 +55,7 @@ public class OrderDao implements IOrderDao {
                   FROM `order`
                   WHERE id= ?
             """;
+
     private final String getAllOrders = """
             SELECT  id,
                     buyer,
@@ -81,7 +84,7 @@ public class OrderDao implements IOrderDao {
                     dateCreated,
                     dateExecution
             FROM `order`
-            where dateExecution BETWEEN ? AND ?
+            where status = 'COMPLETED' AND dateExecution BETWEEN ? AND ?
                  """;
 
     public OrderDao() {
@@ -97,8 +100,6 @@ public class OrderDao implements IOrderDao {
             if (resultSet.next()) {
                 order = buildOrder(resultSet);
             }
-
-
             return Optional.ofNullable(order);
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -121,7 +122,6 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -139,8 +139,6 @@ public class OrderDao implements IOrderDao {
             } else {
                 preparedStatement.setTimestamp(6, null);
             }
-
-            System.out.println(preparedStatement);
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
@@ -157,7 +155,6 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-
     }
 
     @Override
@@ -183,24 +180,37 @@ public class OrderDao implements IOrderDao {
     }
 
     @Override
-    public Boolean removeById(int id) {
-        try (var connection = connectionManager.get()) {
-            PreparedStatement preparedStatement = connection.prepareStatement(deleteOrder);
-            preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
+    public Boolean removeById(int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement deleteOrderFromTableBooksOrder = null;
+        PreparedStatement deleteOrderFromTableOrder = null;
+        try {
+            connection = connectionManager.get();
+            deleteOrderFromTableBooksOrder = connection.prepareStatement(deleteOrderFromBooksOrder);
+            deleteOrderFromTableOrder = connection.prepareStatement(deleteOrder);
+            connection.setAutoCommit(false);
+            deleteOrderFromTableBooksOrder.setInt(1, id);
+            deleteOrderFromTableOrder.setInt(1, id);
+            deleteOrderFromTableBooksOrder.executeUpdate();
+            deleteOrderFromTableOrder.executeUpdate();
+            return deleteOrderFromTableOrder.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new DaoException(e);
+            if (connection != null) {
+                connection.rollback();
+            }
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+            if (deleteOrderFromTableBooksOrder != null) {
+                deleteOrderFromTableBooksOrder.close();
+            }
+            if (deleteOrderFromTableOrder != null) {
+                deleteOrderFromTableOrder.close();
+            }
         }
-    }
-
-    @Override
-    public void setDateExecution(int id, LocalDate date) {
-
-    }
-
-    @Override
-    public void addOrder(Integer id, Order order) {
-
     }
 
     @Override
@@ -238,14 +248,7 @@ public class OrderDao implements IOrderDao {
         }
     }
 
-    @Override
-    public Optional<Order> getById(int id) {
-        return Optional.empty();
-    }
-
-
     private Order buildOrder(ResultSet resultSet) {
-
         try {
             var dateExecution = resultSet.getDate(7) == null
                     ? null : resultSet.getDate(7).toLocalDate();
@@ -262,8 +265,5 @@ public class OrderDao implements IOrderDao {
         } catch (SQLException e) {
             throw new DaoException(e);
         }
-
     }
-
-
 }

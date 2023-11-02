@@ -5,6 +5,7 @@ import com.ruslan.ui.IAction;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 
 public class CancelOrder extends ActionsOrder implements IAction {
     @Override
@@ -25,6 +26,9 @@ public class CancelOrder extends ActionsOrder implements IAction {
             } catch (NumberFormatException e) {
                 System.out.println("You need enter numbers of order ID");
                 logger.error("Not number", e);
+            } catch (SQLException e) {
+                logger.error("SQL Exception", e);
+                throw new RuntimeException(e);
             }
         }
     }
