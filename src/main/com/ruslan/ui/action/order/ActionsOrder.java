@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ActionsOrder {
-    static final Logger logger = LogManager.getLogger(ActionsOrder.class);
+    final Logger logger = LogManager.getLogger(ActionsOrder.class);
     @Inject
     OrderService orderService;
 

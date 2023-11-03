@@ -5,7 +5,7 @@ import com.ruslan.JDBC.ConnectionManager;
 import com.ruslan.data.book.Book;
 import com.ruslan.data.order.Order;
 import com.ruslan.data.order.OrderStatus;
-import com.ruslan.exception.DaoException;
+import exception.DaoException;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -193,6 +193,7 @@ public class OrderDao implements IOrderDao {
             deleteOrderFromTableOrder.setInt(1, id);
             deleteOrderFromTableBooksOrder.executeUpdate();
             deleteOrderFromTableOrder.executeUpdate();
+            connection.commit();
             return deleteOrderFromTableOrder.executeUpdate() > 0;
         } catch (SQLException e) {
             if (connection != null) {

@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 
 public class AddBookToStockAndCloseRequests extends ActionsBook implements IAction {
 
-
     @Override
     public void execute() {
 
