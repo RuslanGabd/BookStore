@@ -12,8 +12,6 @@ public class Book implements Serializable {
     private int price;
     private LocalDate datePublication;
 
-    private LocalDate dataOfReceipt;
-
     private String description;
 
     public Book() {
@@ -25,6 +23,17 @@ public class Book implements Serializable {
         this.author = author;
         this.price = price;
         this.status = BookStatus.IN_STOCK;
+        this.datePublication = datePublication;
+    }
+
+
+    public Book(Integer id, String title, String author, int price, BookStatus bookStatus, String description, LocalDate datePublication) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.status = bookStatus;
+        this.description=description;
         this.datePublication = datePublication;
     }
 

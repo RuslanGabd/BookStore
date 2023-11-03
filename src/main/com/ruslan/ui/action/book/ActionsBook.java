@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 public class ActionsBook {
 
-    static final Logger logger = LogManager.getLogger(ActionsBook.class);
+    final Logger logger = LogManager.getLogger(ActionsBook.class);
     @Inject
     BookService bookService;
 

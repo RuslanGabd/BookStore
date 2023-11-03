@@ -2,8 +2,6 @@ package com.ruslan.ui;
 
 
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.ui.action.ExportAllDataToJSON;
-import com.ruslan.ui.action.ImportAllDataToJSON;
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
 import com.ruslan.ui.action.request.*;
@@ -41,7 +39,7 @@ public class Builder {
     @Inject
     private OrderListByStatus orderListByStatus;
     @Inject
-    private OrderListCompletedForPeriodByStatus orderListCompletedForPeriodByStatus;
+    private OrderListCompletedForPeriodByPrice orderListCompletedForPeriodByPrice;
     @Inject
     private OrderListCompletedForPeriodByDate orderListCompletedForPeriodByDate;
     @Inject
@@ -68,15 +66,28 @@ public class Builder {
     private WriteRequestToFile writeRequestToFile;
     @Inject
     private ReadRequestFromFile readRequestFromFile;
-    @Inject
-    private ExportAllDataToJSON exportAllDataToJSON;
-    @Inject
-    private ImportAllDataToJSON importAllDataToJSON;
+
     @Inject
     private EarnedMoney earnedMoney;
+    @Inject
+    private ImportBooksFromJsonToDataBase importBooksFromJsonToDataBase;
+    @Inject
+    private ImportOrdersFromJsonToDataBase importOrdersFromJsonToDataBase;
+    @Inject
+    private ExportBooksToJson exportBooksToJson;
+    @Inject
+    private ImportRequestsFromJsonToDataBase importRequestsFromJsonToDataBase;
+    @Inject
+    private ExportOrdersToJson exportOrdersToJson;
+    @Inject
+    private ExportRequestsToJson exportRequestsToJson;
+
 
     public void buildMenu() {
-
+        MenuItem importBooksToDataBase = new MenuItem("Load Books to DB",
+                importBooksFromJsonToDataBase, rootMenu);
+        MenuItem exportBooksToJsonFile = new MenuItem("Export books to JSON",
+                exportBooksToJson, rootMenu);
         MenuItem showListBookByAlphabet = new MenuItem("Books sorted by Alphabet",
                 bookListByAlphabetically, rootMenu);
         MenuItem showListBookByDate = new MenuItem("Books sorted by Date Publication",
@@ -100,6 +111,8 @@ public class Builder {
 
 
         Menu menuShowBookMenu = new Menu("Book menu", Arrays.asList(
+                importBooksToDataBase,
+                exportBooksToJsonFile,
                 showListBookByAlphabet,
                 showListBookByDate,
                 showListBookByStatus,
@@ -110,12 +123,12 @@ public class Builder {
                 AddBookToStock,
                 saveBookToFile,
                 loadBookFromFile
-
         ));
 
         MenuItem showBookMenu = new MenuItem("Book menu", null, menuShowBookMenu);
         //________________________________________________________________
-
+        MenuItem importOrdersToDataBase = new MenuItem("Load Orders to DB",
+                importOrdersFromJsonToDataBase, rootMenu);
         MenuItem showListOrderByDateExecutionMI = new MenuItem("Orders sorted by Date Execution",
                 orderListByDateExecution, rootMenu);
         MenuItem showListOrderByPriceMI = new MenuItem("Orders sorted by Price",
@@ -123,7 +136,7 @@ public class Builder {
         MenuItem showListOrderByStatusMI = new MenuItem("Orders sorted by Status",
                 orderListByStatus, rootMenu);
         MenuItem showListOrderCompletedForPeriodByStatusMI = new MenuItem("Completed orders for period sorted by Status",
-                orderListCompletedForPeriodByStatus, rootMenu);
+                orderListCompletedForPeriodByPrice, rootMenu);
         MenuItem showListOrderCompletedForPeriodByDateMI = new MenuItem("Completed orders for period sorted by Date",
                 orderListCompletedForPeriodByDate, rootMenu);
         MenuItem showNumbersCompletedOrdersMI = new MenuItem("Show numbers of completed orders",
@@ -140,8 +153,12 @@ public class Builder {
                 writeOrderToFile, rootMenu);
         MenuItem readOrderFromFileMI = new MenuItem("Read order to file",
                 readOrderFromFile, rootMenu);
+        MenuItem exportOrdersToJsonFile = new MenuItem("Export orders to JSON",
+                exportOrdersToJson, rootMenu);
 
         Menu menuShowOrderMenu = new Menu("Order menu", Arrays.asList(
+                importOrdersToDataBase,
+                exportOrdersToJsonFile,
                 createOrderMI,
                 cancelOrderMI,
                 changeOrderStatusMI,
@@ -159,6 +176,8 @@ public class Builder {
         //________________________________________________________________
 
 
+        MenuItem exportRequestsToJsonFile = new MenuItem("Export Requests to JSON",
+                exportRequestsToJson, rootMenu);
         MenuItem showListRequestsByNumberMI = new MenuItem("Request sorted by number",
                 requestListByNumber, rootMenu);
         MenuItem showListRequestsByAlphabeticallyMI = new MenuItem("Request sorted by  alphabetically",
@@ -169,10 +188,13 @@ public class Builder {
                 writeRequestToFile, rootMenu);
         MenuItem readRequestFromFileMI = new MenuItem("Read request from file",
                 readRequestFromFile, rootMenu);
-
+        MenuItem importRequestsFromJsonToDB = new MenuItem("Read request from file",
+                importRequestsFromJsonToDataBase, rootMenu);
 
         Menu menuShowRequestMenu = new Menu("Request menu",
                 Arrays.asList(
+                        importRequestsFromJsonToDB,
+                        exportRequestsToJsonFile,
                         showListRequestsByNumberMI,
                         showListRequestsByAlphabeticallyMI,
                         writeRequestToFileMI,
@@ -183,21 +205,16 @@ public class Builder {
 
         MenuItem showEarnedMoney = new MenuItem("Show earned money for period", earnedMoney, rootMenu);
 
-
-        //________________________________________________________________
-        MenuItem saveAllData = new MenuItem("Save All Data To JSON", exportAllDataToJSON, rootMenu);
-        MenuItem loadAllData = new MenuItem("Load All Data From JSON", importAllDataToJSON, rootMenu);
-
         //________________________________________________________________
         rootMenu.setName("Root menu");
         rootMenu.setMenuItems(Arrays.asList(
                 showBookMenu,
                 showOrderMenu,
                 showRequestMenu,
-                showEarnedMoney,
-                loadAllData,
-                saveAllData));
+                showEarnedMoney
+        ));
     }
+
     public Menu getRootMenu() {
         return rootMenu;
     }

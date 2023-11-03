@@ -15,7 +15,7 @@ public class CreateOrder extends ActionsOrder implements IAction {
 
     @Inject
     private IBookRepository bookRepository;
-    private final static String checkNumbersSeparatedComma = "((?<!^,)\\d+(,(?!$)|$))+";
+    private final  String checkNumbersSeparatedComma = "((?<!^,)\\d+(,(?!$)|$))+";
 
     @Override
     public void execute() {

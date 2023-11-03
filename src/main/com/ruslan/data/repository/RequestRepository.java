@@ -1,11 +1,8 @@
 package com.ruslan.data.repository;
 
-import com.ruslan.DI.annotation.PostConstruct;
-import com.ruslan.data.book.Book;
 import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.data.request.Request;
 import com.ruslan.data.request.RequestCounted;
-import com.ruslan.jsonHandlers.JsonReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,17 +12,11 @@ import java.util.Map;
 public class RequestRepository implements IRequestRepository {
 
     public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
-    private final JsonReader jsonReader = JsonReader.getInstance();
+
 
     private Map<Integer, Request> requestMap = new HashMap<>();
 
-    @PostConstruct
-    public void importRequestsFromJson() {
-        List<Request> requestsList = jsonReader.readEntities(Request.class, pathRequestJSON);
-        requestsList.forEach(request -> this.addOrder(request.getId(), request));
-    }
-
-    public void removeRequest(int id) {
+     public void removeRequest(int id) {
         requestMap.remove(id);
     }
 
@@ -57,10 +48,6 @@ public class RequestRepository implements IRequestRepository {
         return new ArrayList<>(requestMap.values());
     }
 
-//    @Override
-//    public void createRequest(Book book) {
-//    saveRequest(new Request(bookRepository.getById(bookId)));
-//    }
 
     public Request getRequestForBook(int bookId) {
         return requestMap.values()

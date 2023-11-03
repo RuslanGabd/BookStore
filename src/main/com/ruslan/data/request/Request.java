@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public class Request implements Serializable {
     private Book book;
     private int id;
-
     private LocalDate date;
 
     public Request() {
@@ -17,6 +16,12 @@ public class Request implements Serializable {
     public Request(Book book) {
         this.book = book;
         this.date = LocalDate.now();
+    }
+
+    public Request(int id, Book book, LocalDate localDate) {
+        this.id = id;
+        this.book=book;
+        this.date=localDate;
     }
 
 

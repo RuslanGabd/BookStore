@@ -1,9 +1,9 @@
 package com.ruslan.services;
 
+import com.ruslan.DAO.IRequestDao;
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.data.repository.rinterface.IBookRepository;
-import com.ruslan.data.repository.rinterface.IRequestRepository;
 import com.ruslan.data.request.Request;
+import com.ruslan.jsonHandlers.JsonReader;
 import com.ruslan.jsonHandlers.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
@@ -13,47 +13,43 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 public class RequestService implements IRequestService {
 
-    public static final Logger logger = LogManager.getLogger();
-    private static final String fileName = "Requests.csv";
-    public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
+    public final Logger logger = LogManager.getLogger();
+    private final String fileName = "Requests.csv";
+    public final String pathRequestJSON = "src\\main\\resources\\Requests.json";
+
     @Inject
-    private IRequestRepository requestRepository;
-    @Inject
-    private IBookRepository bookRepository;
+    private IRequestDao requestDao;
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
+    private final JsonReader jsonReader = JsonReader.getInstance();
 
     public RequestService() {
     }
 
     @Override
-    public void createRequest(int bookId) {
-        requestRepository.saveRequest(new Request(bookRepository.getById(bookId)));
+    public void createRequest(Request request) {
+        requestDao.saveRequest(request);
     }
 
     public void cancelRequestsById(int requestId) {
-        requestRepository.removeRequest(requestId);
-        System.out.println("Request id=" + requestId + " canceled");
+        requestDao.removeByRequestId(requestId);
     }
 
     public void cancelRequestsByBookId(int bookId) {
-        Optional.of(requestRepository.getRequestForBook(bookId)).ifPresent(request -> {
-            requestRepository.removeRequest(request.getId());
-        });
+        requestDao.removeByBookId(bookId);
     }
 
     //List of book requests (sort by number of requests, alphabetically);
     public List<Request> getRequestSortedByNumber() {
-        List<Request> listReq = requestRepository.getRequestList();
+        List<Request> listReq = requestDao.getRequestsList();
         listReq.sort(Comparator.comparing(Request::getId));
         return listReq;
     }
 
     public List<Request> getRequestSortedByAlphabetically() {
-        List<Request> listReq = requestRepository.getRequestList();
+        List<Request> listReq = requestDao.getRequestsList();
         listReq.sort(Comparator.comparing(request -> request.getBook().getTitle()));
         return listReq;
     }
@@ -67,7 +63,7 @@ public class RequestService implements IRequestService {
         try {
             requestFile.createNewFile(); // if file already exists will do nothing
             requestsList = getRequestListFromFile();
-            requestsList.add(requestRepository.getById(id));
+            requestsList.add(requestDao.findById(id).orElse(null));
             fos = new FileOutputStream(requestFile);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(requestsList);
@@ -121,8 +117,12 @@ public class RequestService implements IRequestService {
                 .orElse(null);
     }
 
+    public void importRequestsFromJsonToDataBase() {
+        List<Request> requestsList = jsonReader.readEntities(Request.class, pathRequestJSON);
+        requestsList.forEach(request -> requestDao.saveRequest(request));
+    }
 
     public void exportRequestsToJson() {
-        jsonWriter.writeEntities(requestRepository.getRequestList(), pathRequestJSON);
+        jsonWriter.writeEntities(requestDao.getRequestsList(), pathRequestJSON);
     }
 }

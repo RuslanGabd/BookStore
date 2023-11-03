@@ -11,12 +11,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 public class ConfigurationPostProcessor implements ObjectPostProcessor {
 
-    private static final String DEFAULT_PATH_NAME = "config.properties";
-    private static final Logger logger = LogManager.getLogger();
+    private  final String DEFAULT_PATH_NAME = "config.properties";
+    private  final Logger logger = LogManager.getLogger();
     private final Map <String, Properties> mapProperties = new HashMap<>();
     public ConfigurationPostProcessor() {
         final Properties properties = new Properties();
@@ -30,6 +29,7 @@ public class ConfigurationPostProcessor implements ObjectPostProcessor {
         }
     }
 
+    @Override
     public void process(final Object object) {
         final Class<?> clazz = object.getClass();
         if (!clazz.isAnnotationPresent(Configuration.class)) {
