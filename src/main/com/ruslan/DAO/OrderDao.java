@@ -193,6 +193,7 @@ public class OrderDao implements IOrderDao {
             deleteOrderFromTableOrder.setInt(1, id);
             deleteOrderFromTableBooksOrder.executeUpdate();
             deleteOrderFromTableOrder.executeUpdate();
+            connection.commit();
             return deleteOrderFromTableOrder.executeUpdate() > 0;
         } catch (SQLException e) {
             if (connection != null) {
