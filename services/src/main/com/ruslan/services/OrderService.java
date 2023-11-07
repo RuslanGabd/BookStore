@@ -35,7 +35,7 @@ public class OrderService implements IOrderService {
     private IOrderDao orderDao;
     @Inject
     private IRequestDao requestDao;
-    private JsonReader jsonReader = JsonReader.getInstance();
+    private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
     public OrderService() {

@@ -1,10 +1,8 @@
 package com.ruslan.DI.context;
 
 import com.ruslan.DI.ObjectFactory;
-import com.ruslan.DI.postProcessor.ObjectPostProcessor;
 import lombok.Setter;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

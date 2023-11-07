@@ -14,7 +14,7 @@ public class RequestRepository implements IRequestRepository {
     public static final String pathRequestJSON = "src\\main\\resources\\Requests.json";
 
 
-    private Map<Integer, Request> requestMap = new HashMap<>();
+    private final Map<Integer, Request> requestMap = new HashMap<>();
 
      public void removeRequest(int id) {
         requestMap.remove(id);
