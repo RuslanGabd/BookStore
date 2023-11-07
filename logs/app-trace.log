@@ -1,0 +1,6 @@
+2023-11-07T11:46:08.803+0100 TRACE c.r.D.BookDao [main] Book id=1 was founded
+2023-11-07T11:46:08.812+0100 TRACE c.r.D.BookDao [main] Book id=3 was founded
+2023-11-07T11:46:08.816+0100 TRACE c.r.D.BookDao [main] Book id=4 was founded
+2023-11-07T11:46:08.821+0100 TRACE c.r.D.BookDao [main] Book id=4 was founded
+2023-11-07T11:46:08.826+0100 TRACE c.r.D.BookDao [main] Book id=1 was founded
+2023-11-07T11:46:08.830+0100 TRACE c.r.D.BookDao [main] Book id=3 was founded
