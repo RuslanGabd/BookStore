@@ -1,9 +1,9 @@
 package com.ruslan.ui.action.order;
 
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.data.book.Book;
-import com.ruslan.data.repository.rinterface.IBookRepository;
 import com.ruslan.ui.IAction;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.repository.rinterface.IBookRepository;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,7 +1,8 @@
 package com.ruslan.ui.action.order;
 
-import com.ruslan.data.order.OrderStatus;
+
 import com.ruslan.ui.IAction;
+import com.ruslan.entity.order.OrderStatus;
 
 import java.io.BufferedReader;
 import java.io.IOException;

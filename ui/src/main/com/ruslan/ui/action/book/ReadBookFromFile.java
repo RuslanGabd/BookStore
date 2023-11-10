@@ -1,7 +1,8 @@
 package com.ruslan.ui.action.book;
 
-import com.ruslan.data.book.Book;
+
 import com.ruslan.ui.IAction;
+import com.ruslan.entity.book.Book;
 
 import java.io.BufferedReader;
 import java.io.IOException;

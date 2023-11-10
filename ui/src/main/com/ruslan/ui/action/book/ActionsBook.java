@@ -1,9 +1,9 @@
 package com.ruslan.ui.action.book;
 
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.services.BookService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.ruslan.services.BookService;
 
 
 public class ActionsBook {
