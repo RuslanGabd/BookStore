@@ -8,7 +8,7 @@
     <version>1.0</version>
     <modules>
         <module>core</module>
-        <module>DI</module>
+        <module>di</module>
         <module>ui</module>
     </modules>
 
