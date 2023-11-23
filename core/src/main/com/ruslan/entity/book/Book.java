@@ -1,125 +1,70 @@
 package com.ruslan.entity.book;
 
+
+import com.ruslan.entity.BaseEntity;
+import com.ruslan.entity.order.Order;
+import com.ruslan.entity.request.Request;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class Book implements Serializable {
-    private int id;
-    private BookStatus status;
+@Entity
+@Table(name = "book", schema = "bookstore")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(exclude = {"listOrder", "requests"})
+@Setter
+
+public class Book implements Serializable, BaseEntity<Integer> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String title;
     private String author;
-    private int price;
-    private LocalDate datePublication;
-
+    private Integer price;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition="ENUM('IN_STOCK', 'NOT_AVAILABLE', 'OUT_OF_STOCK')")
+    private BookStatus status;
     private String description;
 
-    public Book() {
+
+    @Column(name = "date_publication")
+    private LocalDate datePublication;
+
+    @ManyToMany
+    @JoinTable(name = "booksorder",
+    joinColumns = @JoinColumn(name = "BookID"),
+    inverseJoinColumns = @JoinColumn(name="OrderID"))
+    private List<Order> listOrder;
+
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "book_id")
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    private Set<Request> requests = new HashSet<Request>();
+
+
+    public Book(String title, String author, Integer price, LocalDate datePublication, BookStatus status, String description) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+        this.datePublication = datePublication;
+        this.status = status;
+        this.description = description;
     }
 
     public Book(String title, String author, int price, LocalDate datePublication) {
-
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.status = BookStatus.IN_STOCK;
-        this.datePublication = datePublication;
     }
 
 
-    public Book(Integer id, String title, String author, int price, BookStatus bookStatus, String description, LocalDate datePublication) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.status = bookStatus;
-        this.description=description;
-        this.datePublication = datePublication;
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Book book)) return false;
-        return getId() == book.getId();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "Book:" +
-                " id=" + id +
-                ", title=" + title +
-                ", author=" + author +
-                ", price=" + price +
-                ", date=" + datePublication +
-                ", status=" + status;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-
-    public BookStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BookStatus status) {
-        this.status = status;
-    }
-
-
-    public LocalDate getDatePublication() {
-        return datePublication;
-    }
-
-    public void setDatePublication(LocalDate datePublication) {
-        this.datePublication = datePublication;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setRequest(Request request) {
     }
 }
 

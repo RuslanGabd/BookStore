@@ -3,6 +3,8 @@ package com.ruslan.services;
 import com.ruslan.DI.annotation.Inject;
 import com.ruslan.database.DAO.IOrderDao;
 import com.ruslan.database.DAO.IRequestDao;
+import com.ruslan.database.DAO.OrderRepository;
+import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.entity.book.Book;
 import com.ruslan.entity.book.BookStatus;
 import com.ruslan.entity.order.Order;
@@ -10,10 +12,10 @@ import com.ruslan.entity.order.OrderStatus;
 import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import com.ruslan.services.sinterface.IOrderService;
 import com.ruslan.services.sinterface.IRequestService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -38,37 +40,42 @@ public class OrderService implements IOrderService {
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
+    @Inject
+    private OrderRepository orderRepository;
+    @Inject
+    private RequestRepository requestRepository;
     public OrderService() {
     }
 
     @Override
     public Order createOrder(List<Book> listBooks) {
         Order ord = new Order(listBooks);
-        orderDao.saveOrder(ord);
+        orderRepository.save(ord);
         System.out.println("Order created with id=" + ord.getId() + " contains " + listBooks.size() + " books");
         listBooks.stream()
                 .filter(book -> book.getStatus() == BookStatus.OUT_OF_STOCK)
-                .forEach(book -> requestDao.saveRequest(new Request(book)));
+                .forEach(book -> requestRepository.save(new Request(book)));
         return ord;
     }
 
     public void changeOrderDateCreated(int orderId, LocalDate date) {
-        orderDao.findById(orderId).ifPresent(order -> {
+        orderRepository.findById(orderId).ifPresent(order -> {
             order.setDateCreated(date);
-            orderDao.update(order);
+            orderRepository.update(order);
         });
     }
 
     public void changeOrderDateExecution(int orderId, LocalDate date) {
-        orderDao.findById(orderId).ifPresent(order -> {
+        orderRepository.findById(orderId).ifPresent(order -> {
             order.setDateExecution(date);
-            orderDao.update(order);
+            orderRepository.update(order);
         });
     }
 
     // List of orders (sort by date of execution, by price, by status);
     public List<Order> getOrdersSortedByDateExecution() {
-        List<Order> orderList = orderDao.getOrdersList();
+        //   List<Order> orderList = orderDao.getOrdersList();
+        List<Order> orderList = orderRepository.findAll();
         orderList.sort(Comparator.comparing(Order::getDateExecution,
                 Comparator.nullsLast(Comparator.naturalOrder())));
         return orderList;
@@ -76,36 +83,37 @@ public class OrderService implements IOrderService {
 
     public List<Order> getOrdersSortedByPrice() {
 
-        List<Order> orderList = orderDao.getOrdersList();
+        List<Order> orderList = orderRepository.findAll();
         orderList.sort(Comparator.comparing(Order::getTotalPrice));
         return orderList;
     }
 
     public List<Order> getOrdersSortedByStatus() {
-        List<Order> orderList = orderDao.getOrdersList();
+        List<Order> orderList = orderRepository.findAll();
         orderList.sort(Comparator.comparing(Order::getStatus));
         return orderList;
     }
 
 
     public void changeOrderStatus(int orderId, OrderStatus newOrderStatus) {
-        orderDao.findById(orderId).ifPresent(order -> {
+        orderRepository.findById(orderId).ifPresent(order -> {
             if (newOrderStatus == OrderStatus.COMPLETED) {
                 order.getListBook().stream().filter(book ->
-                                requestDao.findRequestByBookId(book.getId()).orElse(null) != null)
+                                //requestDao.findRequestByBookId(book.getId()).orElse(null) != null)
+                requestDao.findRequestByBookId(book.getId()).orElse(null) != null)
                         .findAny().ifPresentOrElse(book -> {
                             System.out.println("Request with id="
-                                    + requestDao.findRequestByBookId(book.getId()).orElse(null).getId()
+                                    + requestDao.findRequestByBookId(book.getId()).orElse(null)
                                     + " is not finished. Please close request");
                         }, () -> {
                             order.setStatus(newOrderStatus);
                             order.setDateExecution(LocalDate.now());
-                            orderDao.update(order);
+                            orderRepository.update(order);
                             System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
                         });
             } else {
                 order.setStatus(newOrderStatus);
-                orderDao.update(order);
+                orderRepository.update(order);
                 System.out.println("Status for Order with id=" + orderId + " changed: " + newOrderStatus);
             }
         });

@@ -42,6 +42,7 @@ public class ObjectFactory {
         if (implementationClass.isInterface()) {
             implementationClass = objectConfigurator.getImplementationClass(clazz);
         }
+
         T object = null;
         try {
             object = implementationClass.getDeclaredConstructor().newInstance();

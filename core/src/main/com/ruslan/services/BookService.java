@@ -4,17 +4,18 @@ import com.ruslan.DI.annotation.Inject;
 import com.ruslan.DI.config.ConfigProperties;
 import com.ruslan.DI.config.ConfigPropertiesOld;
 import com.ruslan.DI.config.Configuration;
-import com.ruslan.database.DAO.IBookDao;
-import com.ruslan.database.DAO.IOrderDao;
-import com.ruslan.database.DAO.IRequestDao;
+import com.ruslan.database.DAO.BookRepository;
+import com.ruslan.database.DAO.OrderRepository;
+import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.entity.book.Book;
 import com.ruslan.entity.book.BookStatus;
 import com.ruslan.entity.order.Order;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
+import com.ruslan.services.sinterface.IBookService;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.ruslan.services.sinterface.IBookService;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Configuration
+@RequiredArgsConstructor
 public class BookService implements IBookService {
 
     public String pathBookSJSON = "src\\main\\resources\\Books.json";
@@ -32,12 +34,12 @@ public class BookService implements IBookService {
     private final String fileName = "Books.csv";
 
     @Inject
-    private IBookDao bookDao;
+    private BookRepository bookRepository;
     @Inject
-    private IRequestDao requestDao;
-    @Inject
-    private IOrderDao orderDao;
+    private OrderRepository orderRepository;
 
+    @Inject
+    private RequestRepository requestRepository;
     @ConfigProperties(propertyName = "auto-request-closed-when-book-add-to-stock", type = Boolean.class)
     private Boolean isAutoRequestClosed;
     @ConfigProperties(propertyName = "number-of-months-to-mark-book-stale", type = Integer.class)
@@ -45,30 +47,30 @@ public class BookService implements IBookService {
 
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
-    private final  ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
+    private final ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
     @Override
     public Book createBook(String title, String author, int price, LocalDate datePublication) {
-        Book bk = bookDao.saveBook(new Book(title, author, price, datePublication));
+        Book bk = bookRepository.save(new Book(title, author, price, datePublication));
         System.out.println("Created book: " + bk);
         return bk;
     }
 
     @Override
     public void changeStatusBook(int bookId, BookStatus status) {
-        bookDao.findById(bookId).ifPresent(book -> {
+        bookRepository.findById(bookId).ifPresent(book -> {
             book.setStatus(status);
-            bookDao.update(book);
+            bookRepository.update(book);
         });
     }
 
     @Override
     public void removeBookFromStock(int bookId) {
-        bookDao.removeById(bookId);
+        bookRepository.delete(bookId);
     }
 
     public void addBookToStockAndCancelRequests(int bookId) {
-        bookDao.findById(bookId).ifPresent(book -> book.setStatus(BookStatus.IN_STOCK));
+        bookRepository.findById(bookId).ifPresent(book -> book.setStatus(BookStatus.IN_STOCK));
         if (this.isAutoRequestClosed) {
             cancelRequestsByIdBook(bookId);
         }
@@ -76,12 +78,12 @@ public class BookService implements IBookService {
     }
 
     public void cancelRequestsByIdBook(int bookId) {
-        requestDao.getRequestsList().stream()
+        requestRepository.findAll().stream()
                 .filter(request ->
                         request.getBook()
-                                .equals(bookDao.findById(bookId)))
+                                .equals(bookRepository.findById(bookId)))
                 .forEach(request -> {
-                    requestDao.removeByRequestId(request.getId());
+                    requestRepository.delete(request.getId());
                     System.out.println("Request id=" + request.getId() + " canceled");
                 });
     }
@@ -90,17 +92,29 @@ public class BookService implements IBookService {
     //Description of the book.
 
     public String getDescriptionOfBook(int bookId) {
-        Optional<Book> book = bookDao.findById(bookId);
+        Optional<Book> book = bookRepository.findById(bookId);
         return book.map(Book::getDescription).orElse(null);
     }
 
     //List of "stale" books which were not sold for more than 6 months. (sort by date of receipt, by price);
 
-    public List<Book> getStaleBooks() {
-        List<Book> staleBookList = bookDao.getBooksList();
-        List<Order> orderList ;
+    public List<Book> getCompletedOrdersForPeriod() {
+        List<Book> staleBookList = bookRepository.findAll();
+        List<Order> orderList;
 
-        orderList = orderDao.getCompletedOrdersForPeriod(
+        orderList = orderRepository.getCompletedOrdersForPeriod(
+                LocalDate.now().minusMonths(numberOfMonths),
+                LocalDate.now());
+
+        orderList.forEach(order -> staleBookList.removeAll(order.getListBook()));
+        return staleBookList;
+    }
+
+    public List<Book> getStaleBooks() {
+        List<Book> staleBookList = bookRepository.findAll();
+        List<Order> orderList;
+
+        orderList = orderRepository.getCompletedOrdersForPeriod(
                 LocalDate.now().minusMonths(numberOfMonths),
                 LocalDate.now());
 
@@ -124,33 +138,33 @@ public class BookService implements IBookService {
 
 
     public List<Book> getBooksSortedByTitleAlphabetically() {
-        List<Book> bookList = bookDao.getBooksList();
+        List<Book> bookList = bookRepository.findAll();
         bookList.sort((o1, o2) -> CharSequence.compare(o2.getTitle(), o1.getTitle()));
         return bookList;
     }
 
 
     public List<Book> getBooksSortedByDatePublication() {
-        List<Book> bookList = bookDao.getBooksList();
+        List<Book> bookList = bookRepository.findAll();
         bookList.sort(Comparator.comparing(Book::getDatePublication));
         return bookList;
     }
 
 
     public List<Book> getBooksSortedByPrice() {
-        List<Book> bookList = bookDao.getBooksList();
+        List<Book> bookList = bookRepository.findAll();
         bookList.sort(Comparator.comparingInt(Book::getPrice));
         return bookList;
     }
 
     public List<Book> getBooksSortedByStatus() {
-        List<Book> bookList = bookDao.getBooksList();
+        List<Book> bookList = bookRepository.findAll();
         bookList.sort(Comparator.comparing(Book::getStatus));
         return bookList;
     }
 
     public List<Book> getBooksSortedByAuthor() {
-        List<Book> sortedBooks = bookDao.getBooksList();
+        List<Book> sortedBooks = bookRepository.findAll();
         sortedBooks.sort((o1, o2) -> CharSequence.compare(o2.getAuthor(), o1.getAuthor()));
         return sortedBooks;
     }
@@ -162,7 +176,7 @@ public class BookService implements IBookService {
         List<Book> bookList;
 
         try {
-            Optional<Book> book = bookDao.findById(id);
+            Optional<Book> book = bookRepository.findById(id);
             bookFile.createNewFile();
             bookList = getBookListFromFile();
             bookList.add(book.orElse(null));
@@ -222,10 +236,10 @@ public class BookService implements IBookService {
 
     public void importBooksFromJsonToDataBase() {
         List<Book> bookList = jsonReader.readEntities(Book.class, pathBookSJSON);
-        bookList.forEach(book -> bookDao.saveBook(book));
+        bookList.forEach(book -> bookRepository.save(book));
     }
 
     public void exportBooksToJson() {
-        jsonWriter.writeEntities(bookDao.getBooksList(), pathBookSJSON);
+        jsonWriter.writeEntities(bookRepository.findAll(), pathBookSJSON);
     }
 }

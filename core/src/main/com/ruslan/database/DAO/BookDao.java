@@ -4,12 +4,14 @@ import com.ruslan.DI.annotation.Inject;
 import com.ruslan.database.JDBC.ConnectionManager;
 import com.ruslan.database.exception.DaoException;
 import com.ruslan.entity.book.Book;
-import com.ruslan.entity.book.BookStatus;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import java.util.Optional;
 public class BookDao implements IBookDao {
     @Inject
     ConnectionManager connectionManager;
+
     private final Logger logger = LogManager.getLogger(BookDao.class);
     private final String deleteBook = """
             DELETE FROM book
@@ -70,7 +73,7 @@ public class BookDao implements IBookDao {
             var resultSet = preparedStatement.executeQuery();
             Book book = null;
             if (resultSet.next()) {
-                book = buildBook(resultSet);
+           //     book = buildBook(resultSet);
             }
             if (book != null) {
                 logger.trace("Book id={} was founded", book.getId());
@@ -143,7 +146,7 @@ public class BookDao implements IBookDao {
             var resultSet = preparedStatement.executeQuery();
             List<Book> books = new ArrayList<>();
             while (resultSet.next()) {
-                books.add(buildBook(resultSet));
+               // books.add(buildBook(resultSet));
             }
             logger.info("Returned List of books with size={}",books.size());
             return books;
@@ -153,19 +156,19 @@ public class BookDao implements IBookDao {
     }
 
 
-    private Book buildBook(ResultSet resultSet) {
-        try {
-            return new Book(
-                    resultSet.getInt(1),
-                    resultSet.getString(2),
-                    resultSet.getString(3),
-                    resultSet.getBigDecimal(4).intValue(),
-                    BookStatus.valueOf(resultSet.getString(5)),
-                    resultSet.getString(6),
-                    resultSet.getDate(7).toLocalDate()
-            );
-        } catch (SQLException e) {
-            throw new DaoException(e);
-        }
-    }
+//    private Book buildBook(ResultSet resultSet) {
+//        try {
+//            return new Book(
+//                    resultSet.getInt(1),
+//                    resultSet.getString(2),
+//                    resultSet.getString(3),
+//                    resultSet.getBigDecimal(4).intValue(),
+//                    BookStatus.valueOf(resultSet.getString(5)),
+//                    resultSet.getString(6),
+//                    resultSet.getDate(7).toLocalDate()
+//            );
+//        } catch (SQLException e) {
+//            throw new DaoException(e);
+//        }
+//    }
 }

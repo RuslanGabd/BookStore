@@ -4,3 +4,7 @@
 2023-11-07T11:46:08.830+0100 INFO c.r.D.OrderDao [main] Returned List of orders with size=6
 2023-11-10T14:26:58.425+0100 INFO c.r.d.D.BookDao [main] Returned List of books with size=7
 2023-11-10T14:34:05.845+0100 INFO c.r.d.D.OrderDao [main] Returned List of orders with size=6
+2023-11-18T23:00:51.203+0100 INFO c.r.d.D.BookDao [main] Returned List of books with size=12
+2023-11-21T10:29:29.028+0100 INFO c.r.d.D.OrderDao [main] Returned List of orders with size=7
+2023-11-21T10:56:01.965+0100 INFO c.r.d.D.OrderDao [main] Returned List of orders with size=7
+2023-11-21T16:19:02.106+0100 INFO c.r.d.D.RequestDao [main] List of Request with size=3 created

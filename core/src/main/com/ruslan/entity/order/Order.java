@@ -1,29 +1,47 @@
 package com.ruslan.entity.order;
 
+import com.ruslan.entity.BaseEntity;
 import com.ruslan.entity.book.Book;
 import com.ruslan.entity.book.BookStatus;
 import com.ruslan.entity.request.Request;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Order implements Serializable {
+@Entity
+@Table(name = "order", schema = "bookstore")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Order implements Serializable, BaseEntity<Integer> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @ManyToMany(mappedBy = "listOrder")
     private List<Book> listBook;
 
     private String buyer;
     private String address;
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition="ENUM('NEW', 'COMPLETED', 'CANCELLED')")
     private OrderStatus status;
-
+    @Column(name="total_price")
 
     private Integer totalPrice;
+    @Column(name="date_execution")
     private LocalDate dateExecution;
-    private LocalDate dateCreated;
 
-    public Order() {
-    }
+    @Column(name="date_created")
+    private LocalDate dateCreated;
+//    @Builder.Default
+//    @OneToMany(mappedBy = "order")
+//    private Set<BooksOrders> booksOrders = new HashSet<>();
+//
 
     public Order(List<Book> listBook) {
         int commonPrice = 0;

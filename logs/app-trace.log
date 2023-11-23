@@ -10,3 +10,5 @@
 2023-11-10T14:34:05.840+0100 TRACE c.r.d.D.BookDao [main] Book id=4 was founded
 2023-11-10T14:34:05.843+0100 TRACE c.r.d.D.BookDao [main] Book id=1 was founded
 2023-11-10T14:34:05.845+0100 TRACE c.r.d.D.BookDao [main] Book id=3 was founded
+2023-11-22T11:01:32.479+0100 TRACE c.r.d.D.OrderDao [main] Order id=4 found
+2023-11-22T11:01:32.499+0100 TRACE c.r.d.D.OrderDao [main] Order id=4 found

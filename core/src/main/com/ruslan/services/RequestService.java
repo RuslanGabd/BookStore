@@ -2,13 +2,13 @@ package com.ruslan.services;
 
 
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.database.DAO.IRequestDao;
+import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
+import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.ruslan.services.sinterface.IRequestService;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -21,36 +21,38 @@ public class RequestService implements IRequestService {
     private final String fileName = "Requests.csv";
     public final String pathRequestJSON = "src\\main\\resources\\Requests.json";
 
-    @Inject
-    private IRequestDao requestDao;
+
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
     private final JsonReader jsonReader = JsonReader.getInstance();
+
+    @Inject
+    private RequestRepository requestRepository;
 
     public RequestService() {
     }
 
     @Override
     public void createRequest(Request request) {
-        requestDao.saveRequest(request);
+        requestRepository.save(request);
     }
 
     public void cancelRequestsById(int requestId) {
-        requestDao.removeByRequestId(requestId);
+        requestRepository.delete(requestId);
     }
 
-    public void cancelRequestsByBookId(int bookId) {
-        requestDao.removeByBookId(bookId);
-    }
+//    public void cancelRequestsByBookId(int bookId) {
+//       // requestRepository.delete();requestDao.removeByBookId(bookId);
+//    }
 
     //List of book requests (sort by number of requests, alphabetically);
     public List<Request> getRequestSortedByNumber() {
-        List<Request> listReq = requestDao.getRequestsList();
+        List<Request> listReq = requestRepository.findAll();
         listReq.sort(Comparator.comparing(Request::getId));
         return listReq;
     }
 
     public List<Request> getRequestSortedByAlphabetically() {
-        List<Request> listReq = requestDao.getRequestsList();
+        List<Request> listReq = requestRepository.findAll();
         listReq.sort(Comparator.comparing(request -> request.getBook().getTitle()));
         return listReq;
     }
@@ -64,7 +66,7 @@ public class RequestService implements IRequestService {
         try {
             requestFile.createNewFile(); // if file already exists will do nothing
             requestsList = getRequestListFromFile();
-            requestsList.add(requestDao.findById(id).orElse(null));
+            requestsList.add(requestRepository.findById(id).orElse(null));
             fos = new FileOutputStream(requestFile);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(requestsList);
@@ -120,10 +122,10 @@ public class RequestService implements IRequestService {
 
     public void importRequestsFromJsonToDataBase() {
         List<Request> requestsList = jsonReader.readEntities(Request.class, pathRequestJSON);
-        requestsList.forEach(request -> requestDao.saveRequest(request));
+        requestsList.forEach(request -> requestRepository.save(request));
     }
 
     public void exportRequestsToJson() {
-        jsonWriter.writeEntities(requestDao.getRequestsList(), pathRequestJSON);
+        jsonWriter.writeEntities(requestRepository.findAll(), pathRequestJSON);
     }
 }

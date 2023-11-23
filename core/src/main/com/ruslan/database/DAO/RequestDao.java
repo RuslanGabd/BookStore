@@ -99,7 +99,7 @@ public class RequestDao implements IRequestDao {
     public Request saveRequest(Request request) {
         try (var connection = connectionManager.get()) {
             PreparedStatement preparedStatement = connection.prepareStatement(saveRequest, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setInt(1, request.getBook().getId());
+           // preparedStatement.setInt(1, request.getBook().getId());
             preparedStatement.setTimestamp(2, Timestamp.valueOf(request.getDate().atStartOfDay()));
             preparedStatement.executeUpdate();
 
