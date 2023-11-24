@@ -1,6 +1,7 @@
 package com.ruslan.database.DAO;
 
-import com.ruslan.database.hibernate.HibernateSessionFactoryUtil;
+
+import com.ruslan.database.util.HibernateSessionFactoryUtil;
 import com.ruslan.entity.BaseEntity;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
