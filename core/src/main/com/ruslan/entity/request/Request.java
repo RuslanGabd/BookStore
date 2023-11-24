@@ -16,19 +16,14 @@ import java.time.LocalDate;
 @Builder
 @ToString(exclude = {"book"})
 @Setter
-public class Request implements Serializable, BaseEntity<Integer> {
+public class Request extends BaseEntity<Integer>  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private LocalDate date;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "bookid", nullable = false)
     private Book book;
-//    public void setBook(Book book) {
-//        book.setRequest(this);
-//        this.book = book;}
+
 
     public Request(Book book) {
         this.book = book;
@@ -36,7 +31,7 @@ public class Request implements Serializable, BaseEntity<Integer> {
     }
 
     public Request(int id, Book book, LocalDate localDate) {
-        this.id = id;
+        this.setId(id);
         this.book = book;
         this.date = localDate;
     }

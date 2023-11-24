@@ -17,7 +17,7 @@ public class OrderRepository extends RepositoryBase<Integer, Order> {
 
     public List<Order> getCompletedOrdersForPeriod(LocalDate minusMonths, LocalDate now) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        List<Order> ordersCompleted = HibernateSessionFactoryUtil.getSessionFactory().openSession()
+        List<Order> ordersCompleted = session
                 .createQuery("select o from Order o where status='completed' " +
                         "and dateExecution BETWEEN :firstDate and :secondDate", Order.class)
                 .setParameter("firstDate", minusMonths)

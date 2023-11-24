@@ -25,6 +25,7 @@ public class RequestService implements IRequestService {
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
     private final JsonReader jsonReader = JsonReader.getInstance();
 
+
     @Inject
     private RequestRepository requestRepository;
 
@@ -39,10 +40,6 @@ public class RequestService implements IRequestService {
     public void cancelRequestsById(int requestId) {
         requestRepository.delete(requestId);
     }
-
-//    public void cancelRequestsByBookId(int bookId) {
-//       // requestRepository.delete();requestDao.removeByBookId(bookId);
-//    }
 
     //List of book requests (sort by number of requests, alphabetically);
     public List<Request> getRequestSortedByNumber() {

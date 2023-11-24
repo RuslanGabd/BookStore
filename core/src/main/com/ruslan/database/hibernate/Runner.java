@@ -7,6 +7,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Runner {
     public static void main(String[] args) {
         Configuration configuration = new Configuration();
@@ -16,8 +21,7 @@ public class Runner {
 
         Transaction transaction = session.beginTransaction();
         var requestRepository = new RequestRepository();
-       requestRepository.findById(3).ifPresent(System.out::println);
-
+        requestRepository.findById(3).ifPresent(System.out::println);
          transaction.commit();
     }
 }

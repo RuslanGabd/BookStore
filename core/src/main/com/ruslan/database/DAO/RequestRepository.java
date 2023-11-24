@@ -5,7 +5,7 @@ import com.ruslan.entity.request.Request;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import java.util.List;
+import java.util.Optional;
 
 public class RequestRepository extends RepositoryBase<Integer, Request> {
 
@@ -13,34 +13,14 @@ public class RequestRepository extends RepositoryBase<Integer, Request> {
         super(Request.class);
     }
 
-//    @Override
-//    public List<Request> findAll() {
-//        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-//        Transaction tx1 = session.beginTransaction();
-//        List<Request> entity = (List<Request>) session.createSelectionQuery("FROM Request").list();
-//        tx1.commit();
-//        session.close();
-//        return entity;
-//
-//    }
 
-//    public Optional<Object> findRequestByBookId(Integer id) {
-////
-////        return Optional.ofNullable(HibernateSessionFactoryUtil.getSessionFactory().openSession()
-////                .createQuery("select o from Request o where bookId=':id'", Request.class)
-////                .setParameter("id", id));
-//        return Optional.ofNullable(true);
-//    }
-
-    @Override
-    public List<Request> findAll() {
+    public Optional<Object> findRequestByBookId(Integer id) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        List<Request> entity = HibernateSessionFactoryUtil.getSessionFactory().openSession()
-                .createSelectionQuery("select r from Request r", Request.class).list();
+        var object = session.createSelectionQuery("select o from Request o where bookId=':id'", Request.class)
+                .setParameter("id", id);
         tx1.commit();
         session.close();
-        return entity;
-
+        return Optional.ofNullable(object);
     }
 }

@@ -9,9 +9,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "book", schema = "bookstore")
@@ -19,13 +17,11 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"listOrder", "requests"})
+@ToString(exclude = {"listOrder", "listRequests"}, callSuper = true)
 @Setter
 
-public class Book implements Serializable, BaseEntity<Integer> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class Book extends BaseEntity<Integer> implements Serializable  {
+
     private String title;
     private String author;
     private Integer price;
@@ -34,9 +30,7 @@ public class Book implements Serializable, BaseEntity<Integer> {
     private BookStatus status;
     private String description;
 
-
-    @Column(name = "date_publication")
-    private LocalDate datePublication;
+     private LocalDate datePublication;
 
     @ManyToMany
     @JoinTable(name = "booksorder",
@@ -44,11 +38,9 @@ public class Book implements Serializable, BaseEntity<Integer> {
     inverseJoinColumns = @JoinColumn(name="OrderID"))
     private List<Order> listOrder;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "book_id")
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-    private Set<Request> requests = new HashSet<Request>();
+    private List<Request> listRequests;
 
 
     public Book(String title, String author, Integer price, LocalDate datePublication, BookStatus status, String description) {

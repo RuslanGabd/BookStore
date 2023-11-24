@@ -5,7 +5,7 @@ CREATE TABLE `Book` (
     `title` VARCHAR(25) NOT NULL,
     `author` VARCHAR(25) NOT NULL,
     `price`  Decimal(15,2) NOT NULL,
-	`status`  enum('IN_STOCK', 'NOT_AVAILABLE', 'OUT_OF_STOCStatusK') NOT NULL,
+	`status`  enum('IN_STOCK', 'NOT_AVAILABLE', 'OUT_OF_STOCK') NOT NULL,
 	`description` VARCHAR(25) NULL,
      `datePublication` timestamp NOT NULL,
         PRIMARY KEY (`id`)
