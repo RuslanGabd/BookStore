@@ -14,9 +14,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString(exclude = {"book"})
+@ToString(callSuper = true, exclude = {"book"})
 @Setter
-public class Request extends BaseEntity<Integer>  {
+@EqualsAndHashCode(callSuper = false)
+public class Request extends BaseEntity<Integer> {
 
     private LocalDate date;
 
