@@ -30,9 +30,7 @@ public class Order extends BaseEntity<Integer> {
     private OrderStatus status;
     private Integer totalPrice;
     private LocalDate dateExecution;
-
     private LocalDate dateCreated;
-
 
     public Order(List<Book> listBook) {
         int commonPrice = 0;

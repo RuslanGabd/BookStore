@@ -5,7 +5,6 @@ import com.ruslan.entity.book.Book;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -24,7 +23,6 @@ public class Request extends BaseEntity<Integer> {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "bookid", nullable = false)
     private Book book;
-
 
     public Request(Book book) {
         this.book = book;

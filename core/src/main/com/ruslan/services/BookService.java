@@ -51,7 +51,7 @@ public class BookService implements IBookService {
 
     @Override
     public Book createBook(String title, String author, int price, LocalDate datePublication) {
-        Book bk = bookRepository.save(new Book(title, author, price, datePublication));
+        Book bk = bookRepository.save(new Book(title, author, price, datePublication, BookStatus.IN_STOCK, null));
         System.out.println("Created book: " + bk);
         return bk;
     }
@@ -81,7 +81,7 @@ public class BookService implements IBookService {
         requestRepository.findAll().stream()
                 .filter(request ->
                         request.getBook()
-                                .equals(bookRepository.findById(bookId)))
+                                .equals(bookRepository.findById(bookId).orElseGet(null)))
                 .forEach(request -> {
                     requestRepository.delete(request.getId());
                     System.out.println("Request id=" + request.getId() + " canceled");
