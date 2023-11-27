@@ -5,7 +5,7 @@ CREATE TABLE `Book` (
     `title` VARCHAR(25) NOT NULL,
     `author` VARCHAR(25) NOT NULL,
     `price`  INT NOT NULL,
-	`status`  enum('IN_STOCK', 'NOT_AVAILABLE', 'OUT_OF_STOCK') NOT NULL,
+	`status` VARCHAR(255) NOT NULL,
 	`description` VARCHAR(25) NULL,
      `datePublication` date NOT NULL,
         PRIMARY KEY (`id`)
@@ -16,7 +16,7 @@ CREATE TABLE `Order` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `buyer` VARCHAR(50) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
     `address` VARCHAR(100) NOT NULL,
-    `status` enum('NEW', 'COMPLETED', 'CANCELLED'),
+	`status` VARCHAR(255) NOT NULL,
     `totalPrice` int,
     `dateCreated` date NOT NULL,
     `dateExecution` date, 

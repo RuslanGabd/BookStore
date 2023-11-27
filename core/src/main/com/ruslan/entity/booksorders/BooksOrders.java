@@ -3,18 +3,23 @@ package com.ruslan.entity.booksorders;
 import com.ruslan.entity.BaseEntity;
 import com.ruslan.entity.book.Book;
 import com.ruslan.entity.order.Order;
-import jakarta.persistence.*;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.time.Instant;
+import java.util.Objects;
 
 
 @Table(name = "booksorder", schema = "bookstore")
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(callSuper = false)
 public class BooksOrders extends BaseEntity<Integer> {
 
     @ManyToOne
@@ -26,5 +31,16 @@ public class BooksOrders extends BaseEntity<Integer> {
 
     private Instant createdAt;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BooksOrders that = (BooksOrders) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

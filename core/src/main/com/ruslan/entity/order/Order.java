@@ -6,18 +6,20 @@ import com.ruslan.entity.book.BookStatus;
 import com.ruslan.entity.request.Request;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "`order`", schema = "bookstore")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString(callSuper = true, exclude = {"listBook"})
-@EqualsAndHashCode(callSuper = false)
 public class Order extends BaseEntity<Integer> {
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "listOrder")
@@ -26,7 +28,6 @@ public class Order extends BaseEntity<Integer> {
     private String buyer;
     private String address;
     @Enumerated(EnumType.STRING)
-    @Column(columnDefinition = "ENUM('NEW', 'COMPLETED', 'CANCELLED')")
     private OrderStatus status;
     private Integer totalPrice;
     private LocalDate dateExecution;
@@ -60,6 +61,19 @@ public class Order extends BaseEntity<Integer> {
         this.dateCreated = dateCreated;
         this.dateExecution = dateExecution;
         this.listBook = listBooks;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Order order = (Order) o;
+        return getId() != null && Objects.equals(getId(), order.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
 
