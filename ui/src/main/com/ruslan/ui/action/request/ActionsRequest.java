@@ -2,7 +2,7 @@ package com.ruslan.ui.action.request;
 
 
 import com.ruslan.DI.annotation.Inject;
-import com.ruslan.database.DAO.IBookDao;
+import com.ruslan.database.DAO.BookRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.ruslan.services.RequestService;
@@ -12,7 +12,7 @@ public class ActionsRequest {
     @Inject
     RequestService requestService;
     @Inject
-    IBookDao bookDao;
+    BookRepository bookRepository;
 
     public ActionsRequest() {
 

@@ -1,17 +1,30 @@
 package com.ruslan.entity.request;
 
+import com.ruslan.entity.BaseEntity;
 import com.ruslan.entity.book.Book;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
 
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
-public class Request implements Serializable {
-    private Book book;
-    private int id;
+@Entity
+@Table(name = "request", schema = "bookstore")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(callSuper = true)
+public class Request extends BaseEntity<Integer> {
+
     private LocalDate date;
 
-    public Request() {
-    }
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "bookid", nullable = false)
+    @ToString.Exclude
+    private Book book;
 
     public Request(Book book) {
         this.book = book;
@@ -19,44 +32,21 @@ public class Request implements Serializable {
     }
 
     public Request(int id, Book book, LocalDate localDate) {
-        this.id = id;
-        this.book=book;
-        this.date=localDate;
+        this.setId(id);
+        this.book = book;
+        this.date = localDate;
     }
-
 
     @Override
-    public String toString() {
-        return "Request:" +
-                " id=" + id +
-                ", bookId=" + book.getId() +
-                ", date=" + date;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Request request = (Request) o;
+        return getId() != null && Objects.equals(getId(), request.getId());
     }
 
-
-    public Book getBook() {
-        return book;
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-
 }

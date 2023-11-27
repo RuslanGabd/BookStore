@@ -1,10 +1,20 @@
-# TASK 8.2
+# TASK 14
 
 ## BookStore
-Task 2 (difficulty 10)
+Add the implementation of working with the database using hibernate to the project.
 
-Develop a set of annotations and a separate module for their processing:
+Technical requirements:
 
-The module should allow dependency injections (DI) in the program modules. An object containing annotated fields should be submitted to the input, and the module should implement dependencies in them.
+The application comply with the principles of OOP and the patterns of "high cohesion" and "low coupling";
 
-To organize low coupling between modules of the application developed in previous tasks. For implementation, it is necessary to use the Dependency injection pattern and the Reflection mechanism. All application modules must be changed to this solution. 
+apply patterns in development: mvc, dao;
+
+the application must have high-quality exception handling;
+
+errors should be logged to a file;
+
+transactions for working with the database must be processed qualitatively;
+
+the application must be embedded in the git in a separate branch with all configuration files, scripts for creating a database and filling it in;
+
+all work with dependencies is done with the help of maven.

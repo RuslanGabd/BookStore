@@ -15,5 +15,17 @@
             <artifactId>reflections</artifactId>
             <version>0.10.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.1.5.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.18</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

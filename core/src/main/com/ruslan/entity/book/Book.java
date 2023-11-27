@@ -1,125 +1,68 @@
 package com.ruslan.entity.book;
 
+
+import com.ruslan.entity.BaseEntity;
+import com.ruslan.entity.order.Order;
+import com.ruslan.entity.request.Request;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.Hibernate;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
-public class Book implements Serializable {
-    private int id;
-    private BookStatus status;
+@Entity
+@Table(name = "book", schema = "bookstore")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString(callSuper = true)
+public class Book extends BaseEntity<Integer> implements Serializable {
+
     private String title;
     private String author;
-    private int price;
-    private LocalDate datePublication;
-
+    private Integer price;
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
     private String description;
 
-    public Book() {
-    }
+    private LocalDate datePublication;
 
-    public Book(String title, String author, int price, LocalDate datePublication) {
+    @ManyToMany
+    @JoinTable(name = "booksorder",
+            joinColumns = @JoinColumn(name = "BookID"),
+            inverseJoinColumns = @JoinColumn(name = "OrderID"))
+    @ToString.Exclude
+    private List<Order> listOrder;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
+    @ToString.Exclude
+    private List<Request> listRequests;
+
+    public Book(String title, String author, Integer price, LocalDate datePublication, BookStatus status, String description) {
         this.title = title;
         this.author = author;
         this.price = price;
-        this.status = BookStatus.IN_STOCK;
         this.datePublication = datePublication;
+        this.status = status;
+        this.description = description;
     }
-
-
-    public Book(Integer id, String title, String author, int price, BookStatus bookStatus, String description, LocalDate datePublication) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.price = price;
-        this.status = bookStatus;
-        this.description=description;
-        this.datePublication = datePublication;
-    }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Book book)) return false;
-        return getId() == book.getId();
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Book book = (Book) o;
+        return getId() != null && Objects.equals(getId(), book.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
-    }
-
-    @Override
-    public String toString() {
-        return "Book:" +
-                " id=" + id +
-                ", title=" + title +
-                ", author=" + author +
-                ", price=" + price +
-                ", date=" + datePublication +
-                ", status=" + status;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-
-    public BookStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BookStatus status) {
-        this.status = status;
-    }
-
-
-    public LocalDate getDatePublication() {
-        return datePublication;
-    }
-
-    public void setDatePublication(LocalDate datePublication) {
-        this.datePublication = datePublication;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+        return getClass().hashCode();
     }
 }
 

@@ -52,8 +52,8 @@ public class RequestRepository implements IRequestRepository {
     public Request getRequestForBook(int bookId) {
         return requestMap.values()
                 .stream()
-                .filter(request
-                        -> request.getBook().getId() == bookId)
+             //   .filter(request
+                       // -> request.getBook().getId() == bookId)
                 .findAny()
                 .orElse(null);
     }

@@ -4,10 +4,10 @@ CREATE TABLE `Book` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(25) NOT NULL,
     `author` VARCHAR(25) NOT NULL,
-    `price`  Decimal(15,2) NOT NULL,
-	`status`  enum('IN_STOCK', 'NOT_AVAILABLE', 'OUT_OF_STOCStatusK') NOT NULL,
+    `price`  INT NOT NULL,
+	`status` VARCHAR(255) NOT NULL,
 	`description` VARCHAR(25) NULL,
-     `datePublication` timestamp NOT NULL,
+     `datePublication` date NOT NULL,
         PRIMARY KEY (`id`)
 ) ENGINE=INNODB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
@@ -16,10 +16,10 @@ CREATE TABLE `Order` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `buyer` VARCHAR(50) CHARACTER SET ascii COLLATE ascii_general_ci NOT NULL,
     `address` VARCHAR(100) NOT NULL,
-    `status` enum('NEW', 'COMPLETED', 'CANCELLED'),
-    `totalPrice` decimal(15,2),
-    `dateCreated` timestamp NOT NULL,
-    `dateExecution` timestamp, 
+	`status` VARCHAR(255) NOT NULL,
+    `totalPrice` int,
+    `dateCreated` date NOT NULL,
+    `dateExecution` date, 
     PRIMARY KEY (`id`)
 ) ENGINE=INNODB CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
