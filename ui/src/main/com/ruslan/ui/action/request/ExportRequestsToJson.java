@@ -1,7 +1,9 @@
 package com.ruslan.ui.action.request;
 
 import com.ruslan.ui.IAction;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExportRequestsToJson extends ActionsRequest implements IAction {
 
     @Override

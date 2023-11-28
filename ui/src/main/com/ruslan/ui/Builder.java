@@ -1,85 +1,87 @@
 package com.ruslan.ui;
 
 
-import com.ruslan.DI.annotation.Inject;
 import com.ruslan.ui.action.book.*;
 import com.ruslan.ui.action.order.*;
 import com.ruslan.ui.action.request.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class Builder {
 
-    @Inject
+    @Autowired
     private Menu rootMenu;
-    @Inject
+    @Autowired
     private BookListByDatePublication bookListByDatePublication;
-    @Inject
+    @Autowired
     private BookListByStatus bookListByStatus;
-    @Inject
+    @Autowired
     private BookListByPrice bookListByPrice;
-    @Inject
+    @Autowired
     private BookListByAlphabetically bookListByAlphabetically;
-    @Inject
+    @Autowired
     private BookListStaleByDate bookListStaleByDate;
-    @Inject
+    @Autowired
     private BookListStaleByPrice bookListStaleByPrice;
-    @Inject
+    @Autowired
     private BookDescription bookDescription;
-    @Inject
+    @Autowired
     private AddBookToStockAndCloseRequests addBookToStockAndCloseRequests;
-    @Inject
+    @Autowired
     private WriteBookToFile writeBookToFile;
-    @Inject
+    @Autowired
     private ReadBookFromFile readBookFromFile;
-    @Inject
+    @Autowired
     private OrderListByDateExecution orderListByDateExecution;
-    @Inject
+    @Autowired
     private OrderListByPrice orderListByPrice;
-    @Inject
+    @Autowired
     private OrderListByStatus orderListByStatus;
-    @Inject
+    @Autowired
     private OrderListCompletedForPeriodByPrice orderListCompletedForPeriodByPrice;
-    @Inject
+    @Autowired
     private OrderListCompletedForPeriodByDate orderListCompletedForPeriodByDate;
-    @Inject
+    @Autowired
     private OrderNumbersCompletedForPeriod orderNumbersCompletedForPeriod;
-    @Inject
+    @Autowired
     private OrderDetails orderDetails;
-    @Inject
+    @Autowired
     private CreateOrder createOrder;
-    @Inject
+    @Autowired
     private CancelOrder cancelOrder;
-    @Inject
+    @Autowired
     private ChangeOrderStatus changeOrderStatus;
-    @Inject
+    @Autowired
     private WriteOrderToFile writeOrderToFile;
-    @Inject
+    @Autowired
     private ReadOrderFromFile readOrderFromFile;
-    @Inject
+    @Autowired
     private RequestListByNumber requestListByNumber;
-    @Inject
+    @Autowired
     private RequestListByAlphabetically requestListByAlphabetically;
-    @Inject
+    @Autowired
     private CreateRequest createRequest;
-    @Inject
+    @Autowired
     private WriteRequestToFile writeRequestToFile;
-    @Inject
+    @Autowired
     private ReadRequestFromFile readRequestFromFile;
 
-    @Inject
+    @Autowired
     private EarnedMoney earnedMoney;
-    @Inject
+    @Autowired
     private ImportBooksFromJsonToDataBase importBooksFromJsonToDataBase;
-    @Inject
+    @Autowired
     private ImportOrdersFromJsonToDataBase importOrdersFromJsonToDataBase;
-    @Inject
+    @Autowired
     private ExportBooksToJson exportBooksToJson;
-    @Inject
+    @Autowired
     private ImportRequestsFromJsonToDataBase importRequestsFromJsonToDataBase;
-    @Inject
+    @Autowired
     private ExportOrdersToJson exportOrdersToJson;
-    @Inject
+    @Autowired
     private ExportRequestsToJson exportRequestsToJson;
 
 

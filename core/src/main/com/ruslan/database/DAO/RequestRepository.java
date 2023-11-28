@@ -5,9 +5,11 @@ import com.ruslan.database.util.HibernateSessionFactoryUtil;
 import com.ruslan.entity.request.Request;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 public class RequestRepository extends RepositoryBase<Integer, Request> {
 
     public RequestRepository() {

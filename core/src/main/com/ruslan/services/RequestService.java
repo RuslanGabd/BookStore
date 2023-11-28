@@ -1,7 +1,6 @@
 package com.ruslan.services;
 
 
-import com.ruslan.DI.annotation.Inject;
 import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
@@ -9,12 +8,14 @@ import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
+@Component
 public class RequestService implements IRequestService {
 
     public final Logger logger = LogManager.getLogger();
@@ -26,7 +27,7 @@ public class RequestService implements IRequestService {
     private final JsonReader jsonReader = JsonReader.getInstance();
 
 
-    @Inject
+    @Autowired
     private RequestRepository requestRepository;
 
     public RequestService() {

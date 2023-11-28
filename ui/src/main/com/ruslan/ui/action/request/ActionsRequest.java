@@ -1,17 +1,17 @@
 package com.ruslan.ui.action.request;
 
 
-import com.ruslan.DI.annotation.Inject;
 import com.ruslan.database.DAO.BookRepository;
+import com.ruslan.services.RequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import com.ruslan.services.RequestService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ActionsRequest {
     final Logger logger = LogManager.getLogger(ActionsRequest.class);
-    @Inject
+    @Autowired
     RequestService requestService;
-    @Inject
+    @Autowired
     BookRepository bookRepository;
 
     public ActionsRequest() {

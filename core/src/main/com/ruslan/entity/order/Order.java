@@ -7,6 +7,7 @@ import com.ruslan.entity.request.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @ToString(callSuper = true, exclude = {"listBook"})
+@Component
 public class Order extends BaseEntity<Integer> {
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "listOrder")

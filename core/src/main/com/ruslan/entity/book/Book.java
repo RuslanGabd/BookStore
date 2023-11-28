@@ -7,6 +7,7 @@ import com.ruslan.entity.request.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @ToString(callSuper = true)
+@Component
 public class Book extends BaseEntity<Integer> implements Serializable {
 
     private String title;

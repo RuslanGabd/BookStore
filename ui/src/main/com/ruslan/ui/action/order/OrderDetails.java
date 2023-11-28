@@ -1,11 +1,12 @@
 package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+@Component
 public class OrderDetails extends ActionsOrder implements IAction {
     @Override
     public void execute() {

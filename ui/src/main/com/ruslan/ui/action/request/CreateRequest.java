@@ -3,11 +3,12 @@ package com.ruslan.ui.action.request;
 
 import com.ruslan.ui.IAction;
 import com.ruslan.entity.request.Request;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+@Component
 public class CreateRequest extends ActionsRequest implements IAction {
 
 

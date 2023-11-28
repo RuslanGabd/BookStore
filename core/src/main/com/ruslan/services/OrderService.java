@@ -1,7 +1,5 @@
 package com.ruslan.services;
 
-import com.ruslan.DI.annotation.Inject;
-
 import com.ruslan.database.DAO.OrderRepository;
 import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.entity.book.Book;
@@ -12,9 +10,10 @@ import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
-import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Component
 public class OrderService implements IOrderService {
     private final Logger logger = LogManager.getLogger();
     private final String fileName = "Orders.csv";
@@ -33,9 +33,9 @@ public class OrderService implements IOrderService {
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
-    @Inject
+    @Autowired
     private OrderRepository orderRepository;
-    @Inject
+    @Autowired
     private RequestRepository requestRepository;
 
     public OrderService() {

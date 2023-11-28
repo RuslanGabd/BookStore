@@ -1,13 +1,14 @@
 package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-
+@Component
 public class OrderListCompletedForPeriodByPrice extends ActionsOrder implements IAction {
 
     public void execute() {

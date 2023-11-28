@@ -1,7 +1,9 @@
 package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderListByPrice extends ActionsOrder implements IAction {
 
     @Override

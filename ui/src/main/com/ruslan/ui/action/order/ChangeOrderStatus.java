@@ -3,11 +3,12 @@ package com.ruslan.ui.action.order;
 
 import com.ruslan.ui.IAction;
 import com.ruslan.entity.order.OrderStatus;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+@Component
 public class ChangeOrderStatus extends ActionsOrder implements IAction {
 
     @Override
