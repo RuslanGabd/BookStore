@@ -21,7 +21,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @ToString(callSuper = true, exclude = {"listBook"})
-@Component
 public class Order extends BaseEntity<Integer> {
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "listOrder")

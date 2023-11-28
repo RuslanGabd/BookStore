@@ -22,7 +22,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @ToString(callSuper = true)
-@Component
 public class Book extends BaseEntity<Integer> implements Serializable {
 
     private String title;
