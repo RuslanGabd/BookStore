@@ -7,7 +7,6 @@ import com.ruslan.entity.request.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
