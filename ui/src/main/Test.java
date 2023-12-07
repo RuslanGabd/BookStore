@@ -1,15 +1,11 @@
-import com.ruslan.DI.ObjectFactory;
-import com.ruslan.DI.context.ApplicationContext;
 import com.ruslan.ui.MenuController;
-
-import java.util.HashMap;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Test {
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new ApplicationContext();
-        ObjectFactory objectFactory = new ObjectFactory(applicationContext, new HashMap<>());
-        applicationContext.setObjectFactory(objectFactory);
-        MenuController menuController = applicationContext.getObject(MenuController.class);
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfiguration.class);
+        MenuController menuController = context.getBean(MenuController.class);
         menuController.run();
 
     }

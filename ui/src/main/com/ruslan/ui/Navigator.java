@@ -1,7 +1,9 @@
 package com.ruslan.ui;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicInteger;
+@Component
 public class Navigator {
     private Menu currentMenu;
 

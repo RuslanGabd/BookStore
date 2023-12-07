@@ -1,7 +1,5 @@
 package com.ruslan.services;
 
-import com.ruslan.DI.annotation.Inject;
-import com.ruslan.DI.config.ConfigProperties;
 import com.ruslan.DI.config.ConfigPropertiesOld;
 import com.ruslan.DI.config.Configuration;
 import com.ruslan.database.DAO.BookRepository;
@@ -16,6 +14,10 @@ import com.ruslan.services.sinterface.IBookService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -26,6 +28,8 @@ import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
+@Service
+@Component
 public class BookService implements IBookService {
 
     public String pathBookSJSON = "src\\main\\resources\\Books.json";
@@ -33,16 +37,16 @@ public class BookService implements IBookService {
     private final Logger logger = LogManager.getLogger();
     private final String fileName = "Books.csv";
 
-    @Inject
+    @Autowired
     private BookRepository bookRepository;
-    @Inject
+    @Autowired
     private OrderRepository orderRepository;
 
-    @Inject
+    @Autowired
     private RequestRepository requestRepository;
-    @ConfigProperties(propertyName = "auto-request-closed-when-book-add-to-stock", type = Boolean.class)
+    @Value("${auto-request-closed-when-book-add-to-stock:true}")
     private Boolean isAutoRequestClosed;
-    @ConfigProperties(propertyName = "number-of-months-to-mark-book-stale", type = Integer.class)
+    @Value("${number-of-months-to-mark-book-stale:5}")
     private Integer numberOfMonths;
 
     private final JsonReader jsonReader = JsonReader.getInstance();

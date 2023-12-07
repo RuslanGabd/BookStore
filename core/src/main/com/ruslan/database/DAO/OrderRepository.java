@@ -4,10 +4,11 @@ package com.ruslan.database.DAO;
 import com.ruslan.database.util.HibernateSessionFactoryUtil;
 import com.ruslan.entity.order.Order;
 import org.hibernate.Session;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Component
 public class OrderRepository extends RepositoryBase<Integer, Order> {
 
 

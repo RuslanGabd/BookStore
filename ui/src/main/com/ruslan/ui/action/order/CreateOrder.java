@@ -1,19 +1,20 @@
 package com.ruslan.ui.action.order;
 
-import com.ruslan.DI.annotation.Inject;
 import com.ruslan.database.DAO.BookRepository;
 import com.ruslan.entity.book.Book;
 import com.ruslan.ui.IAction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
-
+@Component
 public class CreateOrder extends ActionsOrder implements IAction {
 
-    @Inject
+    @Autowired
     private BookRepository bookRepository;
     private final  String checkNumbersSeparatedComma = "((?<!^,)\\d+(,(?!$)|$))+";
 
