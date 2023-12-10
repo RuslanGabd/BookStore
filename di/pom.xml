@@ -18,13 +18,13 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.1.5.Final</version>
+            <version>6.2.3.Final</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.12.18</version>
+            <version>1.14.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

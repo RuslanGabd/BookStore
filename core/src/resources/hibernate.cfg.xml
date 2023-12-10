@@ -18,9 +18,9 @@
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
         <property name="hbm2ddl.auto">validate</property>
-        <mapping class="com.ruslan.entity.book.Book"/>
-        <mapping class="com.ruslan.entity.order.Order"/>
-        <mapping class="com.ruslan.entity.request.Request"/>
-        <mapping class="com.ruslan.entity.booksorders.BooksOrders"/>
+        <mapping class="java.com.ruslan.entity.book.Book"/>
+        <mapping class="java.com.ruslan.entity.order.Order"/>
+        <mapping class="java.com.ruslan.entity.request.Request"/>
+        <mapping class="java.com.ruslan.entity.booksorders.BooksOrders"/>
     </session-factory>
 </hibernate-configuration>
