@@ -1,17 +1,17 @@
-package java.com.ruslan.services;
+package com.ruslan.services;
 
-import java.com.ruslan.DI.config.ConfigPropertiesOld;
-import java.com.ruslan.DI.config.Configuration;
-import java.com.ruslan.database.DAO.BookRepository;
-import java.com.ruslan.database.DAO.OrderRepository;
-import java.com.ruslan.database.DAO.RequestRepository;
-import java.com.ruslan.dto.BookDto;
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.book.BookStatus;
-import java.com.ruslan.entity.order.Order;
-import java.com.ruslan.json.JsonReader;
-import java.com.ruslan.json.JsonWriter;
-import java.com.ruslan.services.sinterface.IBookService;
+import com.ruslan.DI.config.ConfigPropertiesOld;
+import com.ruslan.DI.config.Configuration;
+import com.ruslan.database.DAO.BookRepository;
+import com.ruslan.database.DAO.OrderRepository;
+import com.ruslan.database.DAO.RequestRepository;
+import com.ruslan.dto.BookDto;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.book.BookStatus;
+import com.ruslan.entity.order.Order;
+import com.ruslan.json.JsonReader;
+import com.ruslan.json.JsonWriter;
+import com.ruslan.services.sinterface.IBookService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -51,7 +51,6 @@ public class BookService implements IBookService {
 
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
-    private final ConfigPropertiesOld configProperties = ConfigPropertiesOld.getINSTANCE();
 
     @Autowired
     public BookService(BookRepository bookRepository, OrderRepository orderRepository, RequestRepository requestRepository) {

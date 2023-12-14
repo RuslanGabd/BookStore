@@ -1,4 +1,4 @@
-package java.com.ruslan.entity.book;
+package com.ruslan.entity.book;
 
 public enum BookStatus {
     IN_STOCK,

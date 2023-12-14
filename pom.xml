@@ -10,8 +10,6 @@
         <module>core</module>
         <module>di</module>
         <module>ui</module>
-
-
     </modules>
 
     <name>bookstore</name>
@@ -27,18 +25,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerArgs>
-                        <arg>--add-opens</arg>
-                        <arg>java.base/java.lang=ALL-UNNAMED</arg>
-                        <arg>--add-opens</arg>
-                        <arg>java.base/java.lang.reflect=ALL-UNNAMED</arg>
-                        <arg>--add-opens</arg>
-                        <arg>java.base/java.util.concurrent=ALL-UNNAMED</arg>
-                        <arg>--add-opens</arg>
-                        <arg>java.base/java.util=ALL-UNNAMED</arg>
-                    </compilerArgs>
-                </configuration>
                 <version>3.1</version>
                 <executions>
                     <execution>
@@ -72,6 +58,7 @@
             <artifactId>log4j-core</artifactId>
             <version>2.20.0</version>
         </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>log4j</groupId>-->
 <!--            <artifactId>log4j</artifactId>-->
@@ -105,20 +92,29 @@
             <type>pom</type>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>6.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>6.1.1</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>3.2.0</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>5.3.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.2.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+
     </dependencies>
 </project>

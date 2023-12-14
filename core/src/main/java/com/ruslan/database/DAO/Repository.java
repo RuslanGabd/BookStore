@@ -1,6 +1,6 @@
-package java.com.ruslan.database.DAO;
+package com.ruslan.database.DAO;
 
-import java.com.ruslan.entity.BaseEntity;
+import com.ruslan.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.util.Collections;

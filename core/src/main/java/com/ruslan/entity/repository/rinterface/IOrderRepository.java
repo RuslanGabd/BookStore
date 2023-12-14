@@ -1,7 +1,7 @@
-package java.com.ruslan.entity.repository.rinterface;
+package com.ruslan.entity.repository.rinterface;
 
-import java.com.ruslan.entity.order.Order;
-import java.com.ruslan.entity.order.OrderStatus;
+import com.ruslan.entity.order.Order;
+import com.ruslan.entity.order.OrderStatus;
 
 import java.time.LocalDate;
 import java.util.List;

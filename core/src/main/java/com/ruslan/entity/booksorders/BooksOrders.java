@@ -1,8 +1,8 @@
-package java.com.ruslan.entity.booksorders;
+package com.ruslan.entity.booksorders;
 
-import java.com.ruslan.entity.BaseEntity;
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.order.Order;
+import com.ruslan.entity.BaseEntity;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.order.Order;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;

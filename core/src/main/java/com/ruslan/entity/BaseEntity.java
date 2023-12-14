@@ -1,4 +1,4 @@
-package java.com.ruslan.entity;
+package com.ruslan.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

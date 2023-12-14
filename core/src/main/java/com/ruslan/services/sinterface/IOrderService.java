@@ -1,8 +1,8 @@
-package java.com.ruslan.services.sinterface;
+package com.ruslan.services.sinterface;
 
 
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.order.Order;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.order.Order;
 
 import java.sql.SQLException;
 import java.util.List;

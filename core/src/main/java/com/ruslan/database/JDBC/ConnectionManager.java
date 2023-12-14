@@ -1,8 +1,8 @@
-package java.com.ruslan.database.JDBC;
+package com.ruslan.database.JDBC;
 
-import java.com.ruslan.DI.annotation.PostConstruct;
-import java.com.ruslan.DI.config.ConfigProperties;
-import java.com.ruslan.DI.config.Configuration;
+import com.ruslan.DI.annotation.PostConstruct;
+import com.ruslan.DI.config.ConfigProperties;
+import com.ruslan.DI.config.Configuration;
 
 import java.lang.reflect.Proxy;
 import java.sql.Connection;

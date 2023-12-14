@@ -1,4 +1,4 @@
-package java.com.ruslan.entity.book;
+package com.ruslan.entity.book;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

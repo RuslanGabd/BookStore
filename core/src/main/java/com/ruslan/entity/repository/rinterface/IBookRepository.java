@@ -1,7 +1,7 @@
-package java.com.ruslan.entity.repository.rinterface;
+package com.ruslan.entity.repository.rinterface;
 
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.book.BookStatus;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.book.BookStatus;
 
 import java.util.List;
 

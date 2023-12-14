@@ -1,4 +1,4 @@
-package java.com.ruslan.DI.postProcessor;
+package com.ruslan.DI.postProcessor;
 
 import java.lang.reflect.InvocationTargetException;
 

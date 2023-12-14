@@ -1,4 +1,4 @@
-package java.com.ruslan.DI;
+package com.ruslan.DI;
 
 import lombok.Getter;
 import org.reflections.Reflections;

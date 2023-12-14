@@ -1,4 +1,4 @@
-package java.com.ruslan.DI;
+package com.ruslan.DI;
 
 
 import org.reflections.Reflections;

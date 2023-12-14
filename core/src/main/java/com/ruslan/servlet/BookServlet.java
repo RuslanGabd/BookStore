@@ -1,6 +1,6 @@
-package java.com.ruslan.servlet;
+/*package com.ruslan.servlet;
 
-import java.com.ruslan.services.BookService;
+import com.ruslan.services.BookService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,4 +40,4 @@ public class BookServlet extends HttpServlet {
         ;
         //    super.doGet(req, resp);
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package java.com.ruslan.DI.annotation;
+package com.ruslan.DI.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

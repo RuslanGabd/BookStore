@@ -1,9 +1,9 @@
-package java.com.ruslan.entity.book;
+package com.ruslan.entity.book;
 
 
-import java.com.ruslan.entity.BaseEntity;
-import java.com.ruslan.entity.order.Order;
-import java.com.ruslan.entity.request.Request;
+import com.ruslan.entity.BaseEntity;
+import com.ruslan.entity.order.Order;
+import com.ruslan.entity.request.Request;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;

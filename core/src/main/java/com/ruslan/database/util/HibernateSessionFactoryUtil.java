@@ -1,4 +1,4 @@
-package java.com.ruslan.database.util;
+package com.ruslan.database.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

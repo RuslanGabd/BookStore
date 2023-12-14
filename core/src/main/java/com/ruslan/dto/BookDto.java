@@ -1,4 +1,4 @@
-package java.com.ruslan.dto;
+package com.ruslan.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

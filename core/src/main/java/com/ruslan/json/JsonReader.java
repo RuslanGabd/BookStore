@@ -1,4 +1,4 @@
-package java.com.ruslan.json;
+package com.ruslan.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

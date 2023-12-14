@@ -1,6 +1,6 @@
-package java.com.ruslan.DI.postProcessor;
+package com.ruslan.DI.postProcessor;
 
-import java.com.ruslan.DI.annotation.PostConstruct;
+import com.ruslan.DI.annotation.PostConstruct;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
