@@ -1,4 +1,4 @@
-package java.com.ruslan.DI;
+package com.ruslan.DI;
 
 public class JavaConfiguration implements Configuration {
 

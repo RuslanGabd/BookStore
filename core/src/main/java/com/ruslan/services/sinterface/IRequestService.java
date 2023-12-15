@@ -1,6 +1,6 @@
-package java.com.ruslan.services.sinterface;
+package com.ruslan.services.sinterface;
 
-import java.com.ruslan.entity.request.Request;
+import com.ruslan.entity.request.Request;
 
 public interface IRequestService {
 

@@ -1,6 +1,6 @@
-package java.com.ruslan.entity.repository.rinterface;
+package com.ruslan.entity.repository.rinterface;
 
-import java.com.ruslan.entity.request.Request;
+import com.ruslan.entity.request.Request;
 
 import java.util.List;
 

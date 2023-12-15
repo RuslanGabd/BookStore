@@ -1,4 +1,4 @@
-package java.com.ruslan.entity.order;
+package com.ruslan.entity.order;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

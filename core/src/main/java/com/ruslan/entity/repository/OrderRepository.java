@@ -1,12 +1,12 @@
-package java.com.ruslan.entity.repository;
+package com.ruslan.entity.repository;
 
-import java.com.ruslan.entity.repository.rinterface.IOrderRepository;
+import com.ruslan.entity.repository.rinterface.IOrderRepository;
 
-import java.com.ruslan.DI.annotation.PostConstruct;
-import java.com.ruslan.entity.order.Order;
-import java.com.ruslan.entity.order.OrderCounted;
-import java.com.ruslan.entity.order.OrderStatus;
-import java.com.ruslan.json.JsonReader;
+import com.ruslan.DI.annotation.PostConstruct;
+import com.ruslan.entity.order.Order;
+import com.ruslan.entity.order.OrderCounted;
+import com.ruslan.entity.order.OrderStatus;
+import com.ruslan.json.JsonReader;
 
 import java.time.LocalDate;
 import java.util.*;

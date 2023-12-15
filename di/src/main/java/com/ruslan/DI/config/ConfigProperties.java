@@ -1,4 +1,4 @@
-package java.com.ruslan.DI.config;
+package com.ruslan.DI.config;
 
 
 import java.lang.annotation.ElementType;

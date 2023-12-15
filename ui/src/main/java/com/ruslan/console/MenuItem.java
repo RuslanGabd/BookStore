@@ -1,4 +1,4 @@
-package com.ruslan.ui.console;
+package com.ruslan.console;
 
 public class MenuItem {
     private final String title;

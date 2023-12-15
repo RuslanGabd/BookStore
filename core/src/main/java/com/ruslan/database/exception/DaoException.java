@@ -1,4 +1,4 @@
-package java.com.ruslan.database.exception;
+package com.ruslan.database.exception;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

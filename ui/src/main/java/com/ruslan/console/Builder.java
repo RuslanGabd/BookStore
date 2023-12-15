@@ -1,8 +1,9 @@
-package com.ruslan.ui.console;
+package com.ruslan.console;
 
-import com.ruslan.ui.console.book.*;
-import com.ruslan.ui.console.order.*;
-import com.ruslan.ui.console.request.*;
+
+import com.ruslan.console.action.book.*;
+import com.ruslan.console.action.order.*;
+import com.ruslan.console.action.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

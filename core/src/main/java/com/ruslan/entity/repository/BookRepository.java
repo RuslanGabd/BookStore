@@ -1,13 +1,13 @@
-package java.com.ruslan.entity.repository;
+package com.ruslan.entity.repository;
 
 
-import java.com.ruslan.entity.repository.rinterface.IBookRepository;
+import com.ruslan.entity.repository.rinterface.IBookRepository;
 
-import java.com.ruslan.DI.annotation.PostConstruct;
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.book.BookCounted;
-import java.com.ruslan.entity.book.BookStatus;
-import java.com.ruslan.json.JsonReader;
+import com.ruslan.DI.annotation.PostConstruct;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.book.BookCounted;
+import com.ruslan.entity.book.BookStatus;
+import com.ruslan.json.JsonReader;
 
 import java.util.ArrayList;
 import java.util.HashMap;

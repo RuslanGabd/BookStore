@@ -1,21 +1,23 @@
-package java.com.ruslan.services;
+package com.ruslan.services;
 
 
-import java.com.ruslan.database.DAO.RequestRepository;
-import java.com.ruslan.entity.request.Request;
-import java.com.ruslan.json.JsonReader;
-import java.com.ruslan.json.JsonWriter;
-import java.com.ruslan.services.sinterface.IRequestService;
+import com.ruslan.database.DAO.RequestRepository;
+import com.ruslan.entity.request.Request;
+import com.ruslan.json.JsonReader;
+import com.ruslan.json.JsonWriter;
+import com.ruslan.services.sinterface.IRequestService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 @Service
+
 public class RequestService implements IRequestService {
 
     public final Logger logger = LogManager.getLogger();

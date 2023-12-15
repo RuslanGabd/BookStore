@@ -1,6 +1,6 @@
-package java.com.ruslan.DI.config;
+package com.ruslan.DI.config;
 
-import java.com.ruslan.DI.postProcessor.ObjectPostProcessor;
+import com.ruslan.DI.postProcessor.ObjectPostProcessor;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

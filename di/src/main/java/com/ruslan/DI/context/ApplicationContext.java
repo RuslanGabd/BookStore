@@ -1,6 +1,6 @@
-package java.com.ruslan.DI.context;
+package com.ruslan.DI.context;
 
-import java.com.ruslan.DI.ObjectFactory;
+import com.ruslan.DI.ObjectFactory;
 import lombok.Setter;
 
 import java.util.Map;

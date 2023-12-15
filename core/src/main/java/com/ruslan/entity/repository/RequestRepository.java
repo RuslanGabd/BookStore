@@ -1,8 +1,8 @@
-package java.com.ruslan.entity.repository;
+package com.ruslan.entity.repository;
 
-import java.com.ruslan.entity.repository.rinterface.IRequestRepository;
-import java.com.ruslan.entity.request.Request;
-import java.com.ruslan.entity.request.RequestCounted;
+import com.ruslan.entity.repository.rinterface.IRequestRepository;
+import com.ruslan.entity.request.Request;
+import com.ruslan.entity.request.RequestCounted;
 
 import java.util.ArrayList;
 import java.util.HashMap;

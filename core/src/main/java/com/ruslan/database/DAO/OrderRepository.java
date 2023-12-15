@@ -1,8 +1,8 @@
-package java.com.ruslan.database.DAO;
+package com.ruslan.database.DAO;
 
 
-import java.com.ruslan.database.util.HibernateSessionFactoryUtil;
-import java.com.ruslan.entity.order.Order;
+import com.ruslan.database.util.HibernateSessionFactoryUtil;
+import com.ruslan.entity.order.Order;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 

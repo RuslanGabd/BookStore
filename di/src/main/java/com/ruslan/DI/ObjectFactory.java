@@ -1,10 +1,10 @@
-package java.com.ruslan.DI;
+package com.ruslan.DI;
 
-import java.com.ruslan.DI.annotation.Inject;
-import java.com.ruslan.DI.annotation.PostConstruct;
-import java.com.ruslan.DI.context.ApplicationContext;
-import java.com.ruslan.DI.postProcessor.ObjectPostProcessor;
-import java.com.ruslan.DI.postProcessor.PostConstructorObjectPostProcessor;
+import com.ruslan.DI.annotation.Inject;
+import com.ruslan.DI.annotation.PostConstruct;
+import com.ruslan.DI.context.ApplicationContext;
+import com.ruslan.DI.postProcessor.ObjectPostProcessor;
+import com.ruslan.DI.postProcessor.PostConstructorObjectPostProcessor;
 import lombok.Getter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

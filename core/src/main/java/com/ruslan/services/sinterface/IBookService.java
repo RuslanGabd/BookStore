@@ -1,7 +1,7 @@
-package java.com.ruslan.services.sinterface;
+package com.ruslan.services.sinterface;
 
-import java.com.ruslan.entity.book.Book;
-import java.com.ruslan.entity.book.BookStatus;
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.book.BookStatus;
 
 import java.time.LocalDate;
 

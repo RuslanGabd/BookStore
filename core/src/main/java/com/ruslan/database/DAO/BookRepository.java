@@ -1,6 +1,6 @@
-package java.com.ruslan.database.DAO;
+package com.ruslan.database.DAO;
 
-import java.com.ruslan.entity.book.Book;
+import com.ruslan.entity.book.Book;
 
 import org.springframework.stereotype.Repository;
 

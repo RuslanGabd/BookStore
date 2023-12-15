@@ -1,4 +1,4 @@
-package com.ruslan.ui.console;
+package com.ruslan.console;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
