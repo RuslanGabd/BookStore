@@ -1,9 +1,12 @@
 package com.ruslan.dto;
 
+import com.ruslan.entity.book.Book;
+import com.ruslan.entity.order.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -12,10 +15,12 @@ public class OrderDto {
 
     private final Integer id;
     private final String buyer;
+    private final String address;
+    private final OrderStatus status;
     private final Integer totalPrice;
-    private final String status;
     private final LocalDate dateCreated;
     private final LocalDate dateExecution;
+    private final List<Book> bookList;
 
     @Override
     public boolean equals(Object o) {

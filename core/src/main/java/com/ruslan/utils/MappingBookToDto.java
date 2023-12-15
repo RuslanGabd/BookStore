@@ -12,7 +12,6 @@ public class MappingBookToDto {
                 book.getDescription(), book.getStatus(), book.getDatePublication());
     }
 
-
     public Book mapToBook(BookDto dto) {
         return new Book(dto.getTitle(), dto.getAuthor(), dto.getPrice(), dto.getDatePublication(),
                 dto.getStatus(), dto.getDescription());
