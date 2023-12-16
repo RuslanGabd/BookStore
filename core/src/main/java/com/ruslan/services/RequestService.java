@@ -2,10 +2,12 @@ package com.ruslan.services;
 
 
 import com.ruslan.database.DAO.RequestRepository;
+import com.ruslan.dto.RequestDto;
 import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
+import com.ruslan.utils.MappingRequestToDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 
 public class RequestService implements IRequestService {
@@ -28,11 +33,13 @@ public class RequestService implements IRequestService {
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
     private final JsonReader jsonReader = JsonReader.getInstance();
 
+    private final MappingRequestToDto mappingRequestToDto;
 
     private final RequestRepository requestRepository;
 
     @Autowired
-    public RequestService(RequestRepository requestRepository) {
+    public RequestService(MappingRequestToDto mappingRequestToDto, RequestRepository requestRepository) {
+        this.mappingRequestToDto = mappingRequestToDto;
         this.requestRepository = requestRepository;
     }
 
@@ -128,5 +135,25 @@ public class RequestService implements IRequestService {
 
     public void exportRequestsToJson() {
         jsonWriter.writeEntities(requestRepository.findAll(), pathRequestJSON);
+    }
+
+    public List<RequestDto> listRequestDto() {
+        return requestRepository.findAll().stream()
+                .map(mappingRequestToDto::mapToRequestDto)
+                .collect(toList());
+    }
+
+    public RequestDto findById(int id) {
+        return mappingRequestToDto.mapToRequestDto(
+                requestRepository.findById(id)
+                        .orElse(null));
+    }
+
+    public void saveRequest(RequestDto dto) {
+        requestRepository.save(mappingRequestToDto.mapToRequest(dto));
+    }
+
+    public void removeRequest(int id) {
+        requestRepository.delete(id);
     }
 }
