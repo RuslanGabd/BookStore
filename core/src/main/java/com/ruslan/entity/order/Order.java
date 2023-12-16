@@ -51,9 +51,8 @@ public class Order extends BaseEntity<Integer> {
         this.dateCreated = LocalDate.now();
     }
 
-    public Order(int id, String buyer, String address, OrderStatus status, int totalPrice, LocalDate dateCreated,
+    public Order(String buyer, String address, OrderStatus status, int totalPrice, LocalDate dateCreated,
                  LocalDate dateExecution, List<Book> listBooks) {
-        this.setId(id);
         this.buyer = buyer;
         this.address = address;
         this.totalPrice = totalPrice;
@@ -62,12 +61,6 @@ public class Order extends BaseEntity<Integer> {
         this.dateExecution = dateExecution;
         this.listBook = listBooks;
     }
-
-    public Order(String buyer, String address, OrderStatus status, Integer totalPrice, LocalDate dateExecution, LocalDate dateCreated) {
-        super();
-    }
-
-
 
     @Override
     public boolean equals(Object o) {

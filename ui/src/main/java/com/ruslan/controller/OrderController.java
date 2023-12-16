@@ -71,7 +71,7 @@ public class OrderController {
 
     @GetMapping("/count-completed-orders-for-period/{from}/{till}")
     public ResponseEntity<Integer> getCountCompletedOrdersForPeriod(@PathVariable String from,
-                                                                         @PathVariable String till)  {
+                                                                    @PathVariable String till) {
         log.info("Received GET request /orders/count-completed-orders-for-period/");
         LocalDate date1 = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate date2 = LocalDate.parse(till, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -80,7 +80,7 @@ public class OrderController {
 
     @GetMapping("/completed-by-period/{from}/{till}")
     public ResponseEntity<List<OrderDto>> ordersDoneByPeriodOfTime(@PathVariable String from,
-                                                                @PathVariable String till) {
+                                                                   @PathVariable String till) {
         log.info("Received GET request /orders/done-by-period/" + from + "/" + till);
         LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate tillDate = LocalDate.parse(till, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -88,8 +88,10 @@ public class OrderController {
     }
 
     @PostMapping("/createOrder")
-    public ResponseEntity<OrderDto> addOrder( @RequestParam(value = "booksId") List<Integer> booksId) {
-        log.info("Received POST request /orders/add/"+ booksId);
-        return ResponseEntity.ok(orderService.createOrderByListBookId(booksId));
-       }
+    public ResponseEntity<OrderDto> addOrder(@RequestParam(value = "buyer") String buyer,
+                                             @RequestParam(value = "address") String address,
+                                             @RequestParam(value = "booksId") List<Integer> booksId) {
+        log.info("Received POST request /orders/add/" + booksId);
+        return ResponseEntity.ok(orderService.createOrderByListBookId(buyer, address, booksId));
+    }
 }

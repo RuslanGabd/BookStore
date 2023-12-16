@@ -269,9 +269,13 @@ public class OrderService implements IOrderService {
                 .collect(toList());
     }
 
-    public OrderDto createOrderByListBookId(List<Integer> booksId) {
+    public OrderDto createOrderByListBookId(String buyer, String address,List<Integer> booksId) {
         List<Book> books = new ArrayList<>();
         booksId.forEach(id -> books.add(bookRepository.findById(id).orElse(null)));
-        return mappingOrderToDto.mapToOrderDto(createOrder(books));
+        Order order = createOrder(books);
+        order.setBuyer(buyer);
+        order.setAddress(address);
+        orderRepository.update(order);
+        return mappingOrderToDto.mapToOrderDto(order);
     }
 }

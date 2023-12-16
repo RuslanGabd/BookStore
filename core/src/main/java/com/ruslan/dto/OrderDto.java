@@ -20,19 +20,19 @@ public class OrderDto {
     private final Integer totalPrice;
     private final LocalDate dateCreated;
     private final LocalDate dateExecution;
-
+    private final List<Integer> idBooks;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderDto orderDto = (OrderDto) o;
-        return Objects.equals(id, orderDto.id) && Objects.equals(buyer, orderDto.buyer) && Objects.equals(totalPrice, orderDto.totalPrice) && Objects.equals(status, orderDto.status) && Objects.equals(dateCreated, orderDto.dateCreated) && Objects.equals(dateExecution, orderDto.dateExecution);
+        return Objects.equals(id, orderDto.id) && Objects.equals(buyer, orderDto.buyer) && Objects.equals(address, orderDto.address) && status == orderDto.status && Objects.equals(totalPrice, orderDto.totalPrice) && Objects.equals(dateCreated, orderDto.dateCreated) && Objects.equals(dateExecution, orderDto.dateExecution) && Objects.equals(idBooks, orderDto.idBooks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, buyer, totalPrice, status, dateCreated, dateExecution);
+        return Objects.hash(id, buyer, address, status, totalPrice, dateCreated, dateExecution, idBooks);
     }
 
     @Override
@@ -40,10 +40,12 @@ public class OrderDto {
         return "OrderDto{" +
                 "id=" + id +
                 ", buyer='" + buyer + '\'' +
+                ", address='" + address + '\'' +
+                ", status=" + status +
                 ", totalPrice=" + totalPrice +
-                ", status='" + status + '\'' +
                 ", dateCreated=" + dateCreated +
                 ", dateExecution=" + dateExecution +
+                ", idBooks=" + idBooks +
                 '}';
     }
 }

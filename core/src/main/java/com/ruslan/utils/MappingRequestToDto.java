@@ -15,11 +15,15 @@ public class MappingRequestToDto {
     BookRepository bookRepository;
 
     public RequestDto mapToRequestDto(Request request) {
-        return new RequestDto(request.getId(), request.getDate(),  request.getBook().getId());
+        return new RequestDto(request.getId(),
+                request.getDate(),
+                request.getBook().getId());
     }
 
     public Request mapToRequest(RequestDto dto) {
-        return new Request(dto.getId(), bookRepository.findById(dto.getId()).orElse(null), dto.getDateCreated());
+        return new Request(dto.getId(),
+                bookRepository.findById(dto.getId()).orElse(null),
+                dto.getDateCreated());
     }
 
 
