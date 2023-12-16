@@ -67,6 +67,8 @@ public class Order extends BaseEntity<Integer> {
         super();
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
