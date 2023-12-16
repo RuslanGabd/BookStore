@@ -12,42 +12,31 @@
     <context:component-scan base-package="com.ruslan"/>
     <mvc:resources mapping="/**" location="classpath:images"/>
     <mvc:annotation-driven/>
-<!--    <mvc:default-servlet-handler/>-->
 
-<!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
-<!--        <property name = "prefix" value = "/WEB-INF/views/"/>-->
-<!--        <property name = "suffix" value = ".html"/>-->
-<!--    </bean>-->
 
-    <bean class="org.thymeleaf.spring5.view.ThymeleafViewResolver">
+    <bean class="org.thymeleaf.spring6.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine"/>
         <property name="order" value="1"/>
     </bean>
 
-    <!-- SpringTemplateEngine автоматически добавляет SpringStandardDialect -->
+
     <bean id="templateEngine"
-          class="org.thymeleaf.spring5.SpringTemplateEngine">
+          class="org.thymeleaf.spring6.SpringTemplateEngine">
         <property name="templateResolver" ref="templateResolver"/>
-        <!-- Включение компилятора SpringEL в Spring 4.2.4 или новее может ускорить -->
-        <!-- выполнение в большинстве сценариев, но может быть несовместимо с конкретными -->
-        <!-- случаями, когда выражения на одной странице повторно используются в разных данных, -->
-        <!-- так что этот флаг по умолчанию имеет значение «false» для более безопасной обратной -->
-        <!-- совместимости. -->
+
         <property name="enableSpringELCompiler" value="true"/>
     </bean>
 
-    <!-- SpringResourceTemplateResolver автоматически интегрируется с собственной           -->
-    <!-- инфраструктурой Spring для обработки web-ресурсов и необходим SpringTemplateEngine -->
+
     <bean id="templateResolver"
-          class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+          class="org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver">
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".html"/>
-        <!-- HTML - значение по умолчанию. Добавлено здесь для большей ясности.              -->
+
         <property name="templateMode" value="HTML"/>
-        <!-- Cache страниц по-умолчанию имеет значение true. Установите в false, если хотите -->
-        <!-- чтобы шаблоны автоматически обновлялись при их изменении.                       -->
+
         <property name="cacheable" value="true"/>
     </bean>
-<!--   <mvc:view-controller path="/books/shelf" view-name="book_shelf"/>-->
+
 
 </beans>
