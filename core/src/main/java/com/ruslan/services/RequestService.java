@@ -1,6 +1,7 @@
 package com.ruslan.services;
 
 
+import com.ruslan.database.DAO.BookRepository;
 import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.dto.RequestDto;
 import com.ruslan.entity.request.Request;
@@ -37,11 +38,13 @@ public class RequestService implements IRequestService {
 
     private final RequestRepository requestRepository;
 
+    private final BookRepository bookRepository;
 
     @Autowired
-    public RequestService(MappingRequestToDto mappingRequestToDto, RequestRepository requestRepository) {
+    public RequestService(MappingRequestToDto mappingRequestToDto, RequestRepository requestRepository, BookRepository bookRepository) {
         this.mappingRequestToDto = mappingRequestToDto;
         this.requestRepository = requestRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -163,9 +166,17 @@ public class RequestService implements IRequestService {
                 .map(mappingRequestToDto::mapToRequestDto)
                 .collect(toList());
     }
+
     public List<RequestDto> RequestsDtoSortedByAlphabetically() {
         return getRequestSortedByAlphabetically().stream()
                 .map(mappingRequestToDto::mapToRequestDto)
                 .collect(toList());
+    }
+
+    public RequestDto createRequestByBookId(Integer idBook) {
+        Request request = new Request();
+        request.setBook(bookRepository.findById(idBook).orElse(null));
+        requestRepository.save(request);
+        return mappingRequestToDto.mapToRequestDto(request);
     }
 }

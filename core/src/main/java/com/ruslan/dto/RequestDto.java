@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -13,19 +14,19 @@ public class RequestDto {
 
     private final Integer id;
     private final LocalDate dateCreated;
-    private final Book book;
+    private final Integer idBook;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RequestDto that = (RequestDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(book, that.book);
+        return Objects.equals(id, that.id) && Objects.equals(dateCreated, that.dateCreated) && Objects.equals(idBook, that.idBook);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, dateCreated, book);
+        return Objects.hash(id, dateCreated, idBook);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class RequestDto {
         return "RequestDto{" +
                 "id=" + id +
                 ", dateCreated=" + dateCreated +
-                ", book=" + book +
+                ", book=" + idBook +
                 '}';
     }
 }
