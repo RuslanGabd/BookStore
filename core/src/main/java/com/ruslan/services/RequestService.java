@@ -37,6 +37,7 @@ public class RequestService implements IRequestService {
 
     private final RequestRepository requestRepository;
 
+
     @Autowired
     public RequestService(MappingRequestToDto mappingRequestToDto, RequestRepository requestRepository) {
         this.mappingRequestToDto = mappingRequestToDto;
@@ -155,5 +156,16 @@ public class RequestService implements IRequestService {
 
     public void removeRequest(int id) {
         requestRepository.delete(id);
+    }
+
+    public List<RequestDto> RequestsDtoSortedByNumber() {
+        return getRequestSortedByNumber().stream()
+                .map(mappingRequestToDto::mapToRequestDto)
+                .collect(toList());
+    }
+    public List<RequestDto> RequestsDtoSortedByAlphabetically() {
+        return getRequestSortedByAlphabetically().stream()
+                .map(mappingRequestToDto::mapToRequestDto)
+                .collect(toList());
     }
 }

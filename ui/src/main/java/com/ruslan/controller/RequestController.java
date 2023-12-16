@@ -63,34 +63,15 @@ public class RequestController {
         }
     }
 
-//    @PatchMapping("/change-status/{status}/{id}")
-//    public ResponseEntity<OrderDto> changeOrderStatus(@PathVariable String status,
-//                                                      @PathVariable int id) {
-//        log.info("Received PATCH request /orders/change-status/" + status + "/" + id);
-//        return ResponseEntity.ok(orderService.changeOrderDtoStatus(id, OrderStatus.valueOf(status)));
-//    }
-//
-//    @GetMapping("/count-completed-orders-for-period/{from}/{till}")
-//    public ResponseEntity<Integer> getCountCompletedOrdersForPeriod(@PathVariable String from,
-//                                                                         @PathVariable String till)  {
-//        log.info("Received GET request /orders/count-completed-orders-for-period/");
-//        LocalDate date1 = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        LocalDate date2 = LocalDate.parse(till, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        return ResponseEntity.ok(orderService.getCountCompletedOrdersForPeriod(date1, date2));
-//    }
-//
-//    @GetMapping("/completed-by-period/{from}/{till}")
-//    public ResponseEntity<List<OrderDto>> ordersDoneByPeriodOfTime(@PathVariable String from,
-//                                                                @PathVariable String till) {
-//        log.info("Received GET request /orders/done-by-period/" + from + "/" + till);
-//        LocalDate fromDate = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        LocalDate tillDate = LocalDate.parse(till, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//        return ResponseEntity.ok(orderService.ordersCompletedByPeriodOfTime(fromDate, tillDate));
-//    }
-//
-//    @PostMapping("/createOrder")
-//    public ResponseEntity<OrderDto> addOrder( @RequestParam(value = "booksId") List<Integer> booksId) {
-//        log.info("Received POST request /orders/add/"+ booksId);
-//        return ResponseEntity.ok(orderService.createOrderByListBookId(booksId));
-//       }
+    @GetMapping("/requests-sorted-by-number")
+    public ResponseEntity<List<RequestDto>> showAllOrderSortedByNumber() {
+        log.info("Received GET request /requests/request-sorted-by-number");
+        return ResponseEntity.ok(requestService.RequestsDtoSortedByNumber());
+    }
+
+    @GetMapping("/requests-sorted-by-alphabetically")
+    public ResponseEntity<List<RequestDto>> showAllOrderSortedByAlphabetically() {
+        log.info("Received GET request /requests/request-sorted-by-alphabetically");
+        return ResponseEntity.ok(requestService.RequestsDtoSortedByAlphabetically());
+    }
 }
