@@ -20,7 +20,7 @@ public class OrderDto {
     private final Integer totalPrice;
     private final LocalDate dateCreated;
     private final LocalDate dateExecution;
-    private final List<Book> bookList;
+
 
     @Override
     public boolean equals(Object o) {

@@ -63,6 +63,10 @@ public class Order extends BaseEntity<Integer> {
         this.listBook = listBooks;
     }
 
+    public Order(String buyer, String address, OrderStatus status, Integer totalPrice, LocalDate dateExecution, LocalDate dateCreated) {
+        super();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

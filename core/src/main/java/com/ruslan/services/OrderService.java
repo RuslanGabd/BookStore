@@ -1,5 +1,6 @@
 package com.ruslan.services;
 
+import com.ruslan.database.DAO.BookRepository;
 import com.ruslan.database.DAO.OrderRepository;
 import com.ruslan.database.DAO.RequestRepository;
 import com.ruslan.dto.OrderDto;
@@ -11,6 +12,8 @@ import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
+import com.ruslan.utils.MappingOrderToDto;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.*;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,7 +29,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
-
+@Transactional
 public class OrderService implements IOrderService {
     private final Logger logger = LogManager.getLogger();
     private final String fileName = "Orders.csv";
@@ -36,21 +38,18 @@ public class OrderService implements IOrderService {
 
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
-
+    private final MappingOrderToDto mappingOrderToDto;
     private final OrderRepository orderRepository;
     private final RequestRepository requestRepository;
+    private final BookRepository bookRepository;
 
-    public List<OrderDto> listOrderDto() {
-        return orderRepository.findAll().stream()
-                .map(order -> new OrderDto(order.getId(), order.getBuyer(), order.getTotalPrice()
-                        , String.valueOf(order.getStatus()), order.getDateCreated(), order.getDateExecution()))
-                .collect(toList());
-    }
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, RequestRepository requestRepository) {
+    public OrderService(MappingOrderToDto mappingOrderToDto, OrderRepository orderRepository, RequestRepository requestRepository, BookRepository bookRepository) {
+        this.mappingOrderToDto = mappingOrderToDto;
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -63,6 +62,7 @@ public class OrderService implements IOrderService {
                 .forEach(book -> requestRepository.save(new Request(book)));
         return ord;
     }
+
 
     public void changeOrderDateCreated(int orderId, LocalDate date) {
         orderRepository.findById(orderId).ifPresent(order -> {
@@ -126,7 +126,7 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public void removeOrder(int orderId) throws SQLException {
+    public void removeOrder(int orderId) {
         orderRepository.delete(orderId);
     }
 
@@ -233,5 +233,45 @@ public class OrderService implements IOrderService {
 
     public void exportOrdersToJson() {
         jsonWriter.writeEntities(orderRepository.findAll(), pathOrdersJSON);
+    }
+
+
+    public List<OrderDto> listOrderDto() {
+        return orderRepository.findAll().stream()
+                .map(mappingOrderToDto::mapToOrderDto)
+                .collect(toList());
+    }
+
+    public OrderDto findById(Integer id) {
+        return mappingOrderToDto.mapToOrderDto(
+                orderRepository.findById(id)
+                        .orElse(null));
+    }
+
+    public void saveOrder(OrderDto dto) {
+        orderRepository.save(mappingOrderToDto.mapToOrder(dto));
+    }
+
+    public void deleteOrder(int id) {
+        orderRepository.delete(id);
+    }
+
+
+
+    public OrderDto changeOrderDtoStatus(int id, OrderStatus orderStatus) {
+        changeOrderStatus(id, orderStatus);
+        return findById(id);
+    }
+
+    public List<OrderDto> ordersCompletedByPeriodOfTime(LocalDate fromDate, LocalDate tillDate) {
+        return orderRepository.getCompletedOrdersForPeriod(fromDate, tillDate).stream()
+                .map(mappingOrderToDto::mapToOrderDto)
+                .collect(toList());
+    }
+
+    public OrderDto createOrderByListBookId(List<Integer> booksId) {
+        List<Book> books = new ArrayList<>();
+        booksId.forEach(id -> books.add(bookRepository.findById(id).orElse(null)));
+        return mappingOrderToDto.mapToOrderDto(createOrder(books));
     }
 }

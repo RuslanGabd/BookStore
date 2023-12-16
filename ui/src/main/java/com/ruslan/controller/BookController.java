@@ -24,7 +24,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<BookDto>> showAllBooks() {
         log.info("Received GET request /books");
         return ResponseEntity.ok(bookService.listBookDto());
@@ -32,7 +32,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> showBook(@PathVariable Integer id) {
-       log.info("Received GET request /books/" + id);
+        log.info("Received GET request /books/" + id);
         if (bookService.findById(id) == null) {
             throw new NoSuchEntityException("There is no book with id=" + id + " in database");
         }
@@ -62,7 +62,7 @@ public class BookController {
 
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable Integer id) {
-     log.info("Received DELETE request /books/" + id);
+        log.info("Received DELETE request /books/" + id);
         if (bookService.findById(id) == null) {
             throw new NoSuchEntityException("There is no book with id=" + id + " in database");
         } else {
@@ -78,17 +78,9 @@ public class BookController {
     }
 
 
-
     @GetMapping("/poor-purchased")
     public ResponseEntity<List<Book>> getStaleBooks() {
         log.info("Received GET request /books/StaleBooks");
         return ResponseEntity.ok(bookService.getStaleBooks());
     }
-
-//    @GetMapping
-//    public ResponseEntity<List<Book>> getAll(@RequestParam(name = "sort", defaultValue = "id") String sort,
-//                                             @RequestParam(name = "start", defaultValue = "1") Integer start,
-//                                             @RequestParam(name = "limit", defaultValue = "5") Integer limit) {
-//
-//    }
 }
