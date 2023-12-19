@@ -8,7 +8,7 @@ import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
-import com.ruslan.utils.MappingRequestToDto;
+import com.ruslan.utils.MapperRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +34,15 @@ public class RequestService implements IRequestService {
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
     private final JsonReader jsonReader = JsonReader.getInstance();
 
-    private final MappingRequestToDto mappingRequestToDto;
+    private final MapperRequest mapperRequest;
 
     private final RequestRepository requestRepository;
 
     private final BookRepository bookRepository;
 
     @Autowired
-    public RequestService(MappingRequestToDto mappingRequestToDto, RequestRepository requestRepository, BookRepository bookRepository) {
-        this.mappingRequestToDto = mappingRequestToDto;
+    public RequestService(MapperRequest mapperRequest, RequestRepository requestRepository, BookRepository bookRepository) {
+        this.mapperRequest = mapperRequest;
         this.requestRepository = requestRepository;
         this.bookRepository = bookRepository;
     }
@@ -143,18 +143,18 @@ public class RequestService implements IRequestService {
 
     public List<RequestDto> listRequestDto() {
         return requestRepository.findAll().stream()
-                .map(mappingRequestToDto::mapToRequestDto)
+                .map(mapperRequest::mapToRequestDto)
                 .collect(toList());
     }
 
     public RequestDto findById(int id) {
-        return mappingRequestToDto.mapToRequestDto(
+        return mapperRequest.mapToRequestDto(
                 requestRepository.findById(id)
                         .orElse(null));
     }
 
     public void saveRequest(RequestDto dto) {
-        requestRepository.save(mappingRequestToDto.mapToRequest(dto));
+        requestRepository.save(mapperRequest.mapToRequest(dto));
     }
 
     public void removeRequest(int id) {
@@ -163,13 +163,13 @@ public class RequestService implements IRequestService {
 
     public List<RequestDto> RequestsDtoSortedByNumber() {
         return getRequestSortedByNumber().stream()
-                .map(mappingRequestToDto::mapToRequestDto)
+                .map(mapperRequest::mapToRequestDto)
                 .collect(toList());
     }
 
     public List<RequestDto> RequestsDtoSortedByAlphabetically() {
         return getRequestSortedByAlphabetically().stream()
-                .map(mappingRequestToDto::mapToRequestDto)
+                .map(mapperRequest::mapToRequestDto)
                 .collect(toList());
     }
 
@@ -177,6 +177,6 @@ public class RequestService implements IRequestService {
         Request request = new Request();
         request.setBook(bookRepository.findById(idBook).orElse(null));
         requestRepository.save(request);
-        return mappingRequestToDto.mapToRequestDto(request);
+        return mapperRequest.mapToRequestDto(request);
     }
 }

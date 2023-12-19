@@ -8,8 +8,9 @@
     <version>1.0</version>
     <modules>
         <module>core</module>
-        <module>di</module>
         <module>ui</module>
+        <module>web</module>
+        <module>springweb</module>
     </modules>
 
     <name>bookstore</name>
@@ -30,6 +31,12 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.22.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>3.2.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

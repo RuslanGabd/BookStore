@@ -1,6 +1,6 @@
 package com.ruslan.services;
 
-import com.ruslan.DI.config.Configuration;
+
 import com.ruslan.database.DAO.BookRepository;
 import com.ruslan.database.DAO.OrderRepository;
 import com.ruslan.database.DAO.RequestRepository;
@@ -11,13 +11,14 @@ import com.ruslan.entity.order.Order;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
-import com.ruslan.utils.MappingBookToDto;
+import com.ruslan.utils.MapperBook;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -42,7 +43,7 @@ public class BookService implements IBookService {
 
     private BookRepository bookRepository;
     private OrderRepository orderRepository;
-    private MappingBookToDto mappingBookToDto;
+    private MapperBook mapperBook;
 
     private RequestRepository requestRepository;
     @Value("${auto-request-closed-when-book-add-to-stock:true}")
@@ -54,11 +55,11 @@ public class BookService implements IBookService {
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
 
     @Autowired
-    public BookService(BookRepository bookRepository, OrderRepository orderRepository, MappingBookToDto mappingBookToDto, RequestRepository requestRepository) {
+    public BookService(BookRepository bookRepository, OrderRepository orderRepository, MapperBook mapperBook, RequestRepository requestRepository) {
         this.bookRepository = bookRepository;
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
-        this.mappingBookToDto = mappingBookToDto;
+        this.mapperBook = mapperBook;
     }
 
     @Override
@@ -84,17 +85,17 @@ public class BookService implements IBookService {
 
     public List<BookDto> listBookDto() {
         return bookRepository.findAll().stream()
-                .map(mappingBookToDto::mapToBookDto)
+                .map(mapperBook::mapToBookDto)
                 .collect(toList());
     }
 
     public BookDto findById(Integer id) {
-        return mappingBookToDto.mapToBookDto(
+        return mapperBook.mapToBookDto(
                 bookRepository.findById(id)
                         .orElse(null));
     }
     public void saveBook(BookDto dto) {
-        bookRepository.save(mappingBookToDto.mapToBook(dto));
+        bookRepository.save(mapperBook.mapToBook(dto));
     }
 
     public void deleteBook(Integer id) {
@@ -105,7 +106,7 @@ public class BookService implements IBookService {
         if (this.isAutoRequestClosed) {
             cancelRequestsByIdBook(bookId);
         }
-       return bookRepository.findById(bookId).map(mappingBookToDto::mapToBookDto).orElse(null);
+       return bookRepository.findById(bookId).map(mapperBook::mapToBookDto).orElse(null);
     }
 
     public void addBookToStockAndCancelRequests(int bookId) {

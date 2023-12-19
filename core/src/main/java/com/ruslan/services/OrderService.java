@@ -12,7 +12,7 @@ import com.ruslan.entity.request.Request;
 import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
-import com.ruslan.utils.MappingOrderToDto;
+import com.ruslan.utils.MapperOrder;
 import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -38,15 +38,15 @@ public class OrderService implements IOrderService {
 
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
-    private final MappingOrderToDto mappingOrderToDto;
+    private final MapperOrder mapperOrder;
     private final OrderRepository orderRepository;
     private final RequestRepository requestRepository;
     private final BookRepository bookRepository;
 
 
     @Autowired
-    public OrderService(MappingOrderToDto mappingOrderToDto, OrderRepository orderRepository, RequestRepository requestRepository, BookRepository bookRepository) {
-        this.mappingOrderToDto = mappingOrderToDto;
+    public OrderService(MapperOrder mapperOrder, OrderRepository orderRepository, RequestRepository requestRepository, BookRepository bookRepository) {
+        this.mapperOrder = mapperOrder;
         this.orderRepository = orderRepository;
         this.requestRepository = requestRepository;
         this.bookRepository = bookRepository;
@@ -238,18 +238,18 @@ public class OrderService implements IOrderService {
 
     public List<OrderDto> listOrderDto() {
         return orderRepository.findAll().stream()
-                .map(mappingOrderToDto::mapToOrderDto)
+                .map(mapperOrder::mapToOrderDto)
                 .collect(toList());
     }
 
     public OrderDto findById(Integer id) {
-        return mappingOrderToDto.mapToOrderDto(
+        return mapperOrder.mapToOrderDto(
                 orderRepository.findById(id)
                         .orElse(null));
     }
 
     public void saveOrder(OrderDto dto) {
-        orderRepository.save(mappingOrderToDto.mapToOrder(dto));
+        orderRepository.save(mapperOrder.mapToOrder(dto));
     }
 
     public void deleteOrder(int id) {
@@ -265,7 +265,7 @@ public class OrderService implements IOrderService {
 
     public List<OrderDto> ordersCompletedByPeriodOfTime(LocalDate fromDate, LocalDate tillDate) {
         return orderRepository.getCompletedOrdersForPeriod(fromDate, tillDate).stream()
-                .map(mappingOrderToDto::mapToOrderDto)
+                .map(mapperOrder::mapToOrderDto)
                 .collect(toList());
     }
 
@@ -276,6 +276,6 @@ public class OrderService implements IOrderService {
         order.setBuyer(buyer);
         order.setAddress(address);
         orderRepository.update(order);
-        return mappingOrderToDto.mapToOrderDto(order);
+        return mapperOrder.mapToOrderDto(order);
     }
 }
