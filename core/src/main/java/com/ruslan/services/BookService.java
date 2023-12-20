@@ -94,6 +94,7 @@ public class BookService implements IBookService {
                 bookRepository.findById(id)
                         .orElse(null));
     }
+
     public void saveBook(BookDto dto) {
         bookRepository.save(mapperBook.mapToBook(dto));
     }
@@ -101,12 +102,13 @@ public class BookService implements IBookService {
     public void deleteBook(Integer id) {
         bookRepository.delete(id);
     }
+
     public BookDto addBookToStockAndCancelRequestsForHttp(int bookId) {
         bookRepository.findById(bookId).ifPresent(book -> book.setStatus(BookStatus.IN_STOCK));
         if (this.isAutoRequestClosed) {
             cancelRequestsByIdBook(bookId);
         }
-       return bookRepository.findById(bookId).map(mapperBook::mapToBookDto).orElse(null);
+        return bookRepository.findById(bookId).map(mapperBook::mapToBookDto).orElse(null);
     }
 
     public void addBookToStockAndCancelRequests(int bookId) {
@@ -115,6 +117,10 @@ public class BookService implements IBookService {
             cancelRequestsByIdBook(bookId);
         }
         System.out.println("Book " + bookId + " add to stock");
+    }
+
+    public List<BookDto> getStaleBooksDto() {
+        return getStaleBooks().stream().map(mapperBook::mapToBookDto).collect(toList());
     }
 
     public void cancelRequestsByIdBook(int bookId) {
@@ -282,7 +288,6 @@ public class BookService implements IBookService {
     public void exportBooksToJson() {
         jsonWriter.writeEntities(bookRepository.findAll(), pathBookSJSON);
     }
-
 
 
 }

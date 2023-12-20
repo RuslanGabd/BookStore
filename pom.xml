@@ -8,8 +8,6 @@
     <version>1.0</version>
     <modules>
         <module>core</module>
-        <module>ui</module>
-        <module>web</module>
         <module>springweb</module>
     </modules>
 

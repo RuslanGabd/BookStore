@@ -1,6 +1,7 @@
 package com.ruslan.controller;
 
 import com.ruslan.controller.webExceptions.NoSuchEntityException;
+import com.ruslan.dto.GenericResponseDto;
 import com.ruslan.dto.OrderDto;
 import com.ruslan.dto.RequestDto;
 import com.ruslan.services.RequestService;
@@ -50,13 +51,13 @@ public class RequestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRequest(@PathVariable int id) {
+    public ResponseEntity<GenericResponseDto> deleteRequest(@PathVariable int id) {
         log.info("Received DELETE request" + id);
         if (requestService.findById(id) == null) {
             throw new NoSuchEntityException("There is no request with id=" + id + " in database");
         } else {
             requestService.removeRequest(id);
-            return ResponseEntity.ok("Request with id=" + id + " was deleted");
+            return ResponseEntity.ok(new GenericResponseDto("Request with id=" + id + " was deleted"));
         }
     }
 

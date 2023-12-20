@@ -1,6 +1,7 @@
 package com.ruslan.controller;
 
 import com.ruslan.controller.webExceptions.NoSuchEntityException;
+import com.ruslan.dto.GenericResponseDto;
 import com.ruslan.dto.OrderDto;
 import com.ruslan.entity.order.OrderStatus;
 import com.ruslan.services.OrderService;
@@ -52,13 +53,13 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteOrder(@PathVariable int id) {
+    public ResponseEntity<GenericResponseDto> deleteOrder(@PathVariable int id) {
         log.info("Received DELETE request /orders/" + id);
         if (orderService.findById(id) == null) {
             throw new NoSuchEntityException("There is no order with id=" + id + " in database");
         } else {
             orderService.removeOrder(id);
-            return  ResponseEntity.ok("Order with id=" + id + " was deleted");
+            return ResponseEntity.ok(new GenericResponseDto("Order with id=" + id + " was deleted"));
         }
     }
 
@@ -70,12 +71,12 @@ public class OrderController {
     }
 
     @GetMapping("/count-completed-orders-for-period/{from}/{till}")
-    public ResponseEntity<Integer> getCountCompletedOrdersForPeriod(@PathVariable String from,
+    public ResponseEntity<GenericResponseDto> getCountCompletedOrdersForPeriod(@PathVariable String from,
                                                                     @PathVariable String till) {
         log.info("Received GET request /orders/count-completed-orders-for-period/");
         LocalDate date1 = LocalDate.parse(from, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalDate date2 = LocalDate.parse(till, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return ResponseEntity.ok(orderService.getCountCompletedOrdersForPeriod(date1, date2));
+        return ResponseEntity.ok(new GenericResponseDto(orderService.getCountCompletedOrdersForPeriod(date1, date2)));
     }
 
     @GetMapping("/completed-by-period/{from}/{till}")

@@ -3,6 +3,7 @@ package com.ruslan.controller;
 
 import com.ruslan.controller.webExceptions.NoSuchEntityException;
 import com.ruslan.dto.BookDto;
+import com.ruslan.dto.GenericResponseDto;
 import com.ruslan.entity.book.Book;
 import com.ruslan.services.BookService;
 import lombok.extern.log4j.Log4j2;
@@ -18,6 +19,7 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+
 
     @Autowired
     public BookController(BookService bookService) {
@@ -61,13 +63,13 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity <String> deleteBook(@PathVariable Integer id) {
+    public ResponseEntity <GenericResponseDto> deleteBook(@PathVariable Integer id) {
         log.info("Received DELETE request /books/" + id);
         if (bookService.findById(id) == null) {
             throw new NoSuchEntityException("There is no book with id=" + id + " in database");
         } else {
             bookService.deleteBook(id);
-            return  ResponseEntity.ok("Book with id=" + id + " was deleted");
+            return  ResponseEntity.ok( new GenericResponseDto("Book with id=" + id + " was deleted"));
         }
     }
 
@@ -79,8 +81,8 @@ public class BookController {
 
 
     @GetMapping("/poor-purchased")
-    public ResponseEntity<List<Book>> getStaleBooks() {
+    public ResponseEntity<List<BookDto>> getStaleBooks() {
         log.info("Received GET request /books/StaleBooks");
-        return ResponseEntity.ok(bookService.getStaleBooks());
+        return ResponseEntity.ok(bookService.getStaleBooksDto());
     }
 }
