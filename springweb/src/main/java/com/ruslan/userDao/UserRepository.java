@@ -3,12 +3,16 @@ package com.ruslan.userDao;
 import com.ruslan.database.DAO.RepositoryBase;
 import com.ruslan.userEntity.User;
 import jakarta.persistence.EntityManager;
+import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
+@Log4j2
 @Repository
 public class UserRepository extends RepositoryBase<Integer, User> {
 
@@ -23,16 +27,18 @@ public class UserRepository extends RepositoryBase<Integer, User> {
         return entityManager.unwrap(Session.class);
     }
 
-    public Optional<User> findByUserName(String username) {
+    @Query()
 
-        User user = getSession().createQuery("select username, password" +
-                        " from User o where username=:username", User.class)
-                .setParameter("username", username).uniqueResult();
-        return Optional.ofNullable(user);
+    public Optional<User> findByUsername(String username) {
+        List<User> listUser = getSession().createQuery("select u from User u where username=:username"
+                        , User.class).
+                setParameter("username", username).list();
+        System.out.println(listUser.get(0));
+        return Optional.ofNullable(listUser.get(0));
     }
 
     public void createUser(User user) {
-        Session session =  getSession();
+        Session session = getSession();
         session.persist(user);
     }
 }

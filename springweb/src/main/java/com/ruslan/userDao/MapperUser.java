@@ -18,7 +18,10 @@ public class MapperUser {
     }
 
     public User userDtoToUser(UserDto userDto) {
-        return new User(userDto.getUserName(),
-                userDto.getPassword());
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(userDto.getPassword());
+        return user;
     }
+
 }

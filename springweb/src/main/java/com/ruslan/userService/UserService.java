@@ -60,10 +60,10 @@ public class UserService implements IUserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserName(username).orElse(null);
+        User user = userRepository.findByUsername(username).orElse(null);
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+                mapRolesToAuthorities(user.getListRoles()));
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
@@ -75,16 +75,16 @@ public class UserService implements IUserService {
 
     @Override
     public boolean userExists(String username) {
-        return userRepository.findByUserName(username).isPresent();
+        return userRepository.findByUsername(username).isPresent();
     }
 
     @Override
     public boolean saveUser(User user) throws UserExistException {
-        if (userRepository.findByUserName(user.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new UserExistException(user.getUsername());
         }
         Role role = roleRepository.findByName("USER").orElse(null);
-        user.setRoles(Collections.singletonList(role));
+        user.setListRoles(Collections.singletonList(role));
         userRepository.createUser(user);
         return true;
     }
