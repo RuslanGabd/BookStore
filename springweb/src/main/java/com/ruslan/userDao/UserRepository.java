@@ -5,7 +5,6 @@ import com.ruslan.userEntity.User;
 import jakarta.persistence.EntityManager;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.Session;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -25,8 +24,6 @@ public class UserRepository extends RepositoryBase<Integer, User> {
     private Session getSession() {
         return entityManager.unwrap(Session.class);
     }
-
-    @Query()
 
     public Optional<User> findByUsername(String username) {
         User user = getSession().createQuery("select u from User u where username=:username"
