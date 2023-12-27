@@ -1,0 +1,36 @@
+expire:
+  time: 100000
+
+spring:
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookstore
+    username: ${username.value:root}
+    password: Kogalym13
+    driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    database: mysql
+  data:
+    jpa:
+      repositories.enabled: true
+  main:
+    allow-circular-references: true
+#  jpa:
+#    properties.hibernate:
+#      batch_size: 50
+#      fetch_size: 50
+#      show_sql: true
+#      format_sql: true
+#      hbm2ddl.auto: validate
+#    open-in-view: false
+logging:
+  level:
+    root: INFO
+    com.ruslan.spring.database.pool: INFO
+    org.springframework.jdbc.core: TRACE
+  file:
+    name: bookstore.log
+    path: /
+

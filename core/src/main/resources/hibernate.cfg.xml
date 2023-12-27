@@ -22,5 +22,6 @@
         <mapping class="com.ruslan.entity.order.Order"/>
         <mapping class="com.ruslan.entity.request.Request"/>
         <mapping class="com.ruslan.entity.booksorders.BooksOrders"/>
+
     </session-factory>
 </hibernate-configuration>
