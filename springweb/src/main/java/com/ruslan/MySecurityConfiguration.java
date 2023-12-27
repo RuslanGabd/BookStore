@@ -27,11 +27,10 @@ public class MySecurityConfiguration {
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling((exception) -> exception.accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                       .requestMatchers(HttpMethod.GET, "/books/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/books/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/requests/**").hasAnyRole( "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/requests/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/orders/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/orders/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/orders/**").hasAnyAuthority("ADMIN")
@@ -39,11 +38,8 @@ public class MySecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/books/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/requests/**").hasAnyAuthority("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/requests/**").hasAnyAuthority("ADMIN")
-                        .anyRequest().authenticated())
-                   .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll());
+                        .anyRequest().authenticated());
+
         http
                 .addFilterBefore(jwtAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class);
