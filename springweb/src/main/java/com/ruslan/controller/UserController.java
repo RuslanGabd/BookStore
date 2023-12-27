@@ -1,5 +1,6 @@
 package com.ruslan.controller;
 
+import com.ruslan.controller.webExceptions.UserExistException;
 import com.ruslan.jwt.JwtDto;
 import com.ruslan.userDao.MapperUser;
 import com.ruslan.userDao.UserDto;
@@ -23,13 +24,13 @@ public class UserController {
 
     private final MapperUser mapperUser;
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public JwtDto login(@RequestBody UserDto userDto) {
         return new JwtDto(userService.login(mapperUser.userDtoToUser(userDto)));
     }
 
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
+    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) throws UserExistException {
         if (bindingResult.hasErrors()) {
             return "registration";
         }

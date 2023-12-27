@@ -1,6 +1,8 @@
 package com.ruslan.userService;
 
+import com.ruslan.controller.webExceptions.UserExistException;
 import com.ruslan.jwt.JwtGenerator;
+import com.ruslan.userDao.RoleRepository;
 import com.ruslan.userDao.UserRepository;
 import com.ruslan.userEntity.Role;
 import com.ruslan.userEntity.User;
@@ -12,14 +14,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -30,7 +36,8 @@ public class UserService implements IUserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    @Autowired
+    private RoleRepository roleRepository;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -53,13 +60,17 @@ public class UserService implements IUserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUserName(username)
-                .map(user -> new org.springframework.security.core.userdetails.User(
-                        user.getUsername(),
-                        user.getPassword(),
-                        Collections.singleton(user.getRole())
-                ))
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user: " + username));
+        User user = userRepository.findByUserName(username).orElse(null);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
+    }
+
+    private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+        return roles
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,12 +79,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean saveUser(User user) {
+    public boolean saveUser(User user) throws UserExistException {
         if (userRepository.findByUserName(user.getUsername()).isPresent()) {
-            return false;
+            throw new UserExistException(user.getUsername());
         }
-        user.setRole(Role.USER);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = roleRepository.findByName("USER").orElse(null);
+        user.setRoles(Collections.singletonList(role));
         userRepository.createUser(user);
         return true;
     }

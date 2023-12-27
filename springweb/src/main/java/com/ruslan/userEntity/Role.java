@@ -1,12 +1,16 @@
 package com.ruslan.userEntity;
 
-import org.springframework.security.core.GrantedAuthority;
+import com.ruslan.entity.BaseEntity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
-public enum Role implements GrantedAuthority {
-    ADMIN, USER;
 
-    @Override
-    public String getAuthority() {
-        return name();
-    }
+@Entity
+@Getter
+@Setter
+@Table(name = "role")
+public class Role extends BaseEntity<Integer> {
+    private String name;
 }

@@ -26,7 +26,7 @@ public class UserRepository extends RepositoryBase<Integer, User> {
     public Optional<User> findByUserName(String username) {
 
         User user = getSession().createQuery("select username, password" +
-                        ", role from User o where username=:username", User.class)
+                        " from User o where username=:username", User.class)
                 .setParameter("username", username).uniqueResult();
         return Optional.ofNullable(user);
     }
@@ -35,6 +35,4 @@ public class UserRepository extends RepositoryBase<Integer, User> {
         Session session =  getSession();
         session.persist(user);
     }
-
-
 }

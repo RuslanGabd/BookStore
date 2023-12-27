@@ -28,6 +28,7 @@ public class MySecurityConfiguration {
                 .exceptionHandling((exception) -> exception.accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                        .requestMatchers(HttpMethod.GET, "/books/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/orders/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/requests/**").hasAnyRole( "ADMIN")

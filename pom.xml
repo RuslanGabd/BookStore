@@ -9,8 +9,7 @@
     <modules>
         <module>core</module>
         <module>springweb</module>
-        <module>security</module>
-    </modules>
+         </modules>
 
     <name>bookstore</name>
     <properties>

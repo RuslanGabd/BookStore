@@ -11,15 +11,14 @@ import org.springframework.stereotype.Service;
 public class MapperUser {
 
     private final PasswordEncoder passwordEncoder;
+
     public UserDto userToDto(User user) {
         return new UserDto(user.getUsername(),
-                           user.getPassword(),
-                           user.getRole());
+                user.getPassword());
     }
 
     public User userDtoToUser(UserDto userDto) {
         return new User(userDto.getUserName(),
-                        userDto.getPassword(),
-                        userDto.getRole());
+                userDto.getPassword());
     }
 }
