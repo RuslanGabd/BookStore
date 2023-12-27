@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 
@@ -30,11 +29,11 @@ public class UserRepository extends RepositoryBase<Integer, User> {
     @Query()
 
     public Optional<User> findByUsername(String username) {
-        List<User> listUser = getSession().createQuery("select u from User u where username=:username"
+        User user = getSession().createQuery("select u from User u where username=:username"
                         , User.class).
-                setParameter("username", username).list();
-        System.out.println(listUser.get(0));
-        return Optional.ofNullable(listUser.get(0));
+                setParameter("username", username).uniqueResult();
+
+        return Optional.ofNullable(user);
     }
 
     public void createUser(User user) {
