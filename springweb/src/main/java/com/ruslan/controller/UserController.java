@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public User addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) throws UserExistException {
+    public UserDto addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) throws UserExistException {
         if (bindingResult.hasErrors()) {
             return null;
         }
@@ -39,7 +39,7 @@ public class UserController {
             model.addAttribute("usernameError", "User with such name is already exist");
             return null;
         }
-        return user;
+        return mapperUser.userToDto(user);
     }
 
 
