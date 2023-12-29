@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -79,14 +80,15 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean saveUser(User user) throws UserExistException {
+    public Optional<User> saveUser(User user) throws UserExistException {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new UserExistException(user.getUsername());
         }
         Role role = roleRepository.findByName("USER").orElse(null);
         user.setListRoles(Collections.singletonList(role));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.createUser(user);
-        return true;
+        return Optional.ofNullable(user);
     }
 
 

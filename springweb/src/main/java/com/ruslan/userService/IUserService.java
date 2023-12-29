@@ -7,13 +7,14 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface IUserService extends UserDetailsService {
 
     public boolean userExists(String username);
 
-    public boolean saveUser(User user) throws UserExistException;
+    public Optional<User> saveUser(User user) throws UserExistException;
 
     @PostAuthorize("returnObject.username == authentication.name")
     User getUser(Integer id);

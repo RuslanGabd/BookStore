@@ -30,17 +30,16 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) throws UserExistException {
+    public User addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) throws UserExistException {
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return null;
         }
-        boolean flag = userService.saveUser(userForm);
-        if (!flag) {
+        User user = userService.saveUser(userForm).orElse(null);
+        if (user == null) {
             model.addAttribute("usernameError", "User with such name is already exist");
-            return "registration";
+            return null;
         }
-
-        return "redirect:/";
+        return user;
     }
 
 
