@@ -1,5 +1,7 @@
 expire:
   time: 100000
+number-of-months-to-mark-book-stale: 10
+auto-request-closed-when-book-add-to-stock: true
 
 spring:
 

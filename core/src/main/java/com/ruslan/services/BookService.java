@@ -47,7 +47,7 @@ public class BookService implements IBookService {
 
     private RequestRepository requestRepository;
     @Value("${auto-request-closed-when-book-add-to-stock:true}")
-    private Boolean isAutoRequestClosed;
+    public Boolean isAutoRequestClosed;
     @Value("${number-of-months-to-mark-book-stale:5}")
     private Integer numberOfMonths;
 
@@ -288,6 +288,7 @@ public class BookService implements IBookService {
     public void exportBooksToJson() {
         jsonWriter.writeEntities(bookRepository.findAll(), pathBookSJSON);
     }
+
 
 
 }

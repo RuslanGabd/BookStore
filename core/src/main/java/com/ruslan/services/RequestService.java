@@ -9,6 +9,7 @@ import com.ruslan.json.JsonReader;
 import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IRequestService;
 import com.ruslan.utils.MapperRequest;
+import jakarta.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Service
-
+@Transactional
 public class RequestService implements IRequestService {
 
     public final Logger logger = LogManager.getLogger();
