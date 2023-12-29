@@ -41,6 +41,4 @@ public class UserController {
         }
         return mapperUser.userToDto(user);
     }
-
-
 }
