@@ -8,10 +8,12 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 @Configuration
 @ComponentScan(basePackages = "com.ruslan")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yml")
 public class ApplicationConfiguration {
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
+
 }
