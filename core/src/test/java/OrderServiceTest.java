@@ -43,7 +43,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void getOrdersSortedByDateExecution() {
+    void getOrdersSortedByDateExecution_returnedSortedList() {
         when(orderRepository.findAll()).thenReturn(orderList);
         List<Order> sortedListOrders = orderService.getOrdersSortedByDateExecution();
         Assertions.assertEquals(sortedListOrders.get(0).getId(), 1);
@@ -51,7 +51,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void getOrdersSortedByPrice() {
+    void getOrdersSortedByPrice_returnedSortedList() {
         when(orderRepository.findAll()).thenReturn(orderList);
         List<Order> sortedListOrders = orderService.getOrdersSortedByPrice();
         Assertions.assertEquals(sortedListOrders.get(0).getTotalPrice(), 150);
@@ -59,7 +59,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void getOrdersSortedByStatus() {
+    void getOrdersSortedByStatus_returnedSortedList() {
         when(orderRepository.findAll()).thenReturn(orderList);
         List<Order> sortedListOrders = orderService.getOrdersSortedByStatus();
         Assertions.assertEquals(sortedListOrders.get(0).getId(), 1);
@@ -67,7 +67,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void changeOrderStatusToCompletedWithOpenedRequest() {
+    void changeOrderStatusToCompletedWithOpenedRequest_changeStatusFalse() {
         Order order = orderList.get(0);
         Request request = requestList.get(1);
 
@@ -81,7 +81,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void changeOrderStatusToCompletedWithOutOpenedRequest() {
+    void changeOrderStatusToCompletedWithOutOpenedRequest_true() {
         Order order = orderList.get(1);
 
         when(orderRepository.findById(anyInt())).thenReturn(Optional.ofNullable(order));
@@ -96,7 +96,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void getCountCompletedOrdersForPeriod() {
+    void getCountCompletedOrdersForPeriod_returnedNumbers() {
         List<Order> completedOrderList = orderList.stream()
                 .filter(order -> order.getStatus()
                         .equals(OrderStatus.COMPLETED)).toList();

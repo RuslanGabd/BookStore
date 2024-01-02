@@ -1,0 +1,11 @@
+number-of-months-to-mark-book-stale: 10
+auto-request-closed-when-book-add-to-stock: true
+logging:
+  level:
+    root: INFO
+    com.ruslan.spring.database.pool: INFO
+    org.springframework.jdbc.core: TRACE
+  file:
+    name: test_bookstore.log
+    path: /
+

@@ -14,6 +14,7 @@ import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IOrderService;
 import com.ruslan.utils.MapperOrder;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
+@NoArgsConstructor
 public class OrderService implements IOrderService {
     private final Logger logger = LogManager.getLogger();
     private final String fileName = "Orders.csv";
@@ -38,10 +40,10 @@ public class OrderService implements IOrderService {
 
     private final JsonReader jsonReader = JsonReader.getInstance();
     private final JsonWriter jsonWriter = JsonWriter.getInstance();
-    private final MapperOrder mapperOrder;
-    private final OrderRepository orderRepository;
-    private final RequestRepository requestRepository;
-    private final BookRepository bookRepository;
+    private MapperOrder mapperOrder;
+    private OrderRepository orderRepository;
+    private RequestRepository requestRepository;
+    private BookRepository bookRepository;
 
 
     @Autowired

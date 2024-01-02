@@ -13,7 +13,6 @@ import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
 import com.ruslan.utils.MapperBook;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,6 @@ import static java.util.stream.Collectors.toList;
 @Configuration
 @Service
 @Getter
-@NoArgsConstructor
 public class BookService implements IBookService {
 
     public String pathBookSJSON = "src\\main\\resources\\Books.json";

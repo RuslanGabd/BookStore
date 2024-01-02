@@ -88,6 +88,12 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>3.2.0</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 </project>

@@ -41,14 +41,14 @@ public class RequestServiceTest {
         orderList = jsonReader.readEntities(Order.class, pathOrderJSON);
     }
     @Test
-    void getRequestSortedByNumber() {
+    void getRequestSortedByNumber_returnedSortedList() {
         when(requestRepository.findAll()).thenReturn(requestList);
         List<Request> sortedRequestList = requestService.getRequestSortedByNumber();
         Assertions.assertEquals(sortedRequestList.get(0).getId(), 1);
         verify(requestRepository, times(1)).findAll();
     }
     @Test
-    void getRequestSortedByAlphabetically() {
+    void getRequestSortedByAlphabetically_returnedSortedList() {
         when(requestRepository.findAll()).thenReturn(requestList);
         List<Request> sortedRequestList = requestService.getRequestSortedByAlphabetically();
         Assertions.assertEquals(sortedRequestList.get(0).getId(), 2);
