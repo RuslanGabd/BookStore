@@ -1,10 +1,24 @@
-# TASK 8.2
+# TASK 12
 
 ## BookStore
-Task 2 (difficulty 10)
+Practical tasks
 
-Develop a set of annotations and a separate module for their processing:
+Task 1.
 
-The module should allow dependency injections (DI) in the program modules. An object containing annotated fields should be submitted to the input, and the module should implement dependencies in them.
+Transfer the main project to Maven. The project should have a modular structure.
 
-To organize low coupling between modules of the application developed in previous tasks. For implementation, it is necessary to use the Dependency injection pattern and the Reflection mechanism. All application modules must be changed to this solution. 
+Task 2.
+
+Сonnect any logging library and configure logging in the project as a dependency (logback, log4j2)
+
+Task 3.
+
+Add a plugin to the project assembly that checks code style. Configure it (including linking the plugin to the execution phase). Recommendations for choosing a plugin: maven-checkstyle-plugin, checkstyle. 
+
+(https://maven.apache.org/plugins/maven-checkstyle-plugin/usage.html)
+
+Config files can be taken here:
+
+https://drive.google.com/open?id=1UgfDCZDNINSsoBgjn65bgIdYPZLGCU9G
+
+https://drive.google.com/open?id=1KbO2r4FEEUcKfwq7cKeaOMvYSMv8FiCN
