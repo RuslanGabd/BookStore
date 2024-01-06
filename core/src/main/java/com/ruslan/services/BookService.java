@@ -13,7 +13,6 @@ import com.ruslan.json.JsonWriter;
 import com.ruslan.services.sinterface.IBookService;
 import com.ruslan.utils.MapperBook;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,6 @@ import static java.util.stream.Collectors.toList;
 @Configuration
 @Service
 @Getter
-@NoArgsConstructor
 public class BookService implements IBookService {
 
     public String pathBookSJSON = "src\\main\\resources\\Books.json";
@@ -47,7 +45,7 @@ public class BookService implements IBookService {
 
     private RequestRepository requestRepository;
     @Value("${auto-request-closed-when-book-add-to-stock:true}")
-    private Boolean isAutoRequestClosed;
+    public Boolean isAutoRequestClosed;
     @Value("${number-of-months-to-mark-book-stale:5}")
     private Integer numberOfMonths;
 
@@ -288,6 +286,7 @@ public class BookService implements IBookService {
     public void exportBooksToJson() {
         jsonWriter.writeEntities(bookRepository.findAll(), pathBookSJSON);
     }
+
 
 
 }
